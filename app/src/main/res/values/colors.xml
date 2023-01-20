@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="yellow_light_hovor_menu">@color/yellow_200</color>
+    <color name="yellow_app_bar">@color/yellow_500</color>
+    <color name="yellow_notification_bar">@color/yellow_400</color>
+
+    <color name="slid_menu_app_bar_yellow">@color/yellow_200</color>
+    <color name="slid_menu_app_bar_dark_yellow">@color/yellow_500</color>
+    <color name="slid_menu_text_color">@color/red_500</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    
+    <color name="red_100">#ff4d4d</color>
+    <color name="red_200">#ff3333</color>
+    <color name="red_300">#e60000</color>
+    <color name="red_400">#cc0000</color>
+    <color name="red_500">#b30000</color>
+
+
+    <color name="orange_100">#ffc266</color>
+    <color name="orange_200">#ffad33</color>
+    <color name="orange_300">#ff9900</color>
+    <color name="orange_400">#e68a00</color>
+    <color name="orange_500">#cc7a00</color>
+
+
+    <color name="yellow_100">#ffdb89</color>
+    <color name="yellow_200">#ffc94d</color>
+    <color name="yellow_300">#ffb300</color>
+    <color name="yellow_400">#e6a100</color>
+    <color name="yellow_500">#b37d00</color>
+
+
+    <color name="blue_100">#4da6ff</color>
+    <color name="blue_200">#3399ff</color>
+    <color name="blue_300">#0066cc</color>
+    <color name="blue_400">#004d99</color>
+    <color name="blue_500">#003366</color>
+
+
+    <color name="grey_100">#cccccc</color>
+    <color name="grey_200">#a6a6a6</color>
+    <color name="grey_300">#808080</color>
+    <color name="grey_400">#666666</color>
+    <color name="grey_500">#4d4d4d</color>
+
+
+</resources>

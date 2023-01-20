@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_dashboard">
+
+    <fragment
+        android:id="@+id/nav_dashboard"
+        android:name="com.surti.khaman.house.ui.dashboard.DashboardFragment"
+        android:label="@string/left_menu_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.surti.khaman.house.ui.gallery.GalleryFragment"
+        android:label="@string/left_menu_find_rupees"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.surti.khaman.house.ui.slideshow.SlideshowFragment"
+        android:label="@string/left_menu_find_weight"
+        tools:layout="@layout/fragment_slideshow" />
+</navigation>

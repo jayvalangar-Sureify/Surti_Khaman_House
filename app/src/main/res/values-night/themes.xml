@@ -1,0 +1,16 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.SurtiKhamanHouse" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/yellow_light_hovor_menu</item>
+        <item name="colorPrimaryVariant">@color/yellow_app_bar</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/slid_menu_app_bar_yellow</item>
+        <item name="colorSecondaryVariant">@color/slid_menu_app_bar_yellow</item>
+        <item name="colorOnSecondary">@color/slid_menu_text_color</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+</resources>
