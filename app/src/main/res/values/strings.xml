@@ -22,6 +22,11 @@
     <string name="total">Total</string>
     <string name="grand_total">Grand Total</string>
 
+    <!-- Receipt -->
+    <string name="receipt">Receipt</string>
+    <string name="bill">Bill</string>
+    <string name="print">Print</string>
+
 
 
 </resources>

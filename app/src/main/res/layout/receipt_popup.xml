@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
+
+    <RelativeLayout
+        android:id="@+id/ll_popup_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow_500"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="@string/receipt"
+            android:layout_centerInParent="true"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:padding="10dp" />
+
+        <Button
+            android:id="@+id/btn_close_popup"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_centerInParent="true"
+            android:drawableBottom="@drawable/ic_cross_white_24"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:id="@+id/scroll_view_receipt"
+        android:layout_below="@+id/ll_popup_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/table_receipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+
+            </TableLayout>
+
+    </ScrollView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/yellow_500"
+            android:textColor="@color/white"
+            android:text="@string/print"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
