@@ -82,59 +82,39 @@
         android:background="@color/yellow_100"
         android:layout_alignParentBottom="true">
 
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_view_receipt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_drawable"
-            android:text="@string/view"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/btn_view_receipt"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/border_red_fill_white_rectangle"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-
-            <TextView
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_receipt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/total"
-                android:textColor="@color/red_500"
-                android:layout_weight="0.5"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="="
-                android:textColor="@color/red_500"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_total_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="00 Rs."
+                android:background="@drawable/button_drawable"
+                android:text="@string/view"
+                android:layout_margin="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
                 android:layout_weight="1"
-                android:padding="10dp"
-                android:textColor="@color/red_500"
-                android:textStyle="bold"
-                android:textSize="20sp"    />
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_reset"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_drawable"
+                android:text="@string/reset"
+                android:layout_margin="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
         </LinearLayout>
+
+
+
+
 
     </RelativeLayout>
 

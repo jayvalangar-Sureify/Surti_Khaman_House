@@ -19,6 +19,7 @@ import com.surti.khaman.house.R;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < DashboardRecyclerViewAdapter.ViewHolder > {
 
@@ -42,12 +43,13 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
     public void onBindViewHolder(ViewHolder holder, int position) {
         final DashboaedModelData MyData = mydata[position];
 
-        String getItemName = "", getWeight = "0", getPrice = "0", getAmount = "0", getFixedPrice = "0";
+        String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
         getItemName = mydata[position].getItem_name();
         getWeight = mydata[position].getWeight();
         getPrice = mydata[position].getPrice();
         getAmount = mydata[position].getAmount();
-        getFixedPrice = mydata[position].getFixed_price();
+        getFixedPrice = mydata[position].getFixedPrice();
+        getFixedWeight = mydata[position].getFixedWeight();
 
         holder.tv_item_name.setText(getItemName);
         holder.et_weight.setText(getWeight);
@@ -55,14 +57,13 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
         if(getAmount != "") {
             holder.tv_amount.setText(getAmount);
-        }else{
-            holder.tv_amount.setText("0");
         }
 
 
         // Find Price
         //------------------------------------------------------------------------------------------
         String finalGetFixedPrice = getFixedPrice;
+        String finalGetFixedWeight = getFixedWeight;
         holder.et_weight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,27 +78,25 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
                 if(is_Et_Weight_Focus) {
                     String temp_str = s.toString();
-                    if (temp_str.isEmpty()) {
+                    if (temp_str.isEmpty() || temp_str == "0") {
                         temp_str = "0";
                     }
 
-                    double i = Double.parseDouble(temp_str);
+                    Long i = Long.parseLong(temp_str);
 
-                    double find_dp = findDynamicPrice(parseStringToDouble(finalGetFixedPrice), i, 1000);
-                    holder.et_price.setText(Double.toString(find_dp));
+                    Long find_dp = findDynamicPrice(Long.parseLong(finalGetFixedPrice), i, Long.parseLong(finalGetFixedWeight));
+                    holder.et_price.setText(Long.toString(find_dp));
 
-                    if(Double.toString(find_dp) != "") {
-                        holder.tv_amount.setText(Double.toString(find_dp));
-                    }else {
-                        holder.tv_amount.setText("0");
+                    if(Long.toString(find_dp) != "") {
+                        holder.tv_amount.setText(Long.toString(find_dp));
                     }
 
-                    mydata[position].setPrice(Double.toString(find_dp));
-                    mydata[position].setWeight(s.toString());
-                    mydata[position].setAmount(Double.toString(find_dp));
+                    mydata[position].setDynamicPrice(Long.toString(find_dp));
+                    mydata[position].setDynamicWeight(s.toString());
+                    mydata[position].setCalculatedAmount(Long.toString(find_dp));
 
-                    Double grandTotal = findGrandTotal();
-                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
+//                    Long grandTotal = findGrandTotal();
+//                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
                 }
 
             }
@@ -122,27 +121,25 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
                 if(is_Et_Price_Focus) {
                     String temp_str = s.toString();
-                    if (temp_str.isEmpty()) {
+                    if (temp_str.isEmpty() || temp_str == "0") {
                         temp_str = "0";
                     }
 
-                    double i = Double.parseDouble(temp_str);
+                    Long i = Long.parseLong(temp_str);
 
-                    double find_dp = findDynamicWeight(1000, parseStringToDouble(finalGetFixedPrice), i);
-                    holder.et_weight.setText(Double.toString(find_dp));
+                    Long find_dp = findDynamicWeight(Long.parseLong(finalGetFixedWeight), Long.parseLong(finalGetFixedPrice), i);
+                    holder.et_weight.setText(Long.toString(find_dp));
 
                     if(s.toString() != "") {
                         holder.tv_amount.setText(s.toString());
-                    }else {
-                        holder.tv_amount.setText("0");
                     }
 
-                    mydata[position].setPrice(s.toString());
-                    mydata[position].setWeight(Double.toString(find_dp));
-                    mydata[position].setAmount(s.toString());
+                    mydata[position].setDynamicPrice(s.toString());
+                    mydata[position].setDynamicWeight(Long.toString(find_dp));
+                    mydata[position].setCalculatedAmount(s.toString());
 
-                    Double grandTotal = findGrandTotal();
-                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
+//                    Long grandTotal = findGrandTotal();
+//                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
                 }
 
 
@@ -179,10 +176,6 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
         return mydata.length;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -205,42 +198,37 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
 
 
-
-
-
-
-    private static double parseStringToDouble(String value) {
-        return value == null || value.isEmpty() ? 0.0 : Double.parseDouble(value);
-    }
-
     // f.w / f.p = d.w / d.p
     // dw = (f.w * d.p / f.p )
     // dp = (f.p * d.w / f.w)
 
-    public Double findDynamicWeight(double fw, double fp, double dp){
-        double dynamic_weight = 0;
+    public long findDynamicWeight(long fw, long fp, long dp){
+        long dynamic_weight = 0;
 
                dynamic_weight = (fw * dp) / fp;
 
         return dynamic_weight;
     }
 
-    public Double findDynamicPrice(double fp, double dw, double fw){
-        double dynamic_price = 0;
+    public Long findDynamicPrice(Long fp, Long dw, Long fw){
+        Long dynamic_price ;
 
         dynamic_price = (fp * dw) / fw;
 
         return dynamic_price;
     }
 
-    public double findGrandTotal(){
-        double grandTotal = 0;
+    public Long findGrandTotal(){
+        Long grandTotal =0l;
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
                 List<DashboaedModelData> myDataList = Arrays.asList(mydata);
-                grandTotal = myDataList.stream().filter(o -> Double.parseDouble(o.getAmount()) > 10.0).mapToInt(o -> (int) Double.parseDouble(o.getAmount())).sum();
+              //  List<String> aa = myDataList.stream().map(o -> o.getAmount()).collect(Collectors.toList());
+               // List<Long> r1 = aa.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
+                grandTotal = myDataList.stream().map(s -> Long.parseLong(s.getAmount())).collect(Collectors.toList()).stream().reduce(0l, Long::sum);
+
             }catch (Exception e){
                 e.getMessage();
             }

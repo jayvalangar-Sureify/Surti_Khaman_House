@@ -1,13 +1,12 @@
 package com.surti.khaman.house.ui.dashboard;
 
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.surti.khaman.house.Adapter.DashboardRecyclerViewAdapter;
+import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
 import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class DashboardFragment extends Fragment implements DashboardInterface {
@@ -30,7 +32,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     DashboardInterface dashboardInterface;
 
 
-    String grand_total = "0 Rs";
+    Long grand_total = 0l;
 
     ArrayList<String> item_name_list ;
     ArrayList<String> item_weight_list ;
@@ -42,14 +44,6 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        dashboardInterface = new DashboardInterface() {
-            @Override
-            public void onTotalAmountChange(String totalAmount) {
-                binding.tvTotalAmount.setText(totalAmount + " RS");
-                grand_total = totalAmount + "Rs";
-
-            }
-        };
 
         Dialog dialog = new Dialog(getActivity());
 
@@ -57,16 +51,19 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         //------------------------------------------------------------------------------------------
 
         DashboaedModelData[] myListData = new DashboaedModelData[]{
-                new DashboaedModelData("Khaman", "0", "0", "0", "200"),
-                new DashboaedModelData("N.Khaman ", "0", "0", "0", "200"),
-                new DashboaedModelData("Dhokla", "0", "0", "0", "200"),
-                new DashboaedModelData("Patra", "0", "0", "0", "200"),
-                new DashboaedModelData("Khandvi", "0", "0", "0", "240"),
-                new DashboaedModelData("Khamni", "0", "0", "0", "240"),
-                new DashboaedModelData("Fafda", "0", "0", "0", "360"),
-                new DashboaedModelData("Jalebi", "0", "0", "0", "300"),
-                new DashboaedModelData("Samosa", "0", "0", "0", "15"),
-                new DashboaedModelData("P.samosa", "0", "0", "0", "240")};
+                new DashboaedModelData("Khaman", "", "", "", "200", "1000"),
+                new DashboaedModelData("N.Khaman ", "", "", "", "200", "1000"),
+                new DashboaedModelData("Dhokla", "", "", "", "200", "1000"),
+                new DashboaedModelData("Patra", "", "", "", "200", "1000"),
+                new DashboaedModelData("Khandvi", "", "", "", "240", "1000"),
+                new DashboaedModelData("Khamni", "", "", "", "240", "1000"),
+                new DashboaedModelData("Gathiya", "", "", "", "240", "1000"),
+                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
+                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
+                new DashboaedModelData("Jalebi", "", "", "", "360", "1000"),
+                new DashboaedModelData("P.samosa", "", "", "", "240", "1000"),
+                new DashboaedModelData("Samosa", "", "", "", "15", "1"),
+                new DashboaedModelData("Kachori", "", "", "", "15", "1")};
 
 
         RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
@@ -84,50 +81,72 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
            binding.btnViewReceipt.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-
                    dialog.setContentView(R.layout.receipt_popup);
                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                    dialog.setCancelable(true);
                    dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
 
-                   Button btn_close = dialog.findViewById(R.id.btn_close_popup);
+                   //-------------------------------------------------------------------------------
+                   SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy  HH:mm");
+                   String currentDateAndTime = sdf.format(new Date());
+                   TextView tv_bill_no, tv_date_time;
+                   tv_bill_no = (TextView) dialog.findViewById(R.id.tv_bill_no_value);
+                   tv_date_time = (TextView) dialog.findViewById(R.id.tv_date_time_value);
 
+                   tv_bill_no.setText(": "+"001");
+                   tv_date_time.setText(": "+currentDateAndTime);
+                   //-------------------------------------------------------------------------------
+
+
+                   Button btn_close = dialog.findViewById(R.id.btn_close_popup);
 
                    item_name_list = new ArrayList<>();
                    item_weight_list = new ArrayList<>();
                    item_price_list = new ArrayList<>();
 
-                   //--------------------------------------------------------------------------------
-                   TableLayout ll = (TableLayout) dialog.findViewById(R.id.table_receipt);
-                    TextView tv_item_name, tv_item_weight, tv_item_price ;
-
-                   //--------------------------------------------------------------------------------
                    for(int i = 0; i < myListData.length; i++){
 
-                       if((int) Double.parseDouble(myListData[i].getAmount()) > 0){
+                       if((myListData[i].getAmount() != null) && !myListData[i].getAmount().isEmpty()) {
+                           if((Long.parseLong(myListData[i].getAmount()) > 0l)) {
+                               String item_name = myListData[i].getItem_name();
+                               String item_weight = myListData[i].getWeight();
+                               String item_price = myListData[i].getPrice();
 
-                           String item_name = myListData[i].getItem_name();
-                           String item_weight = myListData[i].getWeight();
-                           String item_price = myListData[i].getPrice();
-
-                           item_name_list.add(item_name);
-                           item_weight_list.add(item_weight);
-                           item_price_list.add(item_price);
+                               item_name_list.add(item_name);
+                               item_weight_list.add(item_weight);
+                               item_price_list.add(item_price);
+                           }
                        }
+                   }
+                   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                       try {
+                           ArrayList<Long> grand_total_list = new ArrayList<>();
 
+                           for(String s : item_price_list) grand_total_list.add(Long.valueOf(s));
+
+
+                           grand_total = 0l;
+
+                           for (Long number : grand_total_list){
+                               grand_total += number;
+                           }
+                       } catch (Exception e) {
+                           e.getMessage();
+                       }
                    }
 
+//-------------------------------------------------------------------------------------------------------------
+                   RecyclerView dashboard_recycleView = (RecyclerView) dialog.findViewById(R.id.rv_receipt);
+                   ReceiptPopupRecycleViewAdapter adapter = new ReceiptPopupRecycleViewAdapter(item_name_list, item_weight_list, item_price_list);
+//                   dashboard_recycleView.setHasFixedSize(true);
+                   dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+                   dashboard_recycleView.setAdapter(adapter);
+//-------------------------------------------------------------------------------------------------------------
 
-                   for (int j = 0; j < item_name_list.size(); j++){
-                       TableRow row= new TableRow(getContext());
 
-                       TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-                       row.setLayoutParams(lp);
-                       tv_item_name = new TextView(getContext());
-                       tv_item_name.setText(""+item_name_list.get(j)+" ---- "+item_weight_list.get(j)+" ----  "+item_price_list.get(j));
-                       row.addView(tv_item_name);
-                       ll.addView(row,j);
-                   }
+                   TextView tv_final_receipt_total = (TextView) dialog.findViewById(R.id.tv_final_receipt_total);
+                   tv_final_receipt_total.setText("Total = "+grand_total);
+
 
 
                    btn_close.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +160,15 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                }
            });
         //------------------------------------------------------------------------------------------
+
+
+
+
+
         return root;
     }
+
+
 
     @Override
     public void onDestroyView() {
