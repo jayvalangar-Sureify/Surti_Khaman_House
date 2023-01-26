@@ -15,6 +15,10 @@ import com.surti.khaman.house.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int PERMISSION_BLUETOOTH = 01;
+    public static final int PERMISSION_BLUETOOTH_ADMIN = 02;
+    public static final int PERMISSION_BLUETOOTH_CONNECT = 03;
+    public static final int PERMISSION_BLUETOOTH_SCAN = 04;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
