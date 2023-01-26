@@ -68,19 +68,32 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         //------------------------------------------------------------------------------------------
 
         DashboaedModelData[] myListData = new DashboaedModelData[]{
-                new DashboaedModelData("Khaman", "", "", "", "200", "1000"),
-                new DashboaedModelData("N.Khaman ", "", "", "", "200", "1000"),
-                new DashboaedModelData("Dhokla", "", "", "", "200", "1000"),
+                new DashboaedModelData("Vatidal Khaman", "", "", "", "200", "1000"),
+                new DashboaedModelData("Nylon Khaman", "", "", "", "200", "1000"),
+                new DashboaedModelData("White Dhokla", "", "", "", "200", "1000"),
+                new DashboaedModelData("Jain Khamni", "", "", "", "240", "1000"),
+                new DashboaedModelData("Lasan Khamni", "", "", "", "240", "1000"),
                 new DashboaedModelData("Patra", "", "", "", "200", "1000"),
                 new DashboaedModelData("Khandvi", "", "", "", "240", "1000"),
-                new DashboaedModelData("Khamni", "", "", "", "240", "1000"),
-                new DashboaedModelData("Gathiya", "", "", "", "240", "1000"),
-                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
-                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
+                new DashboaedModelData("Dal Patti Samosa", "", "", "", "240", "1000"),
+                new DashboaedModelData("Kanda Patti Samosa", "", "", "", "240", "1000"),
+                new DashboaedModelData("Jain Jumbo Samosa", "", "", "", "20", "1"),
+                new DashboaedModelData("Jambo Samosa", "", "", "", "15", "1"),
+                new DashboaedModelData("Dal Dahi Kachori", "", "", "", "25", "1"),
+                new DashboaedModelData("Oil Locho", "", "", "", "35", "1"),
+                new DashboaedModelData("Butter Locho", "", "", "", "45", "1"),
+                new DashboaedModelData("Cheese Locho", "", "", "", "55", "1"),
+                new DashboaedModelData("Schezwan Locho", "", "", "", "55", "1"),
                 new DashboaedModelData("Jalebi", "", "", "", "360", "1000"),
-                new DashboaedModelData("P.samosa", "", "", "", "240", "1000"),
-                new DashboaedModelData("Samosa", "", "", "", "15", "1"),
-                new DashboaedModelData("Kachori", "", "", "", "15", "1")};
+                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
+                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
+                new DashboaedModelData("Papdi", "", "", "", "300", "1000"),
+                new DashboaedModelData("Gathiya", "", "", "", "300", "1000"),
+                new DashboaedModelData("Mohanthal", "", "", "", "400", "1000"),
+                new DashboaedModelData("Small Water Bottle", "", "", "", "10", "1"),
+                new DashboaedModelData("Big Water Bottle", "", "", "", "20", "1")
+
+            };
 
 
         RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
@@ -151,9 +164,11 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
                            for (int i = 0; i <= item_name_list.size(); i++){
                                if(i == 0 ){
-                                   final_bill_string =  "\n[L]"+item_name_list.get(i)+"[C]"+item_weight_list.get(i)+"[R]"+item_price_list.get(i)+"\n";
+                                   final_bill_string =  "\n[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i)+"\n";
+                               }else if(i == (item_name_list.size() - 1)){
+                                   final_bill_string = final_bill_string + "[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i);
                                }else{
-                                   final_bill_string = final_bill_string + "[L]"+item_name_list.get(i)+"[C]"+item_weight_list.get(i)+"[R]"+item_price_list.get(i)+"\n";
+                                   final_bill_string = final_bill_string + "[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i)+"\n";
                                }
 
 
@@ -185,7 +200,6 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                        }
                    });
 
-                   String final_bill_string1 = "Jay";
                    btn_print.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View view) {
@@ -210,24 +224,20 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
                                    printer
                                            .printFormattedText(
-                                                           "[L]\n" +
                                                            "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
                                                            "[C]<u><font size='normal'>BORIVALI (EAST)</font></u>\n" +
                                                            "[C]<u><font size='normal'>Mobile. 9137272150</font></u>\n" +
-                                                           "[L]\n" +
-                                                           "[L] Bill No : "+"001"+"\n" +
+                                                           "[L] Bill No : <font size='big'><b>"+"001"+"</b></font>\n" +
                                                            "[L] Date-Time : "+currentDateAndTime+"\n" +
                                                            "[L] Fssai : "+"21522012000953"+"\n" +
                                                            "[C]================================\n" +
                                                            "[L] Items" +
-                                                           "[C] Weight" +
-                                                           "[R] Price \n" +
+                                                           "[R] Weight" +
+                                                           " Price\n" +
                                                            "[L]"+final_bill_string +"\n"+
-                                                           "[C]--------------------------------\n" +
-                                                           "[L]GRAND TOTAL :[R]<font size='big'><b>"+grand_total+"</b></font>\n" +
-                                                           "[L]\n" +
                                                            "[C]================================\n" +
-                                                           "[L]\n"
+                                                           "[C]GRAND TOTAL : <font size='big'><b>"+grand_total+"</b></font>\n" +
+                                                           "[C]================================"
                                            );
                                } catch (EscPosConnectionException e) {
                                    e.printStackTrace();
