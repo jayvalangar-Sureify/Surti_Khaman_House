@@ -163,12 +163,27 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                            }
 
                            for (int i = 0; i <= item_name_list.size(); i++){
+
+                               String item_name = item_name_list.get(i);
+                               String item_weight = item_weight_list.get(i);
+                               String item_price = item_price_list.get(i);
+
+                               if(item_price.length() == 1) {
+                                   item_price = "    "+item_price;
+                               }else if(item_price.length() == 2){
+                                   item_price = "   "+item_price;
+                               }else if(item_price.length() == 3){
+                                   item_price = "  "+item_price;
+                               }else if(item_price.length() == 4){
+                                   item_price = " "+item_price;
+                               }
+
                                if(i == 0 ){
-                                   final_bill_string =  "\n[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i)+"\n";
+                                   final_bill_string =  "\n[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
                                }else if(i == (item_name_list.size() - 1)){
-                                   final_bill_string = final_bill_string + "[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i);
+                                   final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price;
                                }else{
-                                   final_bill_string = final_bill_string + "[L]"+item_name_list.get(i)+"[R]"+item_weight_list.get(i)+"     "+item_price_list.get(i)+"\n";
+                                   final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
                                }
 
 
@@ -232,8 +247,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                                            "[L] Fssai : "+"21522012000953"+"\n" +
                                                            "[C]================================\n" +
                                                            "[L] Items" +
-                                                           "[R] Weight" +
-                                                           " Price\n" +
+                                                           "[R] Weight" + "    Price\n" +
                                                            "[L]"+final_bill_string +"\n"+
                                                            "[C]================================\n" +
                                                            "[C]GRAND TOTAL : <font size='big'><b>"+grand_total+"</b></font>\n" +
