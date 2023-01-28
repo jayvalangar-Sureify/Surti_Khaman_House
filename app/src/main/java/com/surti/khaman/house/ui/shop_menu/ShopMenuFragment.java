@@ -46,6 +46,8 @@ public class ShopMenuFragment extends Fragment {
         Dialog dialog = new Dialog(getActivity());
 
         Button btnAdd = root.findViewById(R.id.btn_add_item);
+        Button btnDashboard = root.findViewById(R.id.btn_dashboard);
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +60,7 @@ public class ShopMenuFragment extends Fragment {
 
                 //-------------------------------------------------------------------------------
                 EditText et_item_name, et_item_weight, et_item_price;
-                Button btn_save, btn_display, btn_update;
+                Button btn_save;
                 et_item_name = (EditText) dialog.findViewById(R.id.et_item_name);
                 et_item_weight = (EditText) dialog.findViewById(R.id.et_item_weight);
                 et_item_price = (EditText) dialog.findViewById(R.id.et_item_price);
@@ -67,10 +69,24 @@ public class ShopMenuFragment extends Fragment {
                 btn_save.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        insertDate(et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
-                        dialog.dismiss();
-                        displayData();
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        ContentValues cv=new ContentValues();
+
+                        String et_item_name_string, et_item_weight_string, et_item_price_string;
+                        et_item_name_string = et_item_name.getText().toString();
+                        et_item_weight_string = et_item_weight.getText().toString();
+                        et_item_price_string = et_item_price.getText().toString();
+
+                        if(!et_item_name_string.isEmpty() && !et_item_weight_string.isEmpty() && !et_item_price_string.isEmpty() ) {
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, et_item_name_string);
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, et_item_weight_string);
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN, et_item_price_string);
+                            insertDate(et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
+                            dialog.dismiss();
+                            displayData();
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        }else{
+                            Toast.makeText(getActivity(), "Enter ALL Field", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -81,6 +97,15 @@ public class ShopMenuFragment extends Fragment {
             }
         });
         //==================================================================================
+
+
+
+        btnDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return root;
     }
@@ -121,7 +146,7 @@ public class ShopMenuFragment extends Fragment {
             modelArrayList.add(new ShopMenuModelData(id, item_name, item_weight, item_price));
         }
         cursor.close();
-        myAdapter=new ShopMenuRecycleViewAdapter(getActivity(),R.layout.singledata,modelArrayList,sqLiteDatabase);
+        myAdapter=new ShopMenuRecycleViewAdapter(getActivity(),R.layout.row_display_shop_menu_data,modelArrayList,sqLiteDatabase);
         recyclerView.setAdapter(myAdapter);
     }
 

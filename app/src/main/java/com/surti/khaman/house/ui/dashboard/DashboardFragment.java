@@ -67,42 +67,9 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         databaseMain=new DatabaseMain(getActivity());
 
 
-        //------------------------------------------------------------------------------------------
 
         //------------------------------------------------------------------------------------------
         Dialog dialog = new Dialog(getActivity());
-
-
-        //------------------------------------------------------------------------------------------
-
-//        DashboaedModelData[] myListData = new DashboaedModelData[]{
-//                new DashboaedModelData("Vatidal Khaman", "", "", "", "200", "1000"),
-//                new DashboaedModelData("Nylon Khaman", "", "", "", "200", "1000"),
-//                new DashboaedModelData("White Dhokla", "", "", "", "200", "1000"),
-//                new DashboaedModelData("Jain Khamni", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Lasan Khamni", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Patra", "", "", "", "200", "1000"),
-//                new DashboaedModelData("Khandvi", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Dal Patti Samosa", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Kanda Patti Samosa", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Jain Jumbo Samosa", "", "", "", "20", "1"),
-//                new DashboaedModelData("Jambo Samosa", "", "", "", "15", "1"),
-//                new DashboaedModelData("Dal Dahi Kachori", "", "", "", "25", "1"),
-//                new DashboaedModelData("Oil Locho", "", "", "", "35", "1"),
-//                new DashboaedModelData("Butter Locho", "", "", "", "45", "1"),
-//                new DashboaedModelData("Cheese Locho", "", "", "", "55", "1"),
-//                new DashboaedModelData("Schezwan Locho", "", "", "", "55", "1"),
-//                new DashboaedModelData("Jalebi", "", "", "", "360", "1000"),
-//                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
-//                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
-//                new DashboaedModelData("Papdi", "", "", "", "300", "1000"),
-//                new DashboaedModelData("Gathiya", "", "", "", "300", "1000"),
-//                new DashboaedModelData("Mohanthal", "", "", "", "400", "1000"),
-//                new DashboaedModelData("Small Water Bottle", "", "", "", "10", "1"),
-//                new DashboaedModelData("Big Water Bottle", "", "", "", "20", "1")
-//
-//            };
-
 
         displayData();
         RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
@@ -240,28 +207,36 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                Log.i("test_print", "final_bill_string :- "+final_bill_string);
                                Log.i("test_print", "grand_total :- "+grand_total);
 
-
                                // Your code HERE
                                try {
+
+                                   if(item_name_list.size() != 0){
                                    EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
-
-
                                    printer
                                            .printFormattedText(
-                                                           "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
+                                                   "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
                                                            "[C]<u><font size='normal'>BORIVALI (EAST)</font></u>\n" +
                                                            "[C]<u><font size='normal'>Mobile. 9137272150</font></u>\n" +
-                                                           "[L] Bill No : <font size='big'><b>"+"001"+"</b></font>\n" +
-                                                           "[L] Date-Time : "+currentDateAndTime+"\n" +
-                                                           "[L] Fssai : "+"21522012000953"+"\n" +
+                                                           "[L] Bill No : <font size='big'><b>" + "001" + "</b></font>\n" +
+                                                           "[L] Date-Time : " + currentDateAndTime + "\n" +
+                                                           "[L] Fssai : " + "21522012000953" + "\n" +
                                                            "[C]================================\n" +
                                                            "[L] Items" +
                                                            "[R] Weight" + "    Price\n" +
-                                                           "[L]"+final_bill_string +"\n"+
+                                                           "[L]" + final_bill_string + "\n" +
                                                            "[C]================================\n" +
-                                                           "[C]GRAND TOTAL : <font size='big'><b>"+grand_total+"</b></font>\n" +
+                                                           "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
                                                            "[C]================================"
                                            );
+                               }else{
+
+                                   }
+                                   try{
+                                       dialog.dismiss();
+                                   }catch (Exception e){
+                                       e.getMessage();
+                                       Log.i("test_print", "Exception dialog dismiss:"+e.getMessage());
+                                   }
                                } catch (EscPosConnectionException e) {
                                    e.printStackTrace();
                                    Log.i("test_print", "Exception 1 :- "+e.getMessage());
@@ -286,6 +261,19 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
 
 
+        //==========================================================================================
+        binding.btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayData();
+                RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
+                DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList, dashboardInterface);
+                dashboard_recycleView.setHasFixedSize(true);
+                dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
+                dashboard_recycleView.setAdapter(adapter);
+            }
+        });
+        //==========================================================================================
 
 
         return root;

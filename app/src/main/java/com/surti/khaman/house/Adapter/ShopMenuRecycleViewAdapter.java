@@ -39,7 +39,7 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
     @Override
     public ShopMenuRecycleViewAdapter.ModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(context);
-        View view=inflater.inflate(R.layout.singledata,null);
+        View view=inflater.inflate(R.layout.row_display_shop_menu_data,null);
         return new ModelViewHolder(view);
     }
 
@@ -47,8 +47,8 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
     public void onBindViewHolder(@NonNull ShopMenuRecycleViewAdapter.ModelViewHolder holder, int position) {
         final ShopMenuModelData model=modelArrayList.get(position);
         holder.tv_item_name.setText(model.getItem_name());
-        holder.tv_item_weight.setText(model.getFixedWeight());
-        holder.tv_item_price.setText(model.getFixedPrice());
+        holder.tv_item_weight.setText(model.getFixedWeight() + " gm");
+        holder.tv_item_price.setText(model.getFixedPrice() + " Rs");
 
         //click on button go to main activity
 //        holder.btn_update.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
 //                bundle.putString("item_name",model.getItem_name());
 //                bundle.putString("item_weight",model.getFixedWeight());
 //                bundle.putString("item_price",model.getFixedPrice());
-//                Intent intent=new Intent(context,MainActivity.class);
+//                Intent intent=new Intent(context, MainActivity.class);
 //                intent.putExtra("userdata",bundle);
 //                context.startActivity(intent);
 //            }
@@ -85,26 +85,40 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
                 et_item_price = (EditText) dialog.findViewById(R.id.et_item_price);
                 btn_update = (Button) dialog.findViewById(R.id.btn_update);
 
+                et_item_name.setText(model.getItem_name());
+                et_item_weight.setText(model.getFixedWeight());
+                et_item_price.setText(model.getFixedPrice());
+
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ContentValues cv=new ContentValues();
-                        cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN,et_item_name.getText().toString());
-                        cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN,et_item_weight.getText().toString());
-                        cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN,et_item_price.getText().toString());
-                        DatabaseMain databaseMain;
-                        databaseMain = new DatabaseMain(context);
-                        sqLiteDatabase=databaseMain.getReadableDatabase();
-                        long recedit=sqLiteDatabase.update(DatabaseMain.SHOP_MENU_TABLE_NAME,cv,"id="+model.getId(),null);
-                        if (recedit!=-1){
-                            ShopMenuModelData shopMenuModelData = new ShopMenuModelData(model.getId(), et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
-                            modelArrayList.set(position, shopMenuModelData);
-                            notifyItemChanged(position);
-                            Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(context, "something wrong try again", Toast.LENGTH_SHORT).show();
+                        String et_item_name_string, et_item_weight_string, et_item_price_string;
+                        et_item_name_string = et_item_name.getText().toString();
+                        et_item_weight_string = et_item_weight.getText().toString();
+                        et_item_price_string = et_item_price.getText().toString();
+
+                        if(!et_item_name_string.isEmpty() && !et_item_weight_string.isEmpty() && !et_item_price_string.isEmpty() ) {
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, et_item_name_string);
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, et_item_weight_string);
+                            cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN, et_item_price_string);
+                            DatabaseMain databaseMain;
+                            databaseMain = new DatabaseMain(context);
+                            sqLiteDatabase = databaseMain.getReadableDatabase();
+                            long recedit = sqLiteDatabase.update(DatabaseMain.SHOP_MENU_TABLE_NAME, cv, "id=" + model.getId(), null);
+                            if (recedit != -1) {
+                                ShopMenuModelData shopMenuModelData = new ShopMenuModelData(model.getId(), et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
+                                modelArrayList.set(position, shopMenuModelData);
+                                notifyItemChanged(position);
+//                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
+                            } else {
+
+                            }
+                            dialog.dismiss();
+                        }else {
+                            // Initialising Toast
+                            Toast.makeText(context, "Enter ALL Field", Toast.LENGTH_LONG).show();
                         }
-                        dialog.dismiss();
                     }
                 });
 

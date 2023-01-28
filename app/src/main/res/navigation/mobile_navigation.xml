@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_shop_menu"
         android:name="com.surti.khaman.house.ui.shop_menu.ShopMenuFragment"
         android:label="@string/left_menu_edit_dashboard"
         tools:layout="@layout/fragment_shop_menu" />
