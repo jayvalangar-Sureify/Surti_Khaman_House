@@ -3,6 +3,8 @@ package com.surti.khaman.house.ui.dashboard;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +29,7 @@ import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
 import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.surti.khaman.house.Adapter.DashboardRecyclerViewAdapter;
 import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
+import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
@@ -39,6 +42,10 @@ import java.util.Date;
 
 
 public class DashboardFragment extends Fragment implements DashboardInterface {
+
+    SQLiteDatabase sqLiteDatabase;
+    DatabaseMain databaseMain;
+    ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
 
     private FragmentDashboardBinding binding;
     DashboardInterface dashboardInterface;
@@ -57,6 +64,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        databaseMain=new DatabaseMain(getActivity());
 
 
         //------------------------------------------------------------------------------------------
@@ -67,37 +75,38 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
         //------------------------------------------------------------------------------------------
 
-        DashboaedModelData[] myListData = new DashboaedModelData[]{
-                new DashboaedModelData("Vatidal Khaman", "", "", "", "200", "1000"),
-                new DashboaedModelData("Nylon Khaman", "", "", "", "200", "1000"),
-                new DashboaedModelData("White Dhokla", "", "", "", "200", "1000"),
-                new DashboaedModelData("Jain Khamni", "", "", "", "240", "1000"),
-                new DashboaedModelData("Lasan Khamni", "", "", "", "240", "1000"),
-                new DashboaedModelData("Patra", "", "", "", "200", "1000"),
-                new DashboaedModelData("Khandvi", "", "", "", "240", "1000"),
-                new DashboaedModelData("Dal Patti Samosa", "", "", "", "240", "1000"),
-                new DashboaedModelData("Kanda Patti Samosa", "", "", "", "240", "1000"),
-                new DashboaedModelData("Jain Jumbo Samosa", "", "", "", "20", "1"),
-                new DashboaedModelData("Jambo Samosa", "", "", "", "15", "1"),
-                new DashboaedModelData("Dal Dahi Kachori", "", "", "", "25", "1"),
-                new DashboaedModelData("Oil Locho", "", "", "", "35", "1"),
-                new DashboaedModelData("Butter Locho", "", "", "", "45", "1"),
-                new DashboaedModelData("Cheese Locho", "", "", "", "55", "1"),
-                new DashboaedModelData("Schezwan Locho", "", "", "", "55", "1"),
-                new DashboaedModelData("Jalebi", "", "", "", "360", "1000"),
-                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
-                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
-                new DashboaedModelData("Papdi", "", "", "", "300", "1000"),
-                new DashboaedModelData("Gathiya", "", "", "", "300", "1000"),
-                new DashboaedModelData("Mohanthal", "", "", "", "400", "1000"),
-                new DashboaedModelData("Small Water Bottle", "", "", "", "10", "1"),
-                new DashboaedModelData("Big Water Bottle", "", "", "", "20", "1")
+//        DashboaedModelData[] myListData = new DashboaedModelData[]{
+//                new DashboaedModelData("Vatidal Khaman", "", "", "", "200", "1000"),
+//                new DashboaedModelData("Nylon Khaman", "", "", "", "200", "1000"),
+//                new DashboaedModelData("White Dhokla", "", "", "", "200", "1000"),
+//                new DashboaedModelData("Jain Khamni", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Lasan Khamni", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Patra", "", "", "", "200", "1000"),
+//                new DashboaedModelData("Khandvi", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Dal Patti Samosa", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Kanda Patti Samosa", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Jain Jumbo Samosa", "", "", "", "20", "1"),
+//                new DashboaedModelData("Jambo Samosa", "", "", "", "15", "1"),
+//                new DashboaedModelData("Dal Dahi Kachori", "", "", "", "25", "1"),
+//                new DashboaedModelData("Oil Locho", "", "", "", "35", "1"),
+//                new DashboaedModelData("Butter Locho", "", "", "", "45", "1"),
+//                new DashboaedModelData("Cheese Locho", "", "", "", "55", "1"),
+//                new DashboaedModelData("Schezwan Locho", "", "", "", "55", "1"),
+//                new DashboaedModelData("Jalebi", "", "", "", "360", "1000"),
+//                new DashboaedModelData("Fafda", "", "", "", "360", "1000"),
+//                new DashboaedModelData("Sev", "", "", "", "240", "1000"),
+//                new DashboaedModelData("Papdi", "", "", "", "300", "1000"),
+//                new DashboaedModelData("Gathiya", "", "", "", "300", "1000"),
+//                new DashboaedModelData("Mohanthal", "", "", "", "400", "1000"),
+//                new DashboaedModelData("Small Water Bottle", "", "", "", "10", "1"),
+//                new DashboaedModelData("Big Water Bottle", "", "", "", "20", "1")
+//
+//            };
 
-            };
 
-
+        displayData();
         RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
-        DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(myListData, dashboardInterface);
+        DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList, dashboardInterface);
         dashboard_recycleView.setHasFixedSize(true);
         dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         dashboard_recycleView.setAdapter(adapter);
@@ -135,13 +144,13 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                    item_weight_list = new ArrayList<>();
                    item_price_list = new ArrayList<>();
 
-                   for(int i = 0; i < myListData.length; i++){
+                   for(int i = 0; i < dashboaedModelDataArrayList.size(); i++){
 
-                       if((myListData[i].getAmount() != null) && !myListData[i].getAmount().isEmpty()) {
-                           if((Long.parseLong(myListData[i].getAmount()) > 0l)) {
-                               String item_name = myListData[i].getItem_name();
-                               String item_weight = myListData[i].getWeight();
-                               String item_price = myListData[i].getPrice();
+                       if((dashboaedModelDataArrayList.get(i).getAmount() != null) && !dashboaedModelDataArrayList.get(i).getAmount().isEmpty()) {
+                           if((Long.parseLong(dashboaedModelDataArrayList.get(i).getAmount()) > 0l)) {
+                               String item_name = dashboaedModelDataArrayList.get(i).getItem_name();
+                               String item_weight = dashboaedModelDataArrayList.get(i).getWeight();
+                               String item_price = dashboaedModelDataArrayList.get(i).getPrice();
 
                                item_name_list.add(item_name);
                                item_weight_list.add(item_weight);
@@ -282,6 +291,23 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         return root;
     }
 
+
+    //----------------------------------------------------------------------------------------------
+
+    private void displayData() {
+        sqLiteDatabase=databaseMain.getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_MENU_TABLE_NAME+"",null);
+        dashboaedModelDataArrayList = new ArrayList<>();
+        while (cursor.moveToNext()){
+            int id=cursor.getInt(0);
+            String item_name = cursor.getString(1);
+            String item_weight = cursor.getString(2);
+            String item_price = cursor.getString(3);
+            dashboaedModelDataArrayList.add(new DashboaedModelData(item_name, "", "", "",  item_price, item_weight));
+        }
+        cursor.close();
+    }
+    //----------------------------------------------------------------------------------------------
 
 
     @Override

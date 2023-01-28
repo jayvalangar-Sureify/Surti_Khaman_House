@@ -17,19 +17,19 @@ import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < DashboardRecyclerViewAdapter.ViewHolder > {
 
     boolean is_Et_Weight_Focus, is_Et_Price_Focus;
-     DashboaedModelData[] mydata;
+     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
     DashboardInterface dashboardInterface;
 
     // RecyclerView recyclerView;
-    public DashboardRecyclerViewAdapter(DashboaedModelData[] mydata, DashboardInterface dashboardInterface) {
-        this.mydata = mydata;
+    public DashboardRecyclerViewAdapter(ArrayList<DashboaedModelData> dashboaedModelDataArrayList, DashboardInterface dashboardInterface) {
+        this.dashboaedModelDataArrayList = dashboaedModelDataArrayList;
         this.dashboardInterface = dashboardInterface;
     }
     @Override
@@ -41,15 +41,15 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final DashboaedModelData MyData = mydata[position];
+        final DashboaedModelData MyData = dashboaedModelDataArrayList.get(position);
 
         String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
-        getItemName = mydata[position].getItem_name();
-        getWeight = mydata[position].getWeight();
-        getPrice = mydata[position].getPrice();
-        getAmount = mydata[position].getAmount();
-        getFixedPrice = mydata[position].getFixedPrice();
-        getFixedWeight = mydata[position].getFixedWeight();
+        getItemName = dashboaedModelDataArrayList.get(position).getItem_name();
+        getWeight = dashboaedModelDataArrayList.get(position).getWeight();
+        getPrice = dashboaedModelDataArrayList.get(position).getPrice();
+        getAmount = dashboaedModelDataArrayList.get(position).getAmount();
+        getFixedPrice = dashboaedModelDataArrayList.get(position).getFixedPrice();
+        getFixedWeight = dashboaedModelDataArrayList.get(position).getFixedWeight();
 
         holder.tv_item_name.setText(getItemName);
         holder.et_weight.setText(getWeight);
@@ -91,9 +91,9 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                         holder.tv_amount.setText(Long.toString(find_dp));
                     }
 
-                    mydata[position].setDynamicPrice(Long.toString(find_dp));
-                    mydata[position].setDynamicWeight(s.toString());
-                    mydata[position].setCalculatedAmount(Long.toString(find_dp));
+                    dashboaedModelDataArrayList.get(position).setDynamicPrice(Long.toString(find_dp));
+                    dashboaedModelDataArrayList.get(position).setDynamicWeight(s.toString());
+                    dashboaedModelDataArrayList.get(position).setCalculatedAmount(Long.toString(find_dp));
 
 //                    Long grandTotal = findGrandTotal();
 //                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
@@ -134,9 +134,9 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                         holder.tv_amount.setText(s.toString());
                     }
 
-                    mydata[position].setDynamicPrice(s.toString());
-                    mydata[position].setDynamicWeight(Long.toString(find_dp));
-                    mydata[position].setCalculatedAmount(s.toString());
+                    dashboaedModelDataArrayList.get(position).setDynamicPrice(s.toString());
+                    dashboaedModelDataArrayList.get(position).setDynamicWeight(Long.toString(find_dp));
+                    dashboaedModelDataArrayList.get(position).setCalculatedAmount(s.toString());
 
 //                    Long grandTotal = findGrandTotal();
 //                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
@@ -173,7 +173,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
     }
     @Override
     public int getItemCount() {
-        return mydata.length;
+        return dashboaedModelDataArrayList.size();
     }
 
 
@@ -224,7 +224,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                List<DashboaedModelData> myDataList = Arrays.asList(mydata);
+                List<DashboaedModelData> myDataList = dashboaedModelDataArrayList;
               //  List<String> aa = myDataList.stream().map(o -> o.getAmount()).collect(Collectors.toList());
                // List<Long> r1 = aa.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
                 grandTotal = myDataList.stream().map(s -> Long.parseLong(s.getAmount())).collect(Collectors.toList()).stream().reduce(0l, Long::sum);
