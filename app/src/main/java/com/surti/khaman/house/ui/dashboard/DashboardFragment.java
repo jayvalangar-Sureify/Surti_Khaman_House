@@ -107,6 +107,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
                    Button btn_close = dialog.findViewById(R.id.btn_close_popup);
                    Button btn_print = dialog.findViewById(R.id.btn_print);
+
+
                    item_name_list = new ArrayList<>();
                    item_weight_list = new ArrayList<>();
                    item_price_list = new ArrayList<>();
