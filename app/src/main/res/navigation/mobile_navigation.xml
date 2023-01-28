@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.surti.khaman.house.ui.gallery.GalleryFragment"
-        android:label="@string/left_menu_find_rupees"
-        tools:layout="@layout/fragment_gallery" />
+        android:name="com.surti.khaman.house.ui.shop_menu.ShopMenuFragment"
+        android:label="@string/left_menu_edit_dashboard"
+        tools:layout="@layout/fragment_shop_menu" />
 
     <fragment
         android:id="@+id/nav_slideshow"

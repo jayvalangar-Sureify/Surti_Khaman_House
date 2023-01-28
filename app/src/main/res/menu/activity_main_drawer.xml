@@ -10,8 +10,8 @@
             android:title="@string/left_menu_dashboard" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_left_menu_price_24"
-            android:title="@string/left_menu_find_rupees" />
+            android:icon="@drawable/ic_edit_24"
+            android:title="@string/left_menu_edit_dashboard" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_left_menu_weight_24"

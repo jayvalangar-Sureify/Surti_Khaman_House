@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="left_menu_dashboard">Dashboard</string>
+    <string name="left_menu_edit_dashboard">Edit Dashboard</string>
     <string name="left_menu_find_rupees">Find Rupees</string>
     <string name="left_menu_find_weight">Find Weight</string>
 
@@ -17,6 +18,9 @@
     <string name="item">Item</string>
     <string name="weight">Weight</string>
     <string name="price">Price</string>
+    <string name="item_">Item :</string>
+    <string name="weight_">Weight :</string>
+    <string name="price_">Price :"</string>
     <string name="amount">Amount</string>
     <string name="view">View</string>
     <string name="reset">Reset</string>
@@ -29,6 +33,19 @@
     <string name="bill_no">Bill No</string>
     <string name="date_and_Time">Date and Time</string>
     <string name="print">Print</string>
+
+
+    <!-- Shop Menu -->
+    <string name="add">Add</string>
+    <string name="add_item">Add Item</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="add_menu_item">Add Menu Item</string>
+    <string name="Update_menu_item">Update Menu Item</string>
+    <string name="enter_item_name">Enter Item Name</string>
+    <string name="enter_fix_weight_for_1_kg">Enter Fix Weight For 1 KG</string>
+    <string name="enter_fix_price_for_1_kg">Enter Fix Price For 1 KG</string>
 
 
 
