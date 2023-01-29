@@ -108,6 +108,33 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                    Button btn_close = dialog.findViewById(R.id.btn_close_popup);
                    Button btn_print = dialog.findViewById(R.id.btn_print);
 
+                   TextView tv_cash = dialog.findViewById(R.id.tv_switch_cash);
+                   TextView tv_online = dialog.findViewById(R.id.tv_switch_online);
+
+                   final String[] final_payment_method = {" - Cash"};
+
+                   tv_cash.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           final_payment_method[0] = " - Cash";
+                           tv_cash.setTextColor(getResources().getColor(R.color.white));
+                           tv_cash.setBackgroundColor(getResources().getColor(R.color.yellow_500));
+                           tv_online.setTextColor(getResources().getColor(R.color.red_500));
+                           tv_online.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                       }
+                   });
+
+                   tv_online.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           final_payment_method[0] = " - Online";
+                           tv_cash.setTextColor(getResources().getColor(R.color.red_500));
+                           tv_cash.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                           tv_online.setTextColor(getResources().getColor(R.color.white));
+                           tv_online.setBackgroundColor(getResources().getColor(R.color.yellow_500));
+                       }
+                   });
+
 
                    item_name_list = new ArrayList<>();
                    item_weight_list = new ArrayList<>();
@@ -205,7 +232,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                            } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_SCAN}, MainActivity.PERMISSION_BLUETOOTH_SCAN);
                            } else {
-                               Log.i("test_print", "Run bussiness logic");
+                               Log.i("test_print", "Run bussiness logic : "+ final_payment_method[0]);
                                Log.i("test_print", "final_bill_string :- "+final_bill_string);
                                Log.i("test_print", "grand_total :- "+grand_total);
 
@@ -219,7 +246,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                                    "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
                                                            "[C]<u><font size='normal'>BORIVALI (EAST)</font></u>\n" +
                                                            "[C]<u><font size='normal'>Mobile. 9137272150</font></u>\n" +
-                                                           "[L] Bill No : <font size='big'><b>" + "001" + "</b></font>\n" +
+                                                           "[L] Bill No : <font size='big'><b>" + "001" + "</b></font> "+final_payment_method[0]+"\n" +
                                                            "[L] Date-Time : " + currentDateAndTime + "\n" +
                                                            "[L] Fssai : " + "21522012000953" + "\n" +
                                                            "[C]================================\n" +
