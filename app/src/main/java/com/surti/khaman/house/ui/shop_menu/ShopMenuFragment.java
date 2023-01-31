@@ -80,9 +80,9 @@ public class ShopMenuFragment extends Fragment {
                             cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, et_item_name_string);
                             cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, et_item_weight_string);
                             cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN, et_item_price_string);
-                            insertDate(et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
+                            insert_Shop_Menu_Data(et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
                             dialog.dismiss();
-                            displayData();
+                            display_Shop_Menu_Data();
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                         }else{
                             Toast.makeText(getActivity(), "Enter ALL Field", Toast.LENGTH_LONG).show();
@@ -115,11 +115,11 @@ public class ShopMenuFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        displayData();
+        display_Shop_Menu_Data();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void insertDate(String itemName, String itemWeight, String itemPrice){
+    private void insert_Shop_Menu_Data(String itemName, String itemWeight, String itemPrice){
         ContentValues cv = new ContentValues();
         cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, itemName);
         cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, itemWeight);
@@ -134,7 +134,7 @@ public class ShopMenuFragment extends Fragment {
         }
     }
 
-    private void displayData() {
+    private void display_Shop_Menu_Data() {
         sqLiteDatabase=databaseMain.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_MENU_TABLE_NAME+"",null);
         ArrayList<ShopMenuModelData> modelArrayList=new ArrayList<>();

@@ -89,10 +89,13 @@ public class MainActivity extends AppCompatActivity {
                     myExternalFile.mkdir();
                 }
                 File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
-                FileOutputStream fos = new FileOutputStream(file);
-                String data = "JayBinal";
-                fos.write(data.getBytes());
-                fos.close();
+                if(!file.exists()) {
+                    FileOutputStream fos = new FileOutputStream(file, true);
+                    String data = "        || Ganprati Bapa Morya ||        ";
+                    fos.write(data.getBytes());
+                    fos.close();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

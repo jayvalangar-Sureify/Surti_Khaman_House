@@ -2,11 +2,13 @@ package com.surti.khaman.house.ui.dashboard;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +35,14 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
+import com.surti.khaman.house.Model.ShopMenuModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +59,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
 
     String final_bill_string = "";
+    String final_file_string = "";
     String currentDateAndTime = "";
     Long grand_total = 0l;
 
@@ -185,11 +193,15 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
                                if(i == 0 ){
                                    final_bill_string =  "\n[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
+                                   final_file_string = "{\n["+item_name+", "+item_weight +", "+item_price + "]\n";
                                }else if(i == (item_name_list.size() - 1)){
                                    final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price;
+                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + "]\n}\n";
                                }else{
                                    final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
+                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + "]\n";
                                }
+
 
 
                            }
@@ -235,6 +247,37 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                Log.i("test_print", "Run bussiness logic : "+ final_payment_method[0]);
                                Log.i("test_print", "final_bill_string :- "+final_bill_string);
                                Log.i("test_print", "grand_total :- "+grand_total);
+
+
+                               // Insert Into Database
+                               //-------------------------------------------------------------------------
+                               insert_Shop_Revenue_Data(currentDateAndTime, final_bill_string, ""+grand_total);
+                               //-------------------------------------------------------------------------
+
+
+                               // Insert Into File
+                               //-------------------------------------------------------------------------
+                               String file_data = "\nDate and Time : "+currentDateAndTime
+                                       +"\n"+final_file_string
+                                       +"\nGrand Total : "+grand_total
+                                       +"\n----------------------------------------";
+
+                               OutputStream os = null;
+                               try {
+                                   // below true flag tells OutputStream to append
+                                   os = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+"/SurtiKhamanHouse.txt"), true);
+                                   os.write(file_data.getBytes(), 0, file_data.length());
+                               } catch (IOException e) {
+                                   e.printStackTrace();
+                               } finally {
+                                   try {
+                                       os.close();
+                                   } catch (IOException e) {
+                                       e.printStackTrace();
+                                   }
+                               }
+                               //-------------------------------------------------------------------------
+
 
                                // Your code HERE
                                try {
@@ -321,6 +364,60 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
             String item_weight = cursor.getString(2);
             String item_price = cursor.getString(3);
             dashboaedModelDataArrayList.add(new DashboaedModelData(item_name, "", "", "",  item_price, item_weight));
+        }
+        cursor.close();
+    }
+    //----------------------------------------------------------------------------------------------
+
+
+
+
+    // Shop_Menu_Tabel
+    //----------------------------------------------------------------------------------------------
+
+    private void display_Shop_Menu_Data() {
+        sqLiteDatabase=databaseMain.getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_MENU_TABLE_NAME+"",null);
+
+        while (cursor.moveToNext()){
+            int id=cursor.getInt(0);
+            String item_name = cursor.getString(1);
+            String item_weight = cursor.getString(2);
+            String item_price = cursor.getString(3);
+
+        }
+        cursor.close();
+    }
+    //----------------------------------------------------------------------------------------------
+
+
+    // shop_revenue_tabel
+    //----------------------------------------------------------------------------------------------
+    public void insert_Shop_Revenue_Data(String bill_date_time, String item_name_weight_price, String bill_amount){
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseMain.SHOP_REVENUE_BILL_DATE_TIME_COLUMN, bill_date_time);
+        cv.put(DatabaseMain.SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN, item_name_weight_price);
+        cv.put(DatabaseMain.SHOP_REVENUE_BILL_AMOUNT_COLUMN, bill_amount);
+
+        sqLiteDatabase = databaseMain.getWritableDatabase();
+        Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_REVENUE_TABLE_NAME, null, cv);
+        if (recinsert != null) {
+//            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
+        } else {
+//            Toast.makeText(getActivity(), "something wrong try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void display_Shop_Revenue_Data() {
+        sqLiteDatabase=databaseMain.getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
+        ArrayList<ShopMenuModelData> modelArrayList=new ArrayList<>();
+        while (cursor.moveToNext()){
+            int id=cursor.getInt(0);
+            String item_name = cursor.getString(1);
+            String item_weight = cursor.getString(2);
+            String item_price = cursor.getString(3);
+            modelArrayList.add(new ShopMenuModelData(id, item_name, item_weight, item_price));
         }
         cursor.close();
     }
