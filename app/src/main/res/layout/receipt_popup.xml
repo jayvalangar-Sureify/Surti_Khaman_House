@@ -181,7 +181,7 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="26dp"
         android:layout_marginStart="10dp"
-        app:cardBackgroundColor="@color/grey_200"
+        app:cardBackgroundColor="@color/grey_100"
         android:padding="8dp">
 
         <LinearLayout
@@ -198,7 +198,7 @@
             android:text="@string/cash"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:background="@color/yellow_500"
+            android:background="@color/green_300"
             />
 
 
@@ -210,8 +210,8 @@
             android:padding="6dp"
             android:textSize="20sp"
             android:text="@string/online"
-            android:textStyle="bold"
-            android:textColor="@color/red_500"
+            android:textStyle=""
+            android:textColor="@color/red_300"
             />
         </LinearLayout>
 

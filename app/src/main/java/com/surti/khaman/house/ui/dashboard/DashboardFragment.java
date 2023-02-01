@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -157,9 +158,11 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                        public void onClick(View view) {
                            final_payment_method[0] = " - Cash";
                            tv_cash.setTextColor(getResources().getColor(R.color.white));
-                           tv_cash.setBackgroundColor(getResources().getColor(R.color.yellow_500));
+                           tv_cash.setBackgroundColor(getResources().getColor(R.color.green_300));
+                           tv_cash.setTypeface(Typeface.DEFAULT_BOLD);
+                           tv_online.setTypeface(Typeface.DEFAULT);
                            tv_online.setTextColor(getResources().getColor(R.color.red_500));
-                           tv_online.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                           tv_online.setBackgroundColor(getResources().getColor(R.color.grey_100));
                        }
                    });
 
@@ -168,9 +171,11 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                        public void onClick(View view) {
                            final_payment_method[0] = " - Online";
                            tv_cash.setTextColor(getResources().getColor(R.color.red_500));
-                           tv_cash.setBackgroundColor(getResources().getColor(R.color.grey_200));
+                           tv_cash.setBackgroundColor(getResources().getColor(R.color.grey_100));
+                           tv_cash.setTypeface(Typeface.DEFAULT);
+                           tv_online.setTypeface(Typeface.DEFAULT_BOLD);
                            tv_online.setTextColor(getResources().getColor(R.color.white));
-                           tv_online.setBackgroundColor(getResources().getColor(R.color.yellow_500));
+                           tv_online.setBackgroundColor(getResources().getColor(R.color.green_300));
                        }
                    });
 
