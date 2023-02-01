@@ -55,6 +55,7 @@ import java.util.Date;
 public class DashboardFragment extends Fragment implements DashboardInterface {
 
     String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
+    String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
 
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
@@ -140,7 +141,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                    tv_bill_no = (TextView) dialog.findViewById(R.id.tv_bill_no_value);
                    tv_date_time = (TextView) dialog.findViewById(R.id.tv_date_time_value);
 
-                   tv_bill_no.setText(": "+"001");
+                   tv_bill_no.setText(": "+get_SharedPreference_Billnumber());
                    tv_date_time.setText(": "+currentDateAndTime);
                    //-------------------------------------------------------------------------------
 
@@ -297,6 +298,14 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                        +"\n"+final_file_string
                                        +"\nGrand Total : "+grand_total
                                        +"\n----------------------------------------";
+
+                               int bill_no_integer = get_SharedPreference_Billnumber();
+                               if(bill_no_integer <= 100){
+                               set_SharedPreference_Billnumber(bill_no_integer + 1);
+                               }else{
+                                   set_SharedPreference_Billnumber(1);
+                               }
+
 
                                try {
                                    File myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -491,6 +500,21 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     public String get_SharedPreference_FixedMenu(){
         SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
         return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
+    }
+
+
+
+    public void set_SharedPreference_Billnumber(Integer bill_no){
+        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_BILL_NUMBER, bill_no);
+        editor.commit();
+    }
+
+
+    public Integer get_SharedPreference_Billnumber(){
+        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_BILL_NUMBER, 1);
     }
     //--------------------------------------------------------------------------------------------------
 
