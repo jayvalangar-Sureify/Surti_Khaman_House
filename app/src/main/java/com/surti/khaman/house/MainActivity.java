@@ -1,14 +1,15 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,16 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.surti.khaman.house.databinding.ActivityMainBinding;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-public class MainActivity extends AppCompatActivity {
-
-    private String filename = "SampleFile.txt";
-    private String filepath = "MyFileStorage";
-    File myExternalFile;
-    String myData = "";
+public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
     public static final int PERMISSION_BLUETOOTH = 01;
     public static final int PERMISSION_BLUETOOTH_ADMIN = 02;
@@ -57,49 +49,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        002);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-
-
-            try {
-                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                if (!myExternalFile.exists()) {
-                    myExternalFile.mkdir();
-                }
-                File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
-                if(!file.exists()) {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    String data = "        || Ganprati Bapa Morya ||        ";
-                    fos.write(data.getBytes());
-                    fos.close();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        requestPermissions();
     }
 
     private static boolean isExternalStorageReadOnly() {
@@ -130,5 +80,35 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (PermissionUtil.checkAndRequestPermissions(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN)) {
+                Log.i("test_permission", "Permissions are granted. Good to go!");
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void permissionsGranted() {
+        Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void permissionsDenied() {
+        Toast.makeText(this, "Permissions Denied!", Toast.LENGTH_SHORT).show();
     }
 }

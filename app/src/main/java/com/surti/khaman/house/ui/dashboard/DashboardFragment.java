@@ -230,13 +230,13 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
                                if(i == 0 ){
                                    final_bill_string =  "\n[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
-                                   final_file_string = "{\n["+item_name+", "+item_weight +", "+item_price + "]\n";
+                                   final_file_string = "\n["+item_name+", "+item_weight +", "+item_price + " Rs]\n";
                                }else if(i == (item_name_list.size() - 1)){
                                    final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price;
-                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + "]\n}\n";
+                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + " Rs]\n";
                                }else{
                                    final_bill_string = final_bill_string + "[L]"+item_name+"[R]"+item_weight+"    "+item_price+"\n";
-                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + "]\n";
+                                   final_file_string = final_file_string + ", ["+item_name+", "+item_weight +","+item_price + " Rs]\n";
                                }
 
 
@@ -291,36 +291,32 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                insert_Shop_Revenue_Data(currentDateAndTime, final_bill_string, ""+grand_total);
                                //-------------------------------------------------------------------------
 
-
-                               // Insert Into File
-                               //-------------------------------------------------------------------------
-                               String file_data = "\nDate and Time : "+currentDateAndTime
-                                       +"\n"+final_file_string
-                                       +"\nGrand Total : "+grand_total
-                                       +"\n----------------------------------------";
-
+                               // Generate Bill Number
+                               //------------------------------------------------------------------------
                                int bill_no_integer = get_SharedPreference_Billnumber();
                                if(bill_no_integer <= 100){
-                               set_SharedPreference_Billnumber(bill_no_integer + 1);
+                                   set_SharedPreference_Billnumber(bill_no_integer + 1);
                                }else{
                                    set_SharedPreference_Billnumber(1);
                                }
+                               //------------------------------------------------------------------------
 
+                               // Insert Into File
+                               //-------------------------------------------------------------------------
+                               String internal_file_data = "\nDate and Time : "+currentDateAndTime
+                                       +"\n"+final_file_string
+                                       +"\n-----------------------------------------------------------------"
+                                       +"\nGrand Total : "+grand_total
+                                       +"\n===================================";
 
-                               try {
-                                   File myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                                   if (!myExternalFile.exists()) {
-                                       myExternalFile.mkdir();
-                                   }
-                                   File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
-                                       FileOutputStream fos = new FileOutputStream(file, true);
-                                       String data = "\n        || Ganprati Bapa Morya ||        "+file_data;
-                                       fos.write(data.getBytes());
-                                       fos.close();
+                                String file_data =
+                                        "\n==================================="
+                                        +"\n        || Ganprati Bapa Morya ||        "
+                                        +"\n Bille No : "+bill_no_integer+
+                                        "\n Payment Method : "+final_payment_method[0]
+                                        +internal_file_data;
 
-                               } catch (IOException e) {
-                                   e.printStackTrace();
-                               }
+                                   create_file_and_write(file_data);
 
                                //-------------------------------------------------------------------------
 
@@ -346,6 +342,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                                            "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
                                                            "[C]================================"
                                            );
+
+                                       binding.btnReset.performClick();
                                }else{
 
                                    }
@@ -398,6 +396,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     }
 
 
+    //----------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
     private void displayData() {
@@ -518,6 +518,55 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     }
     //--------------------------------------------------------------------------------------------------
 
+
+
+    // Create file amd Write
+    //----------------------------------------------------------------------------------------------
+    public void create_file_and_write(String file_data){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        002);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+
+
+            try {
+                File myExternalFile;
+                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!myExternalFile.exists()) {
+                    myExternalFile.mkdir();
+                }
+                File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
+                    FileOutputStream fos = new FileOutputStream(file, true);
+                    fos.write(file_data.getBytes());
+                    fos.close();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(),""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
 
     @Override
     public void onDestroyView() {
