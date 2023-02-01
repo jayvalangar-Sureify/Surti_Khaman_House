@@ -1,6 +1,5 @@
 package com.surti.khaman.house.Adapter;
 
-import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,8 +17,6 @@ import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < DashboardRecyclerViewAdapter.ViewHolder > {
 
@@ -57,13 +54,15 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
         if(getAmount != "") {
             holder.tv_amount.setText(getAmount);
+        }else{
+            holder.tv_amount.setText("");
         }
 
 
         // Find Price
         //------------------------------------------------------------------------------------------
-        String finalGetFixedPrice = getFixedPrice;
-        String finalGetFixedWeight = getFixedWeight;
+        String fp_string = getFixedPrice;
+        String fw_string = getFixedWeight;
         holder.et_weight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -71,32 +70,63 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(is_Et_Weight_Focus && i2 == 0) {
+                    holder.et_price.setText("");
+                    holder.tv_amount.setText("");
+                }
+            }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable input) {
 
                 if(is_Et_Weight_Focus) {
-                    String temp_str = s.toString();
-                    if (temp_str.isEmpty() || temp_str == "0") {
-                        temp_str = "0";
+                    String dw_string = input.toString();
+                    if(!dw_string.isEmpty() && dw_string != "0"){
+                        dashboaedModelDataArrayList.get(position).setDynamicWeight(input.toString());
+                    }{
+
                     }
 
-                    Long i = Long.parseLong(temp_str);
+                    Long fp_long = null, dw_long = null, fw_long = null;
 
-                    Long find_dp = findDynamicPrice(Long.parseLong(finalGetFixedPrice), i, Long.parseLong(finalGetFixedWeight));
-                    holder.et_price.setText(Long.toString(find_dp));
-
-                    if(Long.toString(find_dp) != "") {
-                        holder.tv_amount.setText(Long.toString(find_dp));
+                    if(!fp_string.isEmpty()){
+                        fp_long = Long.parseLong(fp_string);
                     }
 
-                    dashboaedModelDataArrayList.get(position).setDynamicPrice(Long.toString(find_dp));
-                    dashboaedModelDataArrayList.get(position).setDynamicWeight(s.toString());
-                    dashboaedModelDataArrayList.get(position).setCalculatedAmount(Long.toString(find_dp));
+                    if(!dw_string.isEmpty()){
+                        dw_long = Long.parseLong(dw_string);;
+                    }
 
-//                    Long grandTotal = findGrandTotal();
-//                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
+                    if(!fw_string.isEmpty()){
+                        fw_long = Long.parseLong(fw_string);
+                    }
+
+
+                    Long find_dp_long = findDynamicPrice(fp_long, dw_long, fw_long);
+                    String find_dp_string = "";
+                    if(find_dp_long != null && find_dp_long != 0l) {
+                        find_dp_string = Long.toString(find_dp_long);
+                        holder.tv_amount.setText(find_dp_string);
+                        holder.et_price.setText(find_dp_string);
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
+                    }else{
+                        holder.et_price.setText("");
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                    }
+
+
+
+
+                    if(input.toString().isEmpty()){
+                        dashboaedModelDataArrayList.get(position).setDynamicWeight("");
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                    }
+
+
                 }
 
             }
@@ -117,29 +147,53 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable input) {
 
                 if(is_Et_Price_Focus) {
-                    String temp_str = s.toString();
-                    if (temp_str.isEmpty() || temp_str == "0") {
-                        temp_str = "0";
+                    String dp_string = input.toString();
+                    if(!dp_string.isEmpty() && dp_string != "0"){
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice(input.toString());
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount(input.toString());
+                        holder.tv_amount.setText(dp_string);
+                    }else{
+                        holder.tv_amount.setText("");
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
                     }
 
-                    Long i = Long.parseLong(temp_str);
+                    Long fp_long = null, dp_long = null, fw_long = null;
 
-                    Long find_dp = findDynamicWeight(Long.parseLong(finalGetFixedWeight), Long.parseLong(finalGetFixedPrice), i);
-                    holder.et_weight.setText(Long.toString(find_dp));
-
-                    if(s.toString() != "") {
-                        holder.tv_amount.setText(s.toString());
+                    if(!fp_string.isEmpty()){
+                        fp_long = Long.parseLong(fp_string);
                     }
 
-                    dashboaedModelDataArrayList.get(position).setDynamicPrice(s.toString());
-                    dashboaedModelDataArrayList.get(position).setDynamicWeight(Long.toString(find_dp));
-                    dashboaedModelDataArrayList.get(position).setCalculatedAmount(s.toString());
+                    if(!dp_string.isEmpty()){
+                        dp_long = Long.parseLong(dp_string);;
+                    }
 
-//                    Long grandTotal = findGrandTotal();
-//                    dashboardInterface.onTotalAmountChange(grandTotal.toString());
+                    if(!fw_string.isEmpty()){
+                        fw_long = Long.parseLong(fw_string);
+                    }
+
+
+
+                    Long find_dw_long = findDynamicWeight(fw_long, fp_long, dp_long);
+                    if(find_dw_long != null) {
+                        String find_dw_string = Long.toString(find_dw_long);
+                        holder.et_weight.setText(find_dw_string);
+                        dashboaedModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
+                    }else{
+                        holder.et_weight.setText("");
+                    }
+
+
+
+                    if(input.toString().isEmpty()){
+                        dashboaedModelDataArrayList.get(position).setDynamicWeight("");
+                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                    }
+
                 }
 
 
@@ -202,37 +256,28 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
     // dw = (f.w * d.p / f.p )
     // dp = (f.p * d.w / f.w)
 
-    public long findDynamicWeight(long fw, long fp, long dp){
-        long dynamic_weight = 0;
+    public Long findDynamicWeight(Long fw, Long fp, Long dp){
+        if((fp != null) && (dp != null) && (fw != null)) {
+            Long dynamic_weight;
 
-               dynamic_weight = (fw * dp) / fp;
+            dynamic_weight = (fw * dp) / fp;
 
-        return dynamic_weight;
+            return dynamic_weight;
+        }else {
+            return null;
+        }
     }
 
     public Long findDynamicPrice(Long fp, Long dw, Long fw){
-        Long dynamic_price ;
+        if((fp != null) && (dw != null) && (fw != null)) {
+            Long dynamic_price;
 
-        dynamic_price = (fp * dw) / fw;
+            dynamic_price = (fp * dw) / fw;
 
-        return dynamic_price;
-    }
-
-    public Long findGrandTotal(){
-        Long grandTotal =0l;
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                List<DashboaedModelData> myDataList = dashboaedModelDataArrayList;
-              //  List<String> aa = myDataList.stream().map(o -> o.getAmount()).collect(Collectors.toList());
-               // List<Long> r1 = aa.stream().map(s -> Long.parseLong(s)).collect(Collectors.toList());
-                grandTotal = myDataList.stream().map(s -> Long.parseLong(s.getAmount())).collect(Collectors.toList()).stream().reduce(0l, Long::sum);
-
-            }catch (Exception e){
-                e.getMessage();
-            }
+            return dynamic_price;
+        }else {
+            return null;
         }
-        return grandTotal;
     }
+
 }
