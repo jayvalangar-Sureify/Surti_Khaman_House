@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
                 if(!file.exists()) {
-                    FileOutputStream fos = new FileOutputStream(file, true);
+                    FileOutputStream fos = new FileOutputStream(file);
                     String data = "        || Ganprati Bapa Morya ||        ";
                     fos.write(data.getBytes());
                     fos.close();

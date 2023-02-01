@@ -42,7 +42,6 @@ import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -262,20 +261,21 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                        +"\nGrand Total : "+grand_total
                                        +"\n----------------------------------------";
 
-                               OutputStream os = null;
                                try {
-                                   // below true flag tells OutputStream to append
-                                   os = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath()+"/SurtiKhamanHouse.txt"), true);
-                                   os.write(file_data.getBytes(), 0, file_data.length());
+                                   File myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                   if (!myExternalFile.exists()) {
+                                       myExternalFile.mkdir();
+                                   }
+                                   File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
+                                       FileOutputStream fos = new FileOutputStream(file, true);
+                                       String data = "\n        || Ganprati Bapa Morya ||        "+file_data;
+                                       fos.write(data.getBytes());
+                                       fos.close();
+
                                } catch (IOException e) {
                                    e.printStackTrace();
-                               } finally {
-                                   try {
-                                       os.close();
-                                   } catch (IOException e) {
-                                       e.printStackTrace();
-                                   }
                                }
+
                                //-------------------------------------------------------------------------
 
 
