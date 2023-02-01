@@ -9,6 +9,7 @@
 
     <string name="left_menu_dashboard">Dashboard</string>
     <string name="left_menu_edit_dashboard">Edit Dashboard</string>
+    <string name="left_menu_expenses">Expenses</string>
     <string name="left_menu_find_rupees">Find Rupees</string>
     <string name="left_menu_find_weight">Find Weight</string>
 
@@ -48,6 +49,14 @@
     <string name="enter_item_name">Enter Item Name<sup>*</sup></string>
     <string name="enter_fix_weight_for_1_kg">Enter Fix Weight For 1 KG<sup>*</sup></string>
     <string name="enter_fix_price_for_1_kg">Enter Fix Price For 1 KG<sup>*</sup></string>
+
+
+    <!-- Expenses -->
+    <string name="expenses">Expenses</string>
+    <string name="todays_expenses">Todays Expenses</string>
+    <string name="enter_expenses">Enter Expenses</string>
+    <string name="add_expenses">Add Expenses</string>
+    <string name="submit">Submit</string>
 
 
 
