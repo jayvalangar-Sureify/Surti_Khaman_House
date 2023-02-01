@@ -1,8 +1,11 @@
 package com.surti.khaman.house.ui.dashboard;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -49,6 +53,8 @@ import java.util.Date;
 
 public class DashboardFragment extends Fragment implements DashboardInterface {
 
+    String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
+
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
@@ -74,6 +80,32 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         databaseMain=new DatabaseMain(getActivity());
 
 
+
+        if(get_SharedPreference_FixedMenu() == "0") {
+            set_SharedPreference_FixedMenu("1");
+            //------------------------------------------------------------------------------------------
+            insert_fixed_Shop_Menu_Data("Jain Vatidaal Khaman", "1000", "200");
+            insert_fixed_Shop_Menu_Data("Nylon Khaman", "1000", "200");
+            insert_fixed_Shop_Menu_Data("White Dhokla", "1000", "200");
+            insert_fixed_Shop_Menu_Data("Patra", "1000", "200");
+            insert_fixed_Shop_Menu_Data("Bardoli Fried Patra", "1000", "200");
+            insert_fixed_Shop_Menu_Data("Jain Surti Khamni", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Lasun Surti Khamni", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Khandvi", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Daal Dryfruit Patti samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Kaanda Patti samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Chinese Jain Patti samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Jalebi(Desi Ghee)", "1000", "360");
+            insert_fixed_Shop_Menu_Data("Fafda", "1000", "360");
+            insert_fixed_Shop_Menu_Data("Jain Jambo Samosa", "1", "20");
+            insert_fixed_Shop_Menu_Data("Aloo samosa (Without garlic/onion)", "1", "15");
+            insert_fixed_Shop_Menu_Data("Tel Locho", "1", "35");
+            insert_fixed_Shop_Menu_Data("Butter Locho", "1", "45");
+            insert_fixed_Shop_Menu_Data("Cheese Locho", "1", "55");
+            insert_fixed_Shop_Menu_Data("Schezwan Locho", "1", "55");
+            insert_fixed_Shop_Menu_Data("Mohanthal (Desi ghee)", "1000", "400");
+            //------------------------------------------------------------------------------------------
+        }
 
         //------------------------------------------------------------------------------------------
         Dialog dialog = new Dialog(getActivity());
@@ -422,6 +454,40 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         cursor.close();
     }
     //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
+    private void insert_fixed_Shop_Menu_Data(String itemName, String itemWeight, String itemPrice) {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, itemName);
+        cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, itemWeight);
+        cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN, itemPrice);
+
+        sqLiteDatabase = databaseMain.getWritableDatabase();
+        Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_MENU_TABLE_NAME, null, cv);
+        if (recinsert != null) {
+//            Toast.makeText(getActivity(), "Fixed Menu Inserted successfully", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "something wrong try again : Fixed Menu Insert", Toast.LENGTH_SHORT).show();
+        }
+    }
+        //----------------------------------------------------------------------------------------------
+
+
+    // SharedPreference
+    //--------------------------------------------------------------------------------------------------
+      public void set_SharedPreference_FixedMenu(String isFixedMenuAlreadyDisplay){
+          SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+          SharedPreferences.Editor editor = sharedPreferences.edit();
+          editor.putString(KEY_FIXED_MENU_ALREADY_DISPLAY, isFixedMenuAlreadyDisplay);
+          editor.commit();
+    }
+
+
+    public String get_SharedPreference_FixedMenu(){
+        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
+    }
+    //--------------------------------------------------------------------------------------------------
 
 
     @Override
