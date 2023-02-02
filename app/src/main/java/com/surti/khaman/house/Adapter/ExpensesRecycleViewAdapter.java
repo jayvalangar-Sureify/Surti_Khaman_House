@@ -17,12 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.surti.khaman.house.Database.DatabaseMain;
+import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -116,30 +116,28 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                         }
                     }
 
-                    private void create_file_and_write(String file_data) {
+                    public void create_file_and_write(String file_data) {
                         try {
-                                File myExternalFile;
-                                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                                if (!myExternalFile.exists()) {
-                                    myExternalFile.mkdir();
-                                }
-
-                                File file = new File(myExternalFile, "SKH_Expenses.txt");
-
-                                if (file.exists()){
-                                    file.deleteOnExit();
-                                }
-
-                                FileOutputStream fos = new FileOutputStream(file, true);
-                                fos.write(file_data.getBytes());
-                                fos.close();
-
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Toast.makeText(context,""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            File filedownload_external_path;
+                            filedownload_external_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            if (!filedownload_external_path.exists()) {
+                                filedownload_external_path.mkdir();
                             }
+                            File file_directory = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh);
+                            file_directory.mkdir();
+
+                            File file_name_skh_expenses = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_skh_expenses);
+
+                            FileOutputStream fos = new FileOutputStream(file_name_skh_expenses, true);
+                            fos.write(file_data.getBytes());
+                            fos.close();
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "" + e.getMessage().toString(), Toast.LENGTH_LONG).show();
                         }
+                    }
 
                 });
 

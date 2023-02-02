@@ -46,7 +46,6 @@ import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -548,18 +547,22 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
 
             try {
-                File myExternalFile;
-                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                if (!myExternalFile.exists()) {
-                    myExternalFile.mkdir();
+                File filedownload_external_path;
+                filedownload_external_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!filedownload_external_path.exists()) {
+                    filedownload_external_path.mkdir();
                 }
-                File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
-                    FileOutputStream fos = new FileOutputStream(file, true);
+                File file_directory = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh);
+                file_directory.mkdir();
+
+                File file_name_surtikhamanhouse = new File(filedownload_external_path+File.separator+MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
+
+                    FileOutputStream fos = new FileOutputStream(file_name_surtikhamanhouse, true);
                     fos.write(file_data.getBytes());
                     fos.close();
 
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(),""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }

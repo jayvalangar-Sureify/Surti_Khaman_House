@@ -25,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.surti.khaman.house.Adapter.ExpensesRecycleViewAdapter;
 import com.surti.khaman.house.Database.DatabaseMain;
+import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentExpenseBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -216,26 +216,24 @@ public class ExpenseFragment extends Fragment {
 
 
             try {
-                File myExternalFile;
-                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                if (!myExternalFile.exists()) {
-                    myExternalFile.mkdir();
+                File filedownload_external_path;
+                filedownload_external_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!filedownload_external_path.exists()) {
+                    filedownload_external_path.mkdir();
                 }
+                File file_directory = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh);
+                file_directory.mkdir();
 
-                File file = new File(myExternalFile, "SKH_Expenses.txt");
+                File file_name_skh_expenses = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_skh_expenses);
 
-                if (file.exists()){
-                    file.deleteOnExit();
-                }
-
-                FileOutputStream fos = new FileOutputStream(file, true);
+                FileOutputStream fos = new FileOutputStream(file_name_skh_expenses, true);
                 fos.write(file_data.getBytes());
                 fos.close();
 
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(),""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "" + e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
         }
     }

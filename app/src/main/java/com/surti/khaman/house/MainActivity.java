@@ -27,6 +27,10 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
+    public static String directory_name_skh = "SKH";
+    public static String file_name_surtikhamanhouse = "SurtiKhamanHouse.txt";
+    public static String file_name_skh_expenses = "SKH_Expenses.txt";
+
     public static final int PERMISSION_BLUETOOTH = 01;
     public static final int PERMISSION_BLUETOOTH_ADMIN = 02;
     public static final int PERMISSION_BLUETOOTH_CONNECT = 03;
