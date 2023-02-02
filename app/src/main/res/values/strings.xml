@@ -53,10 +53,11 @@
 
     <!-- Expenses -->
     <string name="expenses">Expenses</string>
+    <string name="add_expenses">Add Expenses</string>
+    <string name="update_expenses">Update Expenses</string>
     <string name="todays_expenses">Todays Expenses</string>
     <string name="enter_expenses_amount">Enter Expenses Amount</string>
     <string name="enter_expenses_note">Enter Note</string>
-    <string name="add_expenses">Add Expenses</string>
     <string name="submit">Submit</string>
 
 

@@ -25,13 +25,23 @@
 
 
 
-<LinearLayout
+
+            <LinearLayout
     android:id="@+id/ll_top_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
 
+                <TextView
+                    android:id="@+id/tv_expenses_date_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/enter_expenses_amount"
+                    android:textColor="@color/blue_500"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
     <TextView
         android:id="@+id/tv_label_expenses"
         android:layout_width="match_parent"
@@ -43,12 +53,12 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_expenses_note"
+        android:id="@+id/et_expense_amount"
         android:layout_marginTop="6dp"
         android:background="@drawable/border_red_fill_white_rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="number"
         />
 
     <TextView
@@ -63,11 +73,11 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/et_expenses_amount"
+        android:id="@+id/et_expenses_note"
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="text"
         android:background="@drawable/border_red_fill_white_rectangle"
         />
 

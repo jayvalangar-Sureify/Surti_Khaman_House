@@ -45,11 +45,11 @@
                 android:layout_weight="1"
                 />
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_submit_expenses"
+                android:id="@+id/btn_dashboard_expenses"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_drawable"
-                android:text="@string/submit"
+                android:text="@string/left_menu_dashboard"
                 android:textAllCaps="false"
                 android:layout_margin="6dp"
                 android:textColor="@color/white"
