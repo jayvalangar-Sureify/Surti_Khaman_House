@@ -1,15 +1,19 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,6 +22,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.surti.khaman.house.databinding.ActivityMainBinding;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
@@ -111,4 +117,52 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
     public void permissionsDenied() {
         Toast.makeText(this, "Permissions Denied!", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.action_send_mail:
+                sendEmail();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void sendEmail() {
+        String[] TO = {"surtikhamanhouseofficial@gmail.com"};
+        String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        File myExternalFile;
+        myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if (!myExternalFile.exists()) {
+            myExternalFile.mkdir();
+        }
+        File file = new File(myExternalFile, "SurtiKhamanHouse.txt");
+
+        Uri file_surtikhaman_uri = FileProvider.getUriForFile(
+                MainActivity.this,
+                "com.surti.khaman.house.provider", //(use your app signature + ".provider" )
+                file.getAbsoluteFile());
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("vnd.android.cursor.dir/email");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent .putExtra(Intent.EXTRA_STREAM, file_surtikhaman_uri);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bill & Expenses");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hello Surti Khaman House Team, Please find below attachment");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

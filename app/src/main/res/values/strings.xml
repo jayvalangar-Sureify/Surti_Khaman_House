@@ -60,6 +60,9 @@
     <string name="enter_expenses_note">Enter Note</string>
     <string name="submit">Submit</string>
 
+    <!-- Send Mail -->
+    <string name="send_mail">Send Mail</string>
+
 
 
 </resources>
