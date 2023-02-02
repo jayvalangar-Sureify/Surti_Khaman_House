@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -98,6 +102,9 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                                 ExpensesModelData expensesModelData = new ExpensesModelData(model.getId(), et_expense_amount_string, et_expense_note_string, tv_date_time_value_string);
                                 modelArrayList.set(position, expensesModelData);
                                 notifyItemChanged(position);
+
+                                String file_data = "\nUPDATED EXPENSE" + "\n===================================\n Date and Time : " + tv_date_time_value_string + "\nNote : " + et_expense_note_string + "\n Amount : " + et_expense_amount_string + "Rs" + "\n===================================";
+                                create_file_and_write(file_data);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
@@ -108,6 +115,32 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                             Toast.makeText(context, "Enter ALL Field", Toast.LENGTH_LONG).show();
                         }
                     }
+
+                    private void create_file_and_write(String file_data) {
+                        try {
+                                File myExternalFile;
+                                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                if (!myExternalFile.exists()) {
+                                    myExternalFile.mkdir();
+                                }
+
+                                File file = new File(myExternalFile, "SKH_Expenses.txt");
+
+                                if (file.exists()){
+                                    file.deleteOnExit();
+                                }
+
+                                FileOutputStream fos = new FileOutputStream(file, true);
+                                fos.write(file_data.getBytes());
+                                fos.close();
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Toast.makeText(context,""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
                 });
 
                 //-------------------------------------------------------------------------------

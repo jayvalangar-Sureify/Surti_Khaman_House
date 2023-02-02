@@ -1,10 +1,13 @@
 package com.surti.khaman.house.ui.expense;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +29,9 @@ import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentExpenseBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -147,7 +155,11 @@ public class ExpenseFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "something wrong try again", Toast.LENGTH_SHORT).show();
         }
+
+        String file_data = "NEW EXPENSE" + "\n===================================\n Date and Time : " + expenses_date_time + "\nNote : " + expenses_note + "\n Amount : " + expenses_amount + "Rs" + "\n===================================";
+        create_file_and_write(file_data);
         sqLiteDatabase.close();
+
     }
     //----------------------------------------------------------------------------------------------
 
@@ -157,17 +169,75 @@ public class ExpenseFragment extends Fragment {
         sqLiteDatabase=databaseMain.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_EXPENSES_TABLE_NAME+"",null);
         ArrayList<ExpensesModelData> modelArrayList=new ArrayList<>();
+
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
             String expense_amount = cursor.getString(1);
             String expense_note = cursor.getString(2);
             String expense_date_time = cursor.getString(3);
+
             modelArrayList.add(new ExpensesModelData(id, expense_amount, expense_note, expense_date_time));
         }
+
         cursor.close();
         sqLiteDatabase.close();
         myAdapter=new ExpensesRecycleViewAdapter(getActivity(),R.layout.row_expenses_crud,modelArrayList,sqLiteDatabase);
         recyclerView.setAdapter(myAdapter);
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+
+    // Create file amd Write
+    //----------------------------------------------------------------------------------------------
+    public void create_file_and_write(String file_data){
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        002);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+
+
+            try {
+                File myExternalFile;
+                myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                if (!myExternalFile.exists()) {
+                    myExternalFile.mkdir();
+                }
+
+                File file = new File(myExternalFile, "SKH_Expenses.txt");
+
+                if (file.exists()){
+                    file.deleteOnExit();
+                }
+
+                FileOutputStream fos = new FileOutputStream(file, true);
+                fos.write(file_data.getBytes());
+                fos.close();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(),""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     //----------------------------------------------------------------------------------------------
