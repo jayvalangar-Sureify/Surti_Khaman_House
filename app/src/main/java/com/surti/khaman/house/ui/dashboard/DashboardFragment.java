@@ -329,9 +329,9 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                    printer
                                            .printFormattedText(
                                                    "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
-                                                           "[C]<u><font size='normal'>BORIVALI (EAST)</font></u>\n" +
-                                                           "[C]<u><font size='normal'>Mobile. 9137272150</font></u>\n" +
-                                                           "[L] Bill No : <font size='big'><b>" + "001" + "</b></font> "+final_payment_method[0]+"\n" +
+                                                           "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
+                                                           "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
+                                                           "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
                                                            "[L] Date-Time : " + currentDateAndTime + "\n" +
                                                            "[L] Fssai : " + "21522012000953" + "\n" +
                                                            "[C]================================\n" +
