@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -308,14 +309,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                //-------------------------------------------------------------------------
                                display_Shop_Revenue_Data();
 
-                               File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
-
-                               if(myExternalFile.exists()) {
-                                   createMyPDF(internal_file_data);
-                               }else{
-                                   recreateMyPDF(internal_file_data);
-                               }
-
+                               check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
                                //-------------------------------------------------------------------------
 
 
@@ -464,12 +458,12 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
             String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
             String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
             internal_file_data =  internal_file_data
-                    +"\n ==========================================="
+                    +"\n====Bill====Bill====Bill====Bill====Bill====Bill==\n"
                     +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
                     +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
                     +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
                     +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
-                    +"\n ===========================================";
+                    +"\n ===========================================\n";
         }
         cursor.close();
     }
@@ -536,10 +530,24 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
     }
 
+
+    // Call PDF File to call
+    //==============================================================================================
+    public static void check_and_create_file(Context context, String file_data, String file_name){
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
+
+        if(myExternalFile.exists()) {
+            createMyPDF(context, file_data, file_name);
+        }else{
+            recreateMyPDF(context, file_data, file_name);
+        }
+    }
+    //==============================================================================================
+
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void createMyPDF(String myString) {
+    public static void createMyPDF(Context context, String file_data, String file_name) {
 
         //Create the pdf page
         PdfDocument myPdfDocument = new PdfDocument();
@@ -551,7 +559,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         int x = 10, y = 25;
 
         //Paint the string to the page
-        for (String line : myString.split("\n")) {
+        for (String line : file_data.split("\n")) {
             myPage.getCanvas().drawText(line, x, y, myPaint);
             y += myPaint.descent() - myPaint.ascent();
         }
@@ -560,15 +568,15 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         myPdfDocument.finishPage(myPage);
 
         //Initialize the file with the name and path
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
         try {
             myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-            Toast.makeText(getActivity(), "File saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             //If file is not saved, print stack trace, clear edittext, and display toast message
             e.printStackTrace();
             Log.i("test_response", "Error : " + e.getMessage().toString());
-            Toast.makeText(getActivity(), "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
         }
         myPdfDocument.close();
     }
@@ -576,7 +584,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
 
     //----------------------------------------------------------------------------------------------
-    public void recreateMyPDF(String myString) {
+    public static void recreateMyPDF(Context context, String file_data, String file_name) {
         //Create the pdf page
         PdfDocument myPdfDocument = new PdfDocument();
         PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
@@ -587,7 +595,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         int x = 10, y = 25;
 
         //Paint the string to the page
-        for (String line : myString.split("\n")) {
+        for (String line : file_data.split("\n")) {
             myPage.getCanvas().drawText(line, x, y, myPaint);
             y += myPaint.descent() - myPaint.ascent();
         }
@@ -596,14 +604,14 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         myPdfDocument.finishPage(myPage);
 
         //Initialize the file with the name and path
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
         try {
             myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-            Toast.makeText(getActivity(), "File saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             //If file is not saved, print stack trace and display toast message
             e.printStackTrace();
-            Toast.makeText(getActivity(), "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
         }
         myPdfDocument.close();
     }
