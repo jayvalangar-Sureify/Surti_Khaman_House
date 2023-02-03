@@ -9,7 +9,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -40,7 +43,6 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
-import com.surti.khaman.house.Model.ShopMenuModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
@@ -55,6 +57,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
     String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
+
+    String internal_file_data = "";
 
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
@@ -284,12 +288,6 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                Log.i("test_print", "final_bill_string :- "+final_bill_string);
                                Log.i("test_print", "grand_total :- "+grand_total);
 
-
-                               // Insert Into Database
-                               //-------------------------------------------------------------------------
-                               insert_Shop_Revenue_Data(currentDateAndTime, final_bill_string, ""+grand_total);
-                               //-------------------------------------------------------------------------
-
                                // Generate Bill Number
                                //------------------------------------------------------------------------
                                int bill_no_integer = get_SharedPreference_Billnumber();
@@ -300,22 +298,23 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                }
                                //------------------------------------------------------------------------
 
+                               // Insert Into Database
+                               //-------------------------------------------------------------------------------------------------------------------------------------------------
+                               insert_Shop_Revenue_Data(""+bill_no_integer, currentDateAndTime, final_file_string, ""+grand_total);
+                               //--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
                                // Insert Into File
                                //-------------------------------------------------------------------------
-                               String internal_file_data = "\nDate and Time : "+currentDateAndTime
-                                       +"\n"+final_file_string
-                                       +"\n-----------------------------------------------------------------"
-                                       +"\nGrand Total : "+grand_total
-                                       +"\n===================================";
+                               display_Shop_Revenue_Data();
 
-                                String file_data =
-                                        "\n==================================="
-                                        +"\n        || Ganprati Bapa Morya ||        "
-                                        +"\n Bille No : "+bill_no_integer+
-                                        "\n Payment Method : "+final_payment_method[0]
-                                        +internal_file_data;
+                               File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
 
-                                   create_file_and_write(file_data);
+                               if(myExternalFile.exists()) {
+                                   createMyPDF(internal_file_data);
+                               }else{
+                                   recreateMyPDF(internal_file_data);
+                               }
 
                                //-------------------------------------------------------------------------
 
@@ -438,8 +437,9 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
     // shop_revenue_tabel
     //----------------------------------------------------------------------------------------------
-    public void insert_Shop_Revenue_Data(String bill_date_time, String item_name_weight_price, String bill_amount){
+    public void insert_Shop_Revenue_Data(String bill_no,String bill_date_time, String item_name_weight_price, String bill_amount){
         ContentValues cv = new ContentValues();
+        cv.put(DatabaseMain.SHOP_REVENUE_BILL_NO_COLUMN, bill_no);
         cv.put(DatabaseMain.SHOP_REVENUE_BILL_DATE_TIME_COLUMN, bill_date_time);
         cv.put(DatabaseMain.SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN, item_name_weight_price);
         cv.put(DatabaseMain.SHOP_REVENUE_BILL_AMOUNT_COLUMN, bill_amount);
@@ -456,13 +456,20 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     public void display_Shop_Revenue_Data() {
         sqLiteDatabase=databaseMain.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
-        ArrayList<ShopMenuModelData> modelArrayList=new ArrayList<>();
+        internal_file_data = "";
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
-            String item_name = cursor.getString(1);
-            String item_weight = cursor.getString(2);
-            String item_price = cursor.getString(3);
-            modelArrayList.add(new ShopMenuModelData(id, item_name, item_weight, item_price));
+            String SHOP_REVENUE_BILL_NO_COLUMN = cursor.getString(1);
+            String SHOP_REVENUE_BILL_DATE_TIME_COLUMN = cursor.getString(2);
+            String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
+            String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
+            internal_file_data =  internal_file_data
+                    +"\n ==========================================="
+                    +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
+                    +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
+                    +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
+                    +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
+                    +"\n ===========================================";
         }
         cursor.close();
     }
@@ -518,59 +525,6 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     //--------------------------------------------------------------------------------------------------
 
 
-
-    // Create file amd Write
-    //----------------------------------------------------------------------------------------------
-    public void create_file_and_write(String file_data){
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        002);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-
-
-            try {
-                File filedownload_external_path;
-                filedownload_external_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                if (!filedownload_external_path.exists()) {
-                    filedownload_external_path.mkdir();
-                }
-                File file_directory = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh);
-                file_directory.mkdir();
-
-                File file_name_surtikhamanhouse = new File(filedownload_external_path+File.separator+MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
-
-                    FileOutputStream fos = new FileOutputStream(file_name_surtikhamanhouse, true);
-                    fos.write(file_data.getBytes());
-                    fos.close();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity(),""+e.getMessage().toString(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -581,4 +535,78 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     public void onTotalAmountChange(String totalAmount) {
 
     }
+
+    // Create PDF
+    //==============================================================================================
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void createMyPDF(String myString) {
+
+        //Create the pdf page
+        PdfDocument myPdfDocument = new PdfDocument();
+        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
+        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
+        Paint myPaint = new Paint();
+
+        //Initialize top and left margin for text
+        int x = 10, y = 25;
+
+        //Paint the string to the page
+        for (String line : myString.split("\n")) {
+            myPage.getCanvas().drawText(line, x, y, myPaint);
+            y += myPaint.descent() - myPaint.ascent();
+        }
+
+        //Finish writing/painting on the page
+        myPdfDocument.finishPage(myPage);
+
+        //Initialize the file with the name and path
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
+        try {
+            myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
+            Toast.makeText(getActivity(), "File saved!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            //If file is not saved, print stack trace, clear edittext, and display toast message
+            e.printStackTrace();
+            Log.i("test_response", "Error : " + e.getMessage().toString());
+            Toast.makeText(getActivity(), "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+        }
+        myPdfDocument.close();
+    }
+    //==============================================================================================
+
+
+    //----------------------------------------------------------------------------------------------
+    public void recreateMyPDF(String myString) {
+        //Create the pdf page
+        PdfDocument myPdfDocument = new PdfDocument();
+        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
+        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
+        Paint myPaint = new Paint();
+
+        //Initialize top and left margin for text
+        int x = 10, y = 25;
+
+        //Paint the string to the page
+        for (String line : myString.split("\n")) {
+            myPage.getCanvas().drawText(line, x, y, myPaint);
+            y += myPaint.descent() - myPaint.ascent();
+        }
+
+        //Finish writing/painting on the page
+        myPdfDocument.finishPage(myPage);
+
+        //Initialize the file with the name and path
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
+        try {
+            myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
+            Toast.makeText(getActivity(), "File saved!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            //If file is not saved, print stack trace and display toast message
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+        }
+        myPdfDocument.close();
+    }
+    //-----------------------------------------------------------------------------------------------
+
 }

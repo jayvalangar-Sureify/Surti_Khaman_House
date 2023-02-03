@@ -18,6 +18,7 @@ public class DatabaseMain extends SQLiteOpenHelper {
     public static final String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN="item_name_weight_price";
     public static final String SHOP_REVENUE_BILL_AMOUNT_COLUMN="bill_amount_column";
     public static final String SHOP_REVENUE_BILL_DATE_TIME_COLUMN="bill_date_time_column";
+    public static final String SHOP_REVENUE_BILL_NO_COLUMN = "bill_no_column";
 
     public static final String SHOP_EXPENSES_TABLE_NAME="shop_expenses";
     public static final String SHOP_EXPENSES_AMOUNT="expenses_amount";
@@ -37,7 +38,7 @@ public class DatabaseMain extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         shop_menu_query="create table "+SHOP_MENU_TABLE_NAME+"(id integer primary key, "+SHOP_MENU_ITEM_NAME_COLUMN+" text, "+SHOP_MENU_ITEM_WEIGHT_COLUMN+" text, "+SHOP_MENU_ITEM_PRICE_COLUMN+" text)";
-        shop_revenue_query="create table "+SHOP_REVENUE_TABLE_NAME+"(id integer primary key, "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN+" text, "+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN+" text, "+SHOP_REVENUE_BILL_AMOUNT_COLUMN+" text)";
+        shop_revenue_query="create table "+SHOP_REVENUE_TABLE_NAME+"(id integer primary key, "+SHOP_REVENUE_BILL_NO_COLUMN+" text, "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN+" text, "+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN+" text, "+SHOP_REVENUE_BILL_AMOUNT_COLUMN+" text)";
         shop_expenses_query="create table "+SHOP_EXPENSES_TABLE_NAME+"(id integer primary key, "+SHOP_EXPENSES_AMOUNT+" text, "+SHOP_EXPENSES_NOTE+" text, "+SHOP_EXPENSES_DATE_TIME_COLUMN+" text)";
 
         db.execSQL(shop_menu_query);
