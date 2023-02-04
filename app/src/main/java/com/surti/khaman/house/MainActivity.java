@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.surti.khaman.house.databinding.ActivityMainBinding;
+import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.action_send_mail:
-
+                DashboardFragment.sendEmail(MainActivity.this);
                 return true;
 
             default:

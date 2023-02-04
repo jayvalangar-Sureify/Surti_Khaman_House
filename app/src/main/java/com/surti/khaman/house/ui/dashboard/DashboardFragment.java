@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -713,4 +716,44 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
       }
     //----------------------------------------------------------------------------------------------
 
+
+    public static void sendEmail(Context context) {
+        String[] TO = {"valangar90@gmail.com"};
+        String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        File myExternalFile;
+        myExternalFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if (!myExternalFile.exists()) {
+            myExternalFile.mkdir();
+        }
+
+        ContextWrapper contextWrapper = new ContextWrapper(context);
+
+        File downloadDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(downloadDirectory, MainActivity.file_name_surtikhamanhouse);
+
+//        Uri file_surtikhaman_uri = Uri.fromFile(file);
+
+        Uri file_surtikhaman_uri = FileProvider.getUriForFile(
+                context,
+                "com.surti.khaman.house.provider", //(use your app signature + ".provider" )
+                file);
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("vnd.android.cursor.dir/email");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent .putExtra(Intent.EXTRA_STREAM, file_surtikhaman_uri);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bill & Expenses");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hello Surti Khaman House Team, Please find below attachment");
+
+        try {
+            context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
