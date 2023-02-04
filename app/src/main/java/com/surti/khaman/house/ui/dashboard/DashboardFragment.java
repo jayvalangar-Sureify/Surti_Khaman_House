@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -310,6 +311,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                display_Shop_Revenue_Data();
 
                                check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
+
+                               check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
                                //-------------------------------------------------------------------------
 
 
@@ -544,6 +547,19 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     }
     //==============================================================================================
 
+    // Call PDF File to call
+    //==============================================================================================
+    public static void check_and_create_file_insdie_package(Context context, String file_data, String file_name){
+        File myExternalFile = get_inside_Package_File_object(context, file_name);
+
+        if(myExternalFile.exists()) {
+            createMyPDF_Inside_Package(context, file_data, file_name);
+        }else{
+            recreateMyPDF_Inside_Package(context, file_data, file_name);
+        }
+    }
+    //==============================================================================================
+
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -616,5 +632,85 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         myPdfDocument.close();
     }
     //-----------------------------------------------------------------------------------------------
+
+    // Create PDF
+    //==============================================================================================
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static void createMyPDF_Inside_Package(Context context, String file_data, String file_name) {
+
+        //Create the pdf page
+        PdfDocument myPdfDocument = new PdfDocument();
+        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
+        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
+        Paint myPaint = new Paint();
+
+        //Initialize top and left margin for text
+        int x = 10, y = 25;
+
+        //Paint the string to the page
+        for (String line : file_data.split("\n")) {
+            myPage.getCanvas().drawText(line, x, y, myPaint);
+            y += myPaint.descent() - myPaint.ascent();
+        }
+
+        //Finish writing/painting on the page
+        myPdfDocument.finishPage(myPage);
+
+
+        try {
+            myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
+            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            //If file is not saved, print stack trace, clear edittext, and display toast message
+            e.printStackTrace();
+            Log.i("test_response", "Error : " + e.getMessage().toString());
+            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+        }
+        myPdfDocument.close();
+    }
+    //==============================================================================================
+
+
+    //----------------------------------------------------------------------------------------------
+    public static void recreateMyPDF_Inside_Package(Context context, String file_data, String file_name) {
+        //Create the pdf page
+        PdfDocument myPdfDocument = new PdfDocument();
+        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
+        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
+        Paint myPaint = new Paint();
+
+        //Initialize top and left margin for text
+        int x = 10, y = 25;
+
+        //Paint the string to the page
+        for (String line : file_data.split("\n")) {
+            myPage.getCanvas().drawText(line, x, y, myPaint);
+            y += myPaint.descent() - myPaint.ascent();
+        }
+
+        //Finish writing/painting on the page
+        myPdfDocument.finishPage(myPage);
+
+        try {
+            myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
+            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            //If file is not saved, print stack trace and display toast message
+            e.printStackTrace();
+            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+        }
+        myPdfDocument.close();
+    }
+    //-----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+      public static File get_inside_Package_File_object(Context context, String file_name){
+          ContextWrapper contextWrapper = new ContextWrapper(context);
+          File downloadDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+          File file = new File(downloadDirectory, file_name);
+          return file;
+      }
+    //----------------------------------------------------------------------------------------------
 
 }

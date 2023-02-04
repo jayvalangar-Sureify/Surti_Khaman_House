@@ -182,6 +182,7 @@ public class ExpenseFragment extends Fragment {
         }
 
         DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
+        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
         cursor.close();
         sqLiteDatabase.close();
         myAdapter=new ExpensesRecycleViewAdapter(getActivity(),R.layout.row_expenses_crud,modelArrayList,sqLiteDatabase);
