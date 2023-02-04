@@ -329,16 +329,16 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                    EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
                                    printer
                                            .printFormattedText(
-                                                   "[C]<u><font size='normal'><b>SURTI KHAMAN HOUSE</b></font></u>\n" +
+                                                   "[C]<font size='big'><b>SURTI KHAMAN HOUSE</b></font>\n" +
                                                            "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
                                                            "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
                                                            "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
-                                                           "[L] Date-Time : " + currentDateAndTime + "\n" +
-                                                           "[L] Fssai : " + "21522012000953" + "\n" +
+                                                           "[L]<font size='normal'> Date-Time : " + currentDateAndTime + "</font>\n" +
+                                                           "[L]<font size='normal'> Fssai : " + "21522012000953" + "</font>\n" +
                                                            "[C]================================\n" +
                                                            "[L] Items" +
                                                            "[R] Weight" + "    Price\n" +
-                                                           "[L]" + final_bill_string + "\n" +
+                                                           "[L]<font size='small'>" + final_bill_string + "</font>\n" +
                                                            "[C]================================\n" +
                                                            "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
                                                            "[C]================================"
