@@ -101,9 +101,9 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
             insert_fixed_Shop_Menu_Data("Jain Surti Khamni", "1000", "240");
             insert_fixed_Shop_Menu_Data("Lasun Surti Khamni", "1000", "240");
             insert_fixed_Shop_Menu_Data("Patra", "1000", "200");
-            insert_fixed_Shop_Menu_Data("Dal Dryfruit samosa", "1000", "240");
-            insert_fixed_Shop_Menu_Data("Kaanda Patti samosa", "1000", "240");
-            insert_fixed_Shop_Menu_Data("Chinese Patti samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("DalDryfruit Samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Kaanda P Samosa", "1000", "240");
+            insert_fixed_Shop_Menu_Data("Chinese P Samosa", "1000", "240");
             insert_fixed_Shop_Menu_Data("Jain Jambo Samosa", "1", "20");
             insert_fixed_Shop_Menu_Data("Aloo Jambo samosa", "1", "15");
             insert_fixed_Shop_Menu_Data("Dal Dahi Kachori", "1", "25");
@@ -111,9 +111,9 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
             insert_fixed_Shop_Menu_Data("Butter Locho", "1", "45");
             insert_fixed_Shop_Menu_Data("Cheese Locho", "1", "55");
             insert_fixed_Shop_Menu_Data("Schezwan Locho", "1", "55");
-            insert_fixed_Shop_Menu_Data("Jalebi(Desi Ghee)", "1000", "360");
+            insert_fixed_Shop_Menu_Data("Jalebi-DesiGhee", "1000", "360");
             insert_fixed_Shop_Menu_Data("Fafda", "1000", "360");
-            insert_fixed_Shop_Menu_Data("Mohanthal (Desi ghee)", "1000", "400");
+            insert_fixed_Shop_Menu_Data("Mohanthal-DesiGhee", "1000", "400");
             insert_fixed_Shop_Menu_Data("Bardoli Fried Patra", "1000", "200");
             insert_fixed_Shop_Menu_Data("Water Bottle Big", "1", "20");
             insert_fixed_Shop_Menu_Data("Water Bottle Small", "1", "10");
@@ -329,7 +329,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
                                    EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
                                    printer
                                            .printFormattedText(
-                                                   "[C]<font size='big'><b>SURTI KHAMAN HOUSE</b></font>\n" +
+                                                   "[C]<font size='normal'><b>SURTI KHAMAN HOUSE</b></font>\n" +
                                                            "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
                                                            "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
                                                            "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
