@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.action_send_mail:
-                DashboardFragment.sendEmail(MainActivity.this);
+                DashboardFragment.sendEmail(MainActivity.this, MainActivity.file_name_surtikhamanhouse);
                 return true;
 
             default:

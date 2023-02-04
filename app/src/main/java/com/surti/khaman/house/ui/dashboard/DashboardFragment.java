@@ -717,7 +717,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     //----------------------------------------------------------------------------------------------
 
 
-    public static void sendEmail(Context context) {
+    public static void sendEmail(Context context, String file_name) {
         String[] TO = {"valangar90@gmail.com"};
         String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -731,7 +731,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         ContextWrapper contextWrapper = new ContextWrapper(context);
 
         File downloadDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(downloadDirectory, MainActivity.file_name_surtikhamanhouse);
+        File file = new File(downloadDirectory,file_name);
 
 //        Uri file_surtikhaman_uri = Uri.fromFile(file);
 
