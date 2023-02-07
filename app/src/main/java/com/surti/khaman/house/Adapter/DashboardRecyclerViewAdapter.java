@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
 
@@ -22,12 +20,10 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
     boolean is_Et_Weight_Focus, is_Et_Price_Focus;
      ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
-    DashboardInterface dashboardInterface;
 
     // RecyclerView recyclerView;
-    public DashboardRecyclerViewAdapter(ArrayList<DashboaedModelData> dashboaedModelDataArrayList, DashboardInterface dashboardInterface) {
+    public DashboardRecyclerViewAdapter(ArrayList<DashboaedModelData> dashboaedModelDataArrayList) {
         this.dashboaedModelDataArrayList = dashboaedModelDataArrayList;
-        this.dashboardInterface = dashboardInterface;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -206,7 +202,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "click on item: " + MyData.getItem_name(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(view.getContext(), "click on item: " + MyData.getItem_name(), Toast.LENGTH_LONG).show();
             }
         });
 

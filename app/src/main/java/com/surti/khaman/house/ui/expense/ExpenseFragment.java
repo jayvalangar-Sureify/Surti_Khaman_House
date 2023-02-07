@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,10 +148,23 @@ public class ExpenseFragment extends Fragment {
         sqLiteDatabase = databaseMain.getWritableDatabase();
         Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_EXPENSES_TABLE_NAME, null, cv);
         if (recinsert != null) {
-            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", "SHOP_EXPENSES_TABLE_NAME : successfully inserted data");
         } else {
-            Toast.makeText(getActivity(), "something wrong try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Expenses_Table : something wrong try again", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", "Expenses_Table : something wrong try again");
         }
+
+
+        internal_file_data = internal_file_data
+                +"\n"+"====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
+                +"\n"+"Date and Time : "+expenses_date_time
+                +"\n"+"Expenses Amount : "+expenses_amount
+                +"\n"+"Expenses Note : "+expenses_note
+                +"\n ===========================================\n";
+
+        DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
+        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
         sqLiteDatabase.close();
 
     }
@@ -168,21 +182,8 @@ public class ExpenseFragment extends Fragment {
             String expense_amount = cursor.getString(1);
             String expense_note = cursor.getString(2);
             String expense_date_time = cursor.getString(3);
-
-            internal_file_data = internal_file_data
-                    +"\n"+"====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
-                    +"\n"+"ID : "+id
-                    +"\n"+"Date and Time : "+expense_date_time
-                    +"\n"+"Expenses Amount : "+expense_amount
-                    +"\n"+"Expenses Note : "+expense_note
-                    +"\n ===========================================\n";
-
-
             modelArrayList.add(new ExpensesModelData(id, expense_amount, expense_note, expense_date_time));
         }
-
-        DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
-        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
         cursor.close();
         sqLiteDatabase.close();
         myAdapter=new ExpensesRecycleViewAdapter(getActivity(),R.layout.row_expenses_crud,modelArrayList,sqLiteDatabase);

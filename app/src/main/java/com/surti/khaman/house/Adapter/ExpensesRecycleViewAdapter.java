@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,8 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
+import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 
@@ -104,7 +102,9 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                                 notifyItemChanged(position);
 
                                 String file_data = "\nUPDATED EXPENSE" + "\n===================================\n Date and Time : " + tv_date_time_value_string + "\nNote : " + et_expense_note_string + "\n Amount : " + et_expense_amount_string + "Rs" + "\n===================================";
-                                create_file_and_write(file_data);
+
+                                DashboardFragment.createMyPDF(context, file_data, MainActivity.file_name_skh_expenses);
+                                DashboardFragment.check_and_create_file_insdie_package(context, file_data, MainActivity.file_name_skh_expenses);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
@@ -115,30 +115,6 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                             Toast.makeText(context, "Enter ALL Field", Toast.LENGTH_LONG).show();
                         }
                     }
-
-                    public void create_file_and_write(String file_data) {
-                        try {
-                            File filedownload_external_path;
-                            filedownload_external_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                            if (!filedownload_external_path.exists()) {
-                                filedownload_external_path.mkdir();
-                            }
-                            File file_directory = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh);
-                            file_directory.mkdir();
-
-                            File file_name_skh_expenses = new File(filedownload_external_path + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_skh_expenses);
-
-                            FileOutputStream fos = new FileOutputStream(file_name_skh_expenses, true);
-                            fos.write(file_data.getBytes());
-                            fos.close();
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(context, "" + e.getMessage().toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-
                 });
 
                 //-------------------------------------------------------------------------------

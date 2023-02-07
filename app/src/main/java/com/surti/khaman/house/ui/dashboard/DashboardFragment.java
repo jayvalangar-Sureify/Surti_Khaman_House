@@ -45,7 +45,6 @@ import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.surti.khaman.house.Adapter.DashboardRecyclerViewAdapter;
 import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
 import com.surti.khaman.house.Database.DatabaseMain;
-import com.surti.khaman.house.Interface.DashboardInterface;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
@@ -58,7 +57,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class DashboardFragment extends Fragment implements DashboardInterface {
+public class DashboardFragment extends Fragment{
 
     String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
@@ -70,7 +69,6 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
 
     private FragmentDashboardBinding binding;
-    DashboardInterface dashboardInterface;
 
 
     String final_bill_string = "";
@@ -125,7 +123,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
         displayData();
         RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
-        DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList, dashboardInterface);
+        DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList);
         dashboard_recycleView.setHasFixedSize(true);
         dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         dashboard_recycleView.setAdapter(adapter);
@@ -384,7 +382,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
             public void onClick(View view) {
                 displayData();
                 RecyclerView dashboard_recycleView = (RecyclerView) root.findViewById(R.id.dashboard_recycleView);
-                DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList, dashboardInterface);
+                DashboardRecyclerViewAdapter adapter = new DashboardRecyclerViewAdapter(dashboaedModelDataArrayList);
                 dashboard_recycleView.setHasFixedSize(true);
                 dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
                 dashboard_recycleView.setAdapter(adapter);
@@ -452,7 +450,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         if (recinsert != null) {
 //            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
         } else {
-//            Toast.makeText(getActivity(), "something wrong try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "REVENUE_TABLE : something wrong try again", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", "REVENUE_TABLE : something wrong try again");
         }
     }
 
@@ -490,7 +489,8 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         if (recinsert != null) {
 //            Toast.makeText(getActivity(), "Fixed Menu Inserted successfully", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), "something wrong try again : Fixed Menu Insert", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "MENU_TABLE : something wrong try again", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", "MENU_TABLE : something wrong try again");
         }
     }
         //----------------------------------------------------------------------------------------------
@@ -534,16 +534,11 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         binding = null;
     }
 
-    @Override
-    public void onTotalAmountChange(String totalAmount) {
-
-    }
-
 
     // Call PDF File to call
     //==============================================================================================
     public static void check_and_create_file(Context context, String file_data, String file_name){
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator + MainActivity.directory_name_skh, MainActivity.file_name_surtikhamanhouse);
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
 
         if(myExternalFile.exists()) {
             createMyPDF(context, file_data, file_name);
@@ -593,12 +588,13 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
         try {
             myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+///            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : FILE SAVED");
         } catch (Exception e) {
             //If file is not saved, print stack trace, clear edittext, and display toast message
             e.printStackTrace();
-            Log.i("test_response", "Error : " + e.getMessage().toString());
-            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, file_name+" : Exception , "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : Exception , "+e.getMessage());
         }
         myPdfDocument.close();
     }
@@ -629,11 +625,12 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
         File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
         try {
             myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             //If file is not saved, print stack trace and display toast message
             e.printStackTrace();
-            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, file_name+" : Exception , "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : Exception , "+e.getMessage());
         }
         myPdfDocument.close();
     }
@@ -665,12 +662,13 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
         try {
             myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
-            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+            //            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : FILE SAVED");
         } catch (Exception e) {
             //If file is not saved, print stack trace, clear edittext, and display toast message
             e.printStackTrace();
-            Log.i("test_response", "Error : " + e.getMessage().toString());
-            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, file_name+" : Exception, "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : Exception, "+e.getMessage());
         }
         myPdfDocument.close();
     }
@@ -699,11 +697,13 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
         try {
             myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
-            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, file_name+" : File SAVE !!!!, ", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : File SAVE !!!!, ");
         } catch (Exception e) {
             //If file is not saved, print stack trace and display toast message
             e.printStackTrace();
-            Toast.makeText(context, "File not saved... Possible permissions error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, file_name+" : Exception, "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.i("test_response", file_name+" : Exception, "+e.getMessage());
         }
         myPdfDocument.close();
     }
@@ -721,7 +721,7 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
 
     public static void sendEmail(Context context, String file_name) {
-        String[] TO = {"valangar90@gmail.com"};
+        String[] TO = {"surtikhamanhouseofficial@gmail.com"};
         String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
@@ -754,9 +754,10 @@ public class DashboardFragment extends Fragment implements DashboardInterface {
 
         try {
             context.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-
+            Log.i("test_response", "MAIL SEND SEUUCESSFULLY !!!!");
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(context, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", "There is no email client installed : Exception, "+ ex.getMessage());
         }
     }
 }

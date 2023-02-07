@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,9 +129,11 @@ public class ShopMenuFragment extends Fragment {
         sqLiteDatabase = databaseMain.getWritableDatabase();
         Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_MENU_TABLE_NAME, null, cv);
         if (recinsert != null) {
-            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), DatabaseMain.SHOP_MENU_TABLE_NAME+" : Data Inserted Successfully", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", DatabaseMain.SHOP_MENU_TABLE_NAME+" : Data Inserted Successfully");
         } else {
-            Toast.makeText(getActivity(), "something wrong try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), DatabaseMain.SHOP_MENU_TABLE_NAME+" : something wrong try again", Toast.LENGTH_SHORT).show();
+            Log.i("test_response", DatabaseMain.SHOP_MENU_TABLE_NAME+" : Data Inserted Successfully");
         }
     }
 
