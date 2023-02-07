@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "215457849356",
+    "project_id": "surti-khaman-house",
+    "storage_bucket": "surti-khaman-house.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215457849356:android:5bb09edfa37e2f02e5ce29",
+        "android_client_info": {
+          "package_name": "com.surti.khaman.house"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215457849356-kt8pfv7j7rooacm0l5mp0ek43mqh37kn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhL8ZnjT90hwQ3FdqkFHozwCHcwRNtpHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215457849356-kt8pfv7j7rooacm0l5mp0ek43mqh37kn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

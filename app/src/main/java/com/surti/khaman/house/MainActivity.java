@@ -1,8 +1,6 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,13 +23,8 @@ import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-
-    public static String directory_name_skh = "SKH";
+    public static String firebase_storage_file_name = "Firebase_Bills";
+    public static String provider_name = "com.surti.khaman.house.provider";
     public static String file_name_surtikhamanhouse = "SKH_Bills.pdf";
     public static String file_name_skh_expenses = "SKH_Expenses.pdf";
 
@@ -109,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
                 Log.i("test_permission", "Permissions are granted. Good to go!");
             }
         }
-
-        verifyStoragePermissions(MainActivity.this);
     }
 
     @Override
@@ -140,20 +130,6 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
 
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
         }
     }
 
