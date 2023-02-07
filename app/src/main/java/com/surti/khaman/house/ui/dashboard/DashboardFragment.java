@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -305,6 +306,63 @@ public class DashboardFragment extends Fragment{
                                }
                                //------------------------------------------------------------------------
 
+
+                               AsyncTask.execute(new Runnable() {
+                                                     @Override
+                                                     public void run() {
+
+                                                         // Print Bill
+                                                         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                                                         // Your code HERE
+                                                         try {
+
+                                                             if(item_name_list.size() != 0){
+                                                                 EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
+                                                                 printer
+                                                                         .printFormattedText(
+                                                                                 "[C]<font size='normal'><b>SURTI KHAMAN HOUSE</b></font>\n" +
+                                                                                         "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
+                                                                                         "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
+                                                                                         "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
+                                                                                         "[L]<font size='normal'> Date-Time : " + currentDateAndTime + "</font>\n" +
+                                                                                         "[L]<font size='normal'> Fssai : " + "21522012000953" + "</font>\n" +
+                                                                                         "[C]================================\n" +
+                                                                                         "[L] Items" +
+                                                                                         "[R] Weight" + "    Price\n" +
+                                                                                         "[L]<font size='small'>" + final_bill_string + "</font>\n" +
+                                                                                         "[C]================================\n" +
+                                                                                         "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
+                                                                                         "[C]================================"
+                                                                         );
+                                                             }else{
+
+                                                             }
+                                                             try{
+                                                                 dialog.dismiss();
+                                                             }catch (Exception e){
+                                                                 e.getMessage();
+                                                                 Log.i("test_print", "Exception dialog dismiss:"+e.getMessage());
+                                                             }
+                                                         } catch (EscPosConnectionException e) {
+                                                             e.printStackTrace();
+                                                             Log.i("test_print", "Exception 1 :- "+e.getMessage());
+                                                         } catch (EscPosParserException e) {
+                                                             e.printStackTrace();
+                                                             Log.i("test_print", "Exception 2 :- "+e.getMessage());
+                                                         } catch (EscPosEncodingException e) {
+                                                             e.printStackTrace();
+                                                             Log.i("test_print", "Exception 3 :- "+e.getMessage());
+                                                         } catch (EscPosBarcodeException e) {
+                                                             e.printStackTrace();
+                                                             Log.i("test_print", "Exception 4 :- "+e.getMessage());
+                                                         }
+
+
+                                                     }
+                                   //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+                               });
+
                                // Insert Into Database
                                //-------------------------------------------------------------------------------------------------------------------------------------------------
                                insert_Shop_Revenue_Data(""+bill_no_integer, currentDateAndTime, final_file_string, ""+grand_total);
@@ -320,53 +378,10 @@ public class DashboardFragment extends Fragment{
                                check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
                                //-------------------------------------------------------------------------
 
-
-                               // Your code HERE
-                               try {
-
-                                   if(item_name_list.size() != 0){
-                                   EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
-                                   printer
-                                           .printFormattedText(
-                                                   "[C]<font size='normal'><b>SURTI KHAMAN HOUSE</b></font>\n" +
-                                                           "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
-                                                           "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
-                                                           "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
-                                                           "[L]<font size='normal'> Date-Time : " + currentDateAndTime + "</font>\n" +
-                                                           "[L]<font size='normal'> Fssai : " + "21522012000953" + "</font>\n" +
-                                                           "[C]================================\n" +
-                                                           "[L] Items" +
-                                                           "[R] Weight" + "    Price\n" +
-                                                           "[L]<font size='small'>" + final_bill_string + "</font>\n" +
-                                                           "[C]================================\n" +
-                                                           "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
-                                                           "[C]================================"
-                                           );
-
-                                       binding.btnReset.performClick();
-                               }else{
-
-                                   }
-                                   try{
-                                       dialog.dismiss();
-                                   }catch (Exception e){
-                                       e.getMessage();
-                                       Log.i("test_print", "Exception dialog dismiss:"+e.getMessage());
-                                   }
-                               } catch (EscPosConnectionException e) {
-                                   e.printStackTrace();
-                                   Log.i("test_print", "Exception 1 :- "+e.getMessage());
-                               } catch (EscPosParserException e) {
-                                   e.printStackTrace();
-                                   Log.i("test_print", "Exception 2 :- "+e.getMessage());
-                               } catch (EscPosEncodingException e) {
-                                   e.printStackTrace();
-                                   Log.i("test_print", "Exception 3 :- "+e.getMessage());
-                               } catch (EscPosBarcodeException e) {
-                                   e.printStackTrace();
-                                   Log.i("test_print", "Exception 4 :- "+e.getMessage());
-                               }
+                               binding.btnReset.performClick();
                            }
+
+
                        }
                    });
 

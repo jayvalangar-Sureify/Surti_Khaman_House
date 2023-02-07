@@ -23,7 +23,8 @@ import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
-    public static String firebase_storage_file_name = "Firebase_Bills";
+    public static String firebase_storage_bill_file_name = "Firebase_Bills_File";
+    public static String firebase_storage_expenses_file_name = "Expenses_File";
     public static String provider_name = "com.surti.khaman.house.provider";
     public static String file_name_surtikhamanhouse = "SKH_Bills.pdf";
     public static String file_name_skh_expenses = "SKH_Expenses.pdf";

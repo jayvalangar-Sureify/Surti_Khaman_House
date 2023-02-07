@@ -48,6 +48,7 @@ public class FileUploadWorker extends Worker {
             ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
             File downloadDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             File file_name_surtikhamanhouse = new File(downloadDirectory,MainActivity.file_name_surtikhamanhouse);
+            File file_name_skh_expenses = new File(downloadDirectory,MainActivity.file_name_skh_expenses);
 
 //        Uri file_surtikhaman_uri = Uri.fromFile(file);
 
@@ -56,9 +57,17 @@ public class FileUploadWorker extends Worker {
                     MainActivity.provider_name, //(use your app signature + ".provider" )
                     file_name_surtikhamanhouse);
 
+
+            Uri file_name_skh_expenses_uri = FileProvider.getUriForFile(
+                    getApplicationContext(),
+                    MainActivity.provider_name, //(use your app signature + ".provider" )
+                    file_name_skh_expenses);
+
             Log.i("test_response", "Inside oreo URI : "+file_surtikhaman_uri.toString());
 
-            UploadPDF.uploadFiles(file_surtikhaman_uri, getApplicationContext());
+            UploadPDF.upload_Bill_Files(file_surtikhaman_uri, getApplicationContext());
+            UploadPDF.upload_Expenses_Files(file_name_skh_expenses_uri, getApplicationContext());
+
         }
         Result result = Result.success();
         Intrinsics.checkNotNullExpressionValue(result, "Result.success()");

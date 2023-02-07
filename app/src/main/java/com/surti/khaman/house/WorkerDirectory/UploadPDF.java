@@ -49,15 +49,9 @@ public class UploadPDF {
     }
 
 
-    public static void uploadFiles(Uri data, Context context) {
-//        final ProgressDialog progressDialog = new ProgressDialog(context);
-//        progressDialog.setTitle("Uploading .....");
-//        progressDialog.show();
-        Log.i("test_response", "uploadFiles() : "+data.toString());
-
-
-
-
+//=====================================================================================================================================
+    public static void upload_Bill_Files(Uri data, Context context) {
+        Log.i("test_response", "upload_Bill_Files() : "+data.toString());
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -65,41 +59,32 @@ public class UploadPDF {
 
                 // Database
                 storageReference = FirebaseStorage.getInstance().getReference();
-                databaseReference = FirebaseDatabase.getInstance().getReference("Uploads");
-                StorageReference reference = storageReference.child("Uploads");
+                databaseReference = FirebaseDatabase.getInstance().getReference("Uploads_Bills");
+                StorageReference reference = storageReference.child("Uploads_Bills"+System.currentTimeMillis());
                 reference.putFile(data)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                                Log.i("test_response", "uploadFiles() : "+data.toString());
+                                Log.i("test_response", "upload_Bill_Files() : "+data.toString());
 
                                 Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                                 while (!uriTask.isComplete());
                                 Uri url = uriTask.getResult();
 
-                                FileUploadModelClass pdfClass = new FileUploadModelClass(MainActivity.firebase_storage_file_name, url.toString());
+                                FileUploadModelClass pdfClass = new FileUploadModelClass(MainActivity.firebase_storage_bill_file_name, url.toString());
                                 databaseReference.child(databaseReference.push().getKey()).setValue(pdfClass);
-
                                 Log.i("test_response", "File Uploaded SUccessfully : "+data.toString());
-
-//                                Toast.makeText(context, "File Uploaded SUccessfully", Toast.LENGTH_LONG).show();
-
-//                        progressDialog.dismiss();
                             }
                         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                                 double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
                                 Log.i("test_response", "Upload:"+(int) progress+"%");
-//                        double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-//                        progressDialog.setMessage("Upload:"+(int) progress+"%");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Log.i("test_response", "Error : "+e.getMessage().toString());
-//                                Toast.makeText(context, "Failed To Upload : "+e.getMessage().toString(), Toast.LENGTH_LONG).show();
                             }
                         });
             }
@@ -107,6 +92,55 @@ public class UploadPDF {
 
 
     }
+//=====================================================================================================================================
+
+
+
+
+    //=====================================================================================================================================
+    public static void upload_Expenses_Files(Uri data, Context context) {
+        Log.i("test_response", "upload_Bill_Files() : "+data.toString());
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                initFirebase(context);
+
+                // Database
+                storageReference = FirebaseStorage.getInstance().getReference();
+                databaseReference = FirebaseDatabase.getInstance().getReference("Uploads_Expenses");
+                StorageReference reference = storageReference.child("Uploads_Expenses"+System.currentTimeMillis());
+                reference.putFile(data)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.i("test_response", "upload_Bill_Files() : "+data.toString());
+
+                                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                while (!uriTask.isComplete());
+                                Uri url = uriTask.getResult();
+
+                                FileUploadModelClass pdfClass = new FileUploadModelClass(MainActivity.firebase_storage_expenses_file_name, url.toString());
+                                databaseReference.child(databaseReference.push().getKey()).setValue(pdfClass);
+                                Log.i("test_response", "File Uploaded SUccessfully : "+data.toString());
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                double progress = (100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
+                                Log.i("test_response", "Upload:"+(int) progress+"%");
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("test_response", "Error : "+e.getMessage().toString());
+                            }
+                        });
+            }
+        });
+
+
+    }
+//=====================================================================================================================================
 
     private static void initFirebase(Context context) {
         FirebaseApp.initializeApp(context);
