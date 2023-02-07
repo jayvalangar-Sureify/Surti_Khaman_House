@@ -50,23 +50,38 @@ public class FileUploadWorker extends Worker {
             File file_name_surtikhamanhouse = new File(downloadDirectory,MainActivity.file_name_surtikhamanhouse);
             File file_name_skh_expenses = new File(downloadDirectory,MainActivity.file_name_skh_expenses);
 
+            String notification_data_string = "";
+            if(file_name_surtikhamanhouse.exists()){
+                Uri file_surtikhaman_uri = FileProvider.getUriForFile(
+                        getApplicationContext(),
+                        MainActivity.provider_name, //(use your app signature + ".provider" )
+                        file_name_surtikhamanhouse);
+                try {
+                    UploadPDF.upload_Bill_Files(file_surtikhaman_uri, getApplicationContext());
+                }catch (Exception e){
+                    e.getMessage();
+                }
+                notification_data_string = notification_data_string + "[1:T]";
+            }else{
+                notification_data_string = notification_data_string + "[1:F]";
+            }
+
+            if(file_name_skh_expenses.exists()){
+                Uri file_name_skh_expenses_uri = FileProvider.getUriForFile(
+                        getApplicationContext(),
+                        MainActivity.provider_name, //(use your app signature + ".provider" )
+                        file_name_skh_expenses);
+                try {
+                    UploadPDF.upload_Expenses_Files(file_name_skh_expenses_uri, getApplicationContext());
+                }catch (Exception e){
+                    e.getMessage();
+                }
+                notification_data_string = notification_data_string + "[2:T]";
+            }else {
+                notification_data_string = notification_data_string + "[2:F]";
+            }
+
 //        Uri file_surtikhaman_uri = Uri.fromFile(file);
-
-            Uri file_surtikhaman_uri = FileProvider.getUriForFile(
-                    getApplicationContext(),
-                    MainActivity.provider_name, //(use your app signature + ".provider" )
-                    file_name_surtikhamanhouse);
-
-
-            Uri file_name_skh_expenses_uri = FileProvider.getUriForFile(
-                    getApplicationContext(),
-                    MainActivity.provider_name, //(use your app signature + ".provider" )
-                    file_name_skh_expenses);
-
-            Log.i("test_response", "Inside oreo URI : "+file_surtikhaman_uri.toString());
-
-            UploadPDF.upload_Bill_Files(file_surtikhaman_uri, getApplicationContext());
-            UploadPDF.upload_Expenses_Files(file_name_skh_expenses_uri, getApplicationContext());
 
         }
         Result result = Result.success();
