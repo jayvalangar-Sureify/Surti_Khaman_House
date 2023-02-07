@@ -155,17 +155,6 @@ public class ExpenseFragment extends Fragment {
             Toast.makeText(getActivity(), "Expenses_Table : something wrong try again", Toast.LENGTH_SHORT).show();
             Log.i("test_response", "Expenses_Table : something wrong try again");
         }
-
-
-        internal_file_data = internal_file_data
-                +"\n"+"====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
-                +"\n"+"Date and Time : "+expenses_date_time
-                +"\n"+"Expenses Amount : "+expenses_amount
-                +"\n"+"Expenses Note : "+expenses_note
-                +"\n ===========================================\n";
-
-        DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
-        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
         sqLiteDatabase.close();
 
     }
@@ -184,9 +173,18 @@ public class ExpenseFragment extends Fragment {
             String expense_note = cursor.getString(2);
             String expense_date_time = cursor.getString(3);
             modelArrayList.add(new ExpensesModelData(id, expense_amount, expense_note, expense_date_time));
+            internal_file_data = internal_file_data
+                    +"\n"+"====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
+                    +"\n"+"Id : "+id
+                    +"\n"+"Date and Time : "+expense_date_time
+                    +"\n"+"Expenses Amount : "+expense_amount
+                    +"\n"+"Expenses Note : "+expense_note
+                    +"\n ===========================================\n";
         }
         cursor.close();
         sqLiteDatabase.close();
+        DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
+        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
         myAdapter=new ExpensesRecycleViewAdapter(getActivity(),R.layout.row_expenses_crud,modelArrayList,sqLiteDatabase);
         recyclerView.setAdapter(myAdapter);
     }

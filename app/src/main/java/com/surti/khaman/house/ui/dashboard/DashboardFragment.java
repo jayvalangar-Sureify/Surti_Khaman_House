@@ -559,7 +559,7 @@ public class DashboardFragment extends Fragment{
     // Call PDF File to call
     //==============================================================================================
     public static void check_and_create_file(Context context, String file_data, String file_name){
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), MainActivity.file_name_surtikhamanhouse);
+        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
 
         if(myExternalFile.exists()) {
             createMyPDF(context, file_data, file_name);

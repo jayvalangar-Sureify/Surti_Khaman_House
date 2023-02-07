@@ -58,6 +58,10 @@
         android:background="@drawable/border_red_fill_white_rectangle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:textColor="@color/blue_500"
+        android:enabled="false"
+        android:layout_marginStart="4dp"
         android:inputType="number"
         />
 
@@ -77,6 +81,9 @@
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="@color/blue_500"
+        android:paddingStart="10dp"
         android:inputType="text"
         android:background="@drawable/border_red_fill_white_rectangle"
         />

@@ -16,5 +16,9 @@
             android:id="@+id/nav_expenses"
             android:icon="@drawable/ic_money_24"
             android:title="@string/todays_expenses" />
+        <item
+            android:id="@+id/nav_wholesale"
+            android:icon="@drawable/ic_wholesale_icon_24"
+            android:title="@string/whole_Sale" />
     </group>
 </menu>

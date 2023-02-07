@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_dashboard, R.id.nav_shop_menu, R.id.nav_expenses)
+                R.id.nav_dashboard, R.id.nav_shop_menu, R.id.nav_expenses, R.id.nav_wholesale)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

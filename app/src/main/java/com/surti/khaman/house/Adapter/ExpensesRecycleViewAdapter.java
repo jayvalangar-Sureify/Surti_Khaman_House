@@ -16,10 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.surti.khaman.house.Database.DatabaseMain;
-import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.ExpensesModelData;
 import com.surti.khaman.house.R;
-import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
 import java.util.ArrayList;
 
@@ -100,11 +98,6 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                                 ExpensesModelData expensesModelData = new ExpensesModelData(model.getId(), et_expense_amount_string, et_expense_note_string, tv_date_time_value_string);
                                 modelArrayList.set(position, expensesModelData);
                                 notifyItemChanged(position);
-
-                                String file_data = "\nUPDATED EXPENSE" + "\n===================================\n Date and Time : " + tv_date_time_value_string + "\nNote : " + et_expense_note_string + "\n Amount : " + et_expense_amount_string + "Rs" + "\n===================================";
-
-                                DashboardFragment.createMyPDF(context, file_data, MainActivity.file_name_skh_expenses);
-                                DashboardFragment.check_and_create_file_insdie_package(context, file_data, MainActivity.file_name_skh_expenses);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
