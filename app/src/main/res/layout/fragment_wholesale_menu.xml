@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.surti.khaman.house.ui.wholesale_menu.WholesaleMenuFragment">
+
+    <!-- Recycler view -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id = "@+id/rv_wholesale_menu"
+        android:layout_above="@+id/rl_bottom_layout"
+        android:layout_margin="6dp"
+        android:scrollbars="vertical"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/yellow_100"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_add_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_yellow_drawable"
+                android:text="@string/add_item"
+                android:textAllCaps="false"
+                android:layout_margin="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_dashboard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_yellow_drawable"
+                android:text="@string/left_menu_dashboard"
+                android:textAllCaps="false"
+                android:layout_margin="6dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

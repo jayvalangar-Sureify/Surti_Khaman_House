@@ -1,6 +1,6 @@
 package com.surti.khaman.house.Model;
 
-public class WholesaleModelData {
+public class WholesaleMenuModelData {
     private int id;
     private String item_name;
     private String item_weight;
@@ -8,7 +8,7 @@ public class WholesaleModelData {
 
     //generate constructor
 
-    public WholesaleModelData(int id, String item_name, String item_weight, String item_price) {
+    public WholesaleMenuModelData(int id, String item_name, String item_weight, String item_price) {
         this.id = id;
         this.item_name = item_name;
         this.item_weight = item_weight;

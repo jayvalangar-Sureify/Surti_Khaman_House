@@ -8,9 +8,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="left_menu_dashboard">Dashboard</string>
-    <string name="left_menu_edit_dashboard">Edit Dashboard</string>
+    <string name="left_menu_edit_dashboard">Edit Dashboard Data</string>
     <string name="left_menu_expenses">Expenses</string>
     <string name="left_menu_wholesale">Wholesale</string>
+    <string name="left_menu_edit_wholesale_dashboard">Edit Wholesale Data</string>
     <string name="left_menu_find_rupees">Find Rupees</string>
     <string name="left_menu_find_weight">Find Weight</string>
 
@@ -65,7 +66,7 @@
     <string name="send_mail">Send Mail</string>
 
     <!-- Wholesale -->
-    <string name="whole_Sale">Whole Sale</string>
+    <string name="wholesale">Wholesale</string>
 
 
 
