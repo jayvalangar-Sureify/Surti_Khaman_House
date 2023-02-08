@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
     public static String file_name_surtikhamanhouse = "SKH_Bills.pdf";
     public static String file_name_skh_expenses = "SKH_Expenses.pdf";
 
+    // Wholesale
+    //----------------------------------------------------------------------------------------------
+    public static String file_name_wholesale_bill = "SKH_wholesale_Bills.pdf";
+    //----------------------------------------------------------------------------------------------
+
     public static final int PERMISSION_BLUETOOTH = 01;
     public static final int PERMISSION_BLUETOOTH_ADMIN = 02;
     public static final int PERMISSION_BLUETOOTH_CONNECT = 03;
