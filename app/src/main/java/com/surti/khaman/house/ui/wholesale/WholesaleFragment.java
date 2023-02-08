@@ -422,7 +422,7 @@ public class WholesaleFragment extends Fragment {
 
     private void displayData() {
         sqLiteDatabase=databaseMain.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_MENU_TABLE_NAME+"",null);
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.WHOLESALE_MENU_TABLE_NAME+"",null);
         dashboaedModelDataArrayList = new ArrayList<>();
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
@@ -461,13 +461,13 @@ public class WholesaleFragment extends Fragment {
     //----------------------------------------------------------------------------------------------
     public void insert_Shop_Revenue_Data(String bill_no,String bill_date_time, String item_name_weight_price, String bill_amount){
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseMain.SHOP_REVENUE_BILL_NO_COLUMN, bill_no);
-        cv.put(DatabaseMain.SHOP_REVENUE_BILL_DATE_TIME_COLUMN, bill_date_time);
-        cv.put(DatabaseMain.SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN, item_name_weight_price);
-        cv.put(DatabaseMain.SHOP_REVENUE_BILL_AMOUNT_COLUMN, bill_amount);
+        cv.put(DatabaseMain.WHOLESALE_REVENUE_BILL_NO, bill_no);
+        cv.put(DatabaseMain.WHOLESALE_REVENUE_DATE_TIME, bill_date_time);
+        cv.put(DatabaseMain.WHOLESALE_REVENUE_NAME_WT_RS, item_name_weight_price);
+        cv.put(DatabaseMain.WHOLESALE_REVENUE_BILL_AMOUNT, bill_amount);
 
         sqLiteDatabase = databaseMain.getWritableDatabase();
-        Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_REVENUE_TABLE_NAME, null, cv);
+        Long recinsert = sqLiteDatabase.insert(DatabaseMain.WHOLESALE_REVENUE_TABLE_NAME, null, cv);
         if (recinsert != null) {
 //            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
         } else {
@@ -478,20 +478,20 @@ public class WholesaleFragment extends Fragment {
 
     public void display_Shop_Revenue_Data() {
         sqLiteDatabase=databaseMain.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.WHOLESALE_REVENUE_TABLE_NAME+"",null);
         internal_file_data = "";
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
-            String SHOP_REVENUE_BILL_NO_COLUMN = cursor.getString(1);
-            String SHOP_REVENUE_BILL_DATE_TIME_COLUMN = cursor.getString(2);
-            String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
-            String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
+            String WHOLESALE_REVENUE_BILL_NO = cursor.getString(1);
+            String WHOLESALE_REVENUE_DATE_TIME = cursor.getString(2);
+            String WHOLESALE_REVENUE_NAME_WT_RS = cursor.getString(3);
+            String WHOLESALE_REVENUE_BILL_AMOUNT = cursor.getString(4);
             internal_file_data =  internal_file_data
                     +"\n======Wholesale==Wholesale==Wholesale======\n"
-                    +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
-                    +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
-                    +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
-                    +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
+                    +"\n Bill No : "+WHOLESALE_REVENUE_BILL_NO
+                    +"\n Date Time : "+WHOLESALE_REVENUE_DATE_TIME
+                    +"\n"+WHOLESALE_REVENUE_NAME_WT_RS
+                    +"\n Grand Total : "+WHOLESALE_REVENUE_BILL_AMOUNT
                     +"\n ===========================================\n";
         }
         cursor.close();
@@ -501,12 +501,12 @@ public class WholesaleFragment extends Fragment {
     //----------------------------------------------------------------------------------------------
     private void insert_fixed_Shop_Menu_Data(String itemName, String itemWeight, String itemPrice) {
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseMain.SHOP_MENU_ITEM_NAME_COLUMN, itemName);
-        cv.put(DatabaseMain.SHOP_MENU_ITEM_WEIGHT_COLUMN, itemWeight);
-        cv.put(DatabaseMain.SHOP_MENU_ITEM_PRICE_COLUMN, itemPrice);
+        cv.put(DatabaseMain.WHOLESALE_MENU_ITEM_NAME_COLUMN, itemName);
+        cv.put(DatabaseMain.WHOLESALE_MENU_ITEM_WEIGHT_COLUMN, itemWeight);
+        cv.put(DatabaseMain.WHOLESALE_MENU_ITEM_PRICE_COLUMN, itemPrice);
 
         sqLiteDatabase = databaseMain.getWritableDatabase();
-        Long recinsert = sqLiteDatabase.insert(DatabaseMain.SHOP_MENU_TABLE_NAME, null, cv);
+        Long recinsert = sqLiteDatabase.insert(DatabaseMain.WHOLESALE_MENU_TABLE_NAME, null, cv);
         if (recinsert != null) {
 //            Toast.makeText(getActivity(), "Fixed Menu Inserted successfully", Toast.LENGTH_SHORT).show();
         } else {
