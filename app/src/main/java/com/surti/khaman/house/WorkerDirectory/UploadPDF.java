@@ -28,6 +28,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.surti.khaman.house.MainActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import kotlin.jvm.internal.Intrinsics;
@@ -55,12 +58,18 @@ public class UploadPDF {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                initFirebase(context);
+//                initFirebase(context);
 
                 // Database
                 storageReference = FirebaseStorage.getInstance().getReference();
                 databaseReference = FirebaseDatabase.getInstance().getReference("Uploads_Bills");
-                StorageReference reference = storageReference.child("Uploads_Bills"+System.currentTimeMillis());
+                String currentDateTime = "";
+                try {
+                    currentDateTime = new SimpleDateFormat("_[dd-MMM-yyyy]_[HH:mm]", Locale.getDefault()).format(new Date());
+                }catch (Exception e){
+                    e.getMessage();
+                }
+                StorageReference reference = storageReference.child("Uploads_Bills"+currentDateTime);
                 reference.putFile(data)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -103,12 +112,18 @@ public class UploadPDF {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                initFirebase(context);
+//                initFirebase(context);
 
                 // Database
                 storageReference = FirebaseStorage.getInstance().getReference();
                 databaseReference = FirebaseDatabase.getInstance().getReference("Uploads_Expenses");
-                StorageReference reference = storageReference.child("Uploads_Expenses"+System.currentTimeMillis());
+                String currentDateTime = "";
+                try {
+                    currentDateTime = new SimpleDateFormat("_yyyy_MM_dd_HH_mm", Locale.getDefault()).format(new Date());
+                }catch (Exception e){
+                    e.getMessage();
+                }
+                StorageReference reference = storageReference.child("Uploads_Expenses"+currentDateTime);
                 reference.putFile(data)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -143,10 +158,14 @@ public class UploadPDF {
 //=====================================================================================================================================
 
     private static void initFirebase(Context context) {
-        FirebaseApp.initializeApp(context);
-        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
-        firebaseAppCheck.installAppCheckProviderFactory(
-                PlayIntegrityAppCheckProviderFactory.getInstance());
+        try {
+            FirebaseApp.initializeApp(context);
+            FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+            firebaseAppCheck.installAppCheckProviderFactory(
+                    PlayIntegrityAppCheckProviderFactory.getInstance());
+        }catch (Exception e){
+            e.getMessage();
+        }
     }
 
 

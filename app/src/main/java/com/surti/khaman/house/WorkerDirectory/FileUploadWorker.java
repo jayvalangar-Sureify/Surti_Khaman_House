@@ -28,8 +28,11 @@ import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
 
 public class FileUploadWorker extends Worker {
+
+    String notification_data_string = "";
     @NotNull
-    public static final String CHANNEL_ID = "channel_id";
+    public static final String CHANNEL_ID = "SKH_File_Upload_ID";
+    public static final String CHANNEL_NAME = "SKH_Channel";
     public static final int NOTIFICATION_ID = 1;
     @NotNull
     public static final FileUploadWorker.Companion Companion = new FileUploadWorker.Companion((DefaultConstructorMarker) null);
@@ -41,7 +44,7 @@ public class FileUploadWorker extends Worker {
     @NotNull
     public Result doWork() {
         Log.i("test_response", "DoWork : Success function called");
-        this.issueNotification();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.i("test_response", "Inside oreo");
 
@@ -50,7 +53,7 @@ public class FileUploadWorker extends Worker {
             File file_name_surtikhamanhouse = new File(downloadDirectory,MainActivity.file_name_surtikhamanhouse);
             File file_name_skh_expenses = new File(downloadDirectory,MainActivity.file_name_skh_expenses);
 
-            String notification_data_string = "";
+
             if(file_name_surtikhamanhouse.exists()){
                 Uri file_surtikhaman_uri = FileProvider.getUriForFile(
                         getApplicationContext(),
@@ -83,6 +86,8 @@ public class FileUploadWorker extends Worker {
 
 //        Uri file_surtikhaman_uri = Uri.fromFile(file);
 
+            this.issueNotification();
+
         }
         Result result = Result.success();
         Intrinsics.checkNotNullExpressionValue(result, "Result.success()");
@@ -95,19 +100,20 @@ public class FileUploadWorker extends Worker {
         if (Build.VERSION.SDK_INT
                 >= Build.VERSION_CODES.O) {
             makeNotificationChannel(
-                    "CHANNEL_1", "Example channel",
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
                     NotificationManager.IMPORTANCE_DEFAULT);
         }
 
         // Creating the notification builder
         NotificationCompat.Builder notificationBuilder
-                = new NotificationCompat.Builder(getApplicationContext(), "CHANNEL_1");
+                = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
 
         // Setting the notification's properties
         notificationBuilder
                 .setSmallIcon(com.surti.khaman.house.R.drawable.ic_left_menu_dashboard_24)
                 .setContentTitle("Surti Khaman House")
-                .setContentText("Data Updated Successfully")
+                .setContentText("Updates "+notification_data_string)
                 .setNumber(3);
 
         // Getting the notification manager and send the
@@ -119,7 +125,7 @@ public class FileUploadWorker extends Worker {
         // it is better to not use 0 as notification id, so
         // used 1.
         notificationManager.notify(
-                1, notificationBuilder.build());
+                NOTIFICATION_ID, notificationBuilder.build());
     }
 
     // Helper method to create a notification channel for
