@@ -1,9 +1,15 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         NavigationUI.setupWithNavController(navigationView, navController);
 
         requestPermissions();
+
+        // Show File Access Permission
+        if (Build.VERSION.SDK_INT >= 30){
+            if(!Environment.isExternalStorageManager()) {
+                show_file_access_permission_dialog_box(MainActivity.this);
+            }
+        }
     }
 
     private static boolean isExternalStorageReadOnly() {
@@ -104,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
                     Manifest.permission.BLUETOOTH_ADMIN,
                     Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_SCAN)) {
+
                 Log.i("test_permission", "Permissions are granted. Good to go!");
             }
         }
@@ -139,4 +153,33 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         }
     }
 
+    //==============================================================================================
+    public static void show_file_access_permission_dialog_box(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Please Grant File Access Permission");
+        builder.setTitle("Grant Permission");
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Grant", (DialogInterface.OnClickListener) (dialog, which) -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                try {
+                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+                    context.startActivity(intent);
+                } catch (Exception ex){
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    context.startActivity(intent);
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.cancel();
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+    //==============================================================================================
 }
