@@ -43,6 +43,8 @@ import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
 import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
 import com.dantsu.escposprinter.exceptions.EscPosParserException;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.surti.khaman.house.Adapter.DashboardRecyclerViewAdapter;
 import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
 import com.surti.khaman.house.Database.DatabaseMain;
@@ -54,6 +56,8 @@ import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +68,7 @@ public class DashboardFragment extends Fragment{
     public static ArrayList<String> page_wise_data_arraylist = new ArrayList<>();
     String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
+    String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
 
     String internal_file_data = "";
 
@@ -499,7 +504,14 @@ public class DashboardFragment extends Fragment{
                     +"\n ===========================================\n";
         }
 
-        page_wise_data_arraylist = split_line_wise(internal_file_data);
+        String previous_file_data = "";
+        if(get_SharedPreference_Old_data() == 0) {
+            previous_file_data =
+                    "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n"
+                            + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
+                            + "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n";
+        }
+        page_wise_data_arraylist = split_line_wise(previous_file_data + "\n" + internal_file_data);
 
         cursor.close();
     }
@@ -537,6 +549,19 @@ public class DashboardFragment extends Fragment{
     public String get_SharedPreference_FixedMenu(){
         SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
         return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
+    }
+
+    public void set_SharedPreference_Old_data(Integer bill_no){
+        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_OLD_FILE_DATA, bill_no);
+        editor.commit();
+    }
+
+
+    public Integer get_SharedPreference_Old_data(){
+        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_OLD_FILE_DATA, 0);
     }
 
 
@@ -813,4 +838,31 @@ public class DashboardFragment extends Fragment{
           }
     //----------------------------------------------------------------------------------------------
 
+
+    public static InputStream inputStream;
+    public static String extract_pdf_text(String fileName){
+        String content = "";
+        PdfReader reader = null;
+        try {
+            //String fileName is the string with the path to your .pdf file, for example resources/pdfs/preface.pdf
+            reader = new PdfReader(fileName);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        int numberOfPages = reader.getNumberOfPages();
+        numberOfPages = numberOfPages + 1;
+        for (int page = 1; page < numberOfPages; page++){
+            try {
+                String content1Page = PdfTextExtractor.getTextFromPage(reader, page);
+                content = content + content1Page;
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        Log.i("Test_lines",""+content);
+        return content;
+    }
 }
