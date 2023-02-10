@@ -61,10 +61,14 @@ import java.util.Date;
 
 public class DashboardFragment extends Fragment{
 
+    public static ArrayList<String> page_wise_data_arraylist = new ArrayList<>();
     String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
 
     String internal_file_data = "";
+
+    public static int page_width = 420, page_height = 842;
+
 
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
@@ -494,6 +498,9 @@ public class DashboardFragment extends Fragment{
                     +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
                     +"\n ===========================================\n";
         }
+
+        page_wise_data_arraylist = split_line_wise(internal_file_data);
+
         cursor.close();
     }
     //----------------------------------------------------------------------------------------------
@@ -559,54 +566,55 @@ public class DashboardFragment extends Fragment{
     // Call PDF File to call
     //==============================================================================================
     public static void check_and_create_file(Context context, String file_data, String file_name){
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
-
-        if(myExternalFile.exists()) {
-            createMyPDF(context, file_data, file_name);
-        }else{
-            recreateMyPDF(context, file_data, file_name);
-        }
+        File download_directory_file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        createMyPDF(context, file_data, file_name, download_directory_file);
     }
     //==============================================================================================
 
     // Call PDF File to call
     //==============================================================================================
     public static void check_and_create_file_insdie_package(Context context, String file_data, String file_name){
-        File myExternalFile = get_inside_Package_File_object(context, file_name);
-
-        if(myExternalFile.exists()) {
-            createMyPDF_Inside_Package(context, file_data, file_name);
-        }else{
-            recreateMyPDF_Inside_Package(context, file_data, file_name);
-        }
+        File inside_package_file = get_inside_Package_File_object(context, file_name);
+        createMyPDF_Inside_Package(context, file_data, file_name, inside_package_file);
     }
     //==============================================================================================
 
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static void createMyPDF(Context context, String file_data, String file_name) {
+    public static void createMyPDF(Context context, String file_data, String file_name, File file) {
 
         //Create the pdf page
         PdfDocument myPdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
-        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
         Paint myPaint = new Paint();
 
-        //Initialize top and left margin for text
-        int x = 10, y = 25;
+        //=============================================================================================================================
 
-        //Paint the string to the page
-        for (String line : file_data.split("\n")) {
-            myPage.getCanvas().drawText(line, x, y, myPaint);
-            y += myPaint.descent() - myPaint.ascent();
+        for (int i = 0; i < page_wise_data_arraylist.size(); i++){
+
+            //Initialize top and left margin for text
+            int page1_x = 10, page1_y = 25;
+
+            PdfDocument.PageInfo myPageInfo1 = new PdfDocument.PageInfo.Builder(page_width, page_height, 1).create();
+            PdfDocument.Page myPage1 = myPdfDocument.startPage(myPageInfo1);
+
+            Log.i("test_page", i+") "+page_wise_data_arraylist.get(i));
+
+            for (String line : page_wise_data_arraylist.get(i).split("\n")) {
+                myPage1.getCanvas().drawText(line, page1_x, page1_y, myPaint);
+                page1_y += myPaint.descent() - myPaint.ascent();
+            }
+
+            myPdfDocument.finishPage(myPage1);
+
         }
 
-        //Finish writing/painting on the page
-        myPdfDocument.finishPage(myPage);
+//=============================================================================================================================
+
+
 
         //Initialize the file with the name and path
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
+        File myExternalFile = new File(file, file_name);
         try {
             myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
 ///            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
@@ -621,68 +629,36 @@ public class DashboardFragment extends Fragment{
     }
     //==============================================================================================
 
-
-    //----------------------------------------------------------------------------------------------
-    public static void recreateMyPDF(Context context, String file_data, String file_name) {
-        //Create the pdf page
-        PdfDocument myPdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
-        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
-        Paint myPaint = new Paint();
-
-        //Initialize top and left margin for text
-        int x = 10, y = 25;
-
-        //Paint the string to the page
-        for (String line : file_data.split("\n")) {
-            myPage.getCanvas().drawText(line, x, y, myPaint);
-            y += myPaint.descent() - myPaint.ascent();
-        }
-
-        //Finish writing/painting on the page
-        myPdfDocument.finishPage(myPage);
-
-        //Initialize the file with the name and path
-        File myExternalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), file_name);
-        try {
-            myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-//            Toast.makeText(context, "File saved!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            //If file is not saved, print stack trace and display toast message
-            e.printStackTrace();
-            Toast.makeText(context, file_name+" : Exception , "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : Exception , "+e.getMessage());
-        }
-        myPdfDocument.close();
-    }
-    //-----------------------------------------------------------------------------------------------
-
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static void createMyPDF_Inside_Package(Context context, String file_data, String file_name) {
-
+    public static void createMyPDF_Inside_Package(Context context, String file_data, String file_name, File file) {
         //Create the pdf page
         PdfDocument myPdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
-        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
         Paint myPaint = new Paint();
 
-        //Initialize top and left margin for text
-        int x = 10, y = 25;
+        //=============================================================================================================================
 
-        //Paint the string to the page
-        for (String line : file_data.split("\n")) {
-            myPage.getCanvas().drawText(line, x, y, myPaint);
-            y += myPaint.descent() - myPaint.ascent();
+        for (int i = 0; i < page_wise_data_arraylist.size(); i++){
+
+            //Initialize top and left margin for text
+            int page1_x = 10, page1_y = 25;
+            PdfDocument.PageInfo myPageInfo1 = new PdfDocument.PageInfo.Builder(page_width, page_height, 1).create();
+            PdfDocument.Page myPage1 = myPdfDocument.startPage(myPageInfo1);
+
+            for (String line : page_wise_data_arraylist.get(i).split("\n")) {
+                myPage1.getCanvas().drawText(line, page1_x, page1_y, myPaint);
+                page1_y += myPaint.descent() - myPaint.ascent();
+            }
+
+            myPdfDocument.finishPage(myPage1);
+
         }
 
-        //Finish writing/painting on the page
-        myPdfDocument.finishPage(myPage);
-
+//=============================================================================================================================
 
         try {
-            myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
+            myPdfDocument.writeTo(new FileOutputStream(file));
             //            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
             Log.i("test_response", file_name+" : FILE SAVED");
         } catch (Exception e) {
@@ -696,41 +672,7 @@ public class DashboardFragment extends Fragment{
     //==============================================================================================
 
 
-    //----------------------------------------------------------------------------------------------
-    public static void recreateMyPDF_Inside_Package(Context context, String file_data, String file_name) {
-        //Create the pdf page
-        PdfDocument myPdfDocument = new PdfDocument();
-        PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(300, 600, 1).create();
-        PdfDocument.Page myPage = myPdfDocument.startPage(myPageInfo);
-        Paint myPaint = new Paint();
-
-        //Initialize top and left margin for text
-        int x = 10, y = 25;
-
-        //Paint the string to the page
-        for (String line : file_data.split("\n")) {
-            myPage.getCanvas().drawText(line, x, y, myPaint);
-            y += myPaint.descent() - myPaint.ascent();
-        }
-
-        //Finish writing/painting on the page
-        myPdfDocument.finishPage(myPage);
-
-        try {
-            myPdfDocument.writeTo(new FileOutputStream(get_inside_Package_File_object(context, file_name)));
-//            Toast.makeText(context, file_name+" : File SAVE !!!!, ", Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : File SAVE !!!!, ");
-        } catch (Exception e) {
-            //If file is not saved, print stack trace and display toast message
-            e.printStackTrace();
-            Toast.makeText(context, file_name+" : Exception, "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : Exception, "+e.getMessage());
-        }
-        myPdfDocument.close();
-    }
-    //-----------------------------------------------------------------------------------------------
-
-
+    // App Inside PATH : FILE OBJECT
     //----------------------------------------------------------------------------------------------
       public static File get_inside_Package_File_object(Context context, String file_name){
           ContextWrapper contextWrapper = new ContextWrapper(context);
@@ -741,6 +683,9 @@ public class DashboardFragment extends Fragment{
     //----------------------------------------------------------------------------------------------
 
 
+
+    // Send Mail
+    //----------------------------------------------------------------------------------------------
     public static void sendEmail(Context context, String file_name) {
         String[] TO = {"surtikhamanhouseofficial@gmail.com"};
         String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
@@ -781,4 +726,91 @@ public class DashboardFragment extends Fragment{
             Log.i("test_response", "There is no email client installed : Exception, "+ ex.getMessage());
         }
     }
+
+    //----------------------------------------------------------------------------------------------
+
+
+    // File Page Wise Data
+    //----------------------------------------------------------------------------------------------
+          public static ArrayList<String> split_line_wise(String data){
+              String[] array_total_lines = data.split("\r\n|\r|\n");
+              int total_number_of_lines = array_total_lines.length;
+              int fix_lines_of_one_page = 50;
+              int requried_pages = total_number_of_lines / fix_lines_of_one_page;
+              int last_remaining_lines = total_number_of_lines % fix_lines_of_one_page;
+              int add_exclusive_lines = total_number_of_lines - last_remaining_lines;
+
+              if (requried_pages == 0){
+                  requried_pages = 1;
+              }else if(last_remaining_lines != 0){
+                  requried_pages = requried_pages + 1;
+              }
+
+              ArrayList<String> page_wise_data_list = new ArrayList<>();
+
+//              Log.i("test_lines", "============ START =====================");
+//
+//              Log.i("test_lines", "total_number_of_lines : "+total_number_of_lines);
+//              Log.i("test_lines", "fix_lines_of_one_page : "+fix_lines_of_one_page);
+//              Log.i("test_lines", "requried_pages : "+requried_pages);
+//              Log.i("test_lines", "last_remaining_lines : "+last_remaining_lines);
+//              Log.i("test_lines", "add_exclusive_lines : "+add_exclusive_lines);
+
+              String one_page_data = "";
+              for (int j = 0; j < total_number_of_lines; j++){
+
+                  if(total_number_of_lines < fix_lines_of_one_page){
+//                      Log.i("test_lines", "Less than 50 Lines ADD LINE NUMBER : "+j);
+
+                      one_page_data = one_page_data + "\n" + array_total_lines[j];
+
+                      if(j == (total_number_of_lines - 1)){
+
+//                          Log.i("test_lines", "$$$$$$$ DATA : "+one_page_data);
+//                          Log.i("test_lines", "=-=-=-=-=-=-=-=-=-= TIME TO ADD INTO ARRAY LIST,Less than 50 Lines, ADD TO ARRAY LIST : "+j);
+
+                          page_wise_data_list.add(one_page_data);
+                          one_page_data = "";
+                      }
+                  }else if( (j == add_exclusive_lines) && (j > add_exclusive_lines)){
+                      one_page_data = one_page_data + "\n" + array_total_lines[j];
+                      if(j == (total_number_of_lines - 1)){
+//                          Log.i("test_lines", "$$$$$$$ DATA : "+one_page_data);
+//                          Log.i("test_lines", "=-=-=-=-=-=-=-=-=-= TIME TO ADD INTO ARRAY LIST, PAGE REMAINING LINES, ADD TO ARRAY LIST : "+j);
+
+                          page_wise_data_list.add(one_page_data);
+                          one_page_data = "";
+                      }
+                  }else {
+                      if (j % 50 == 0) {
+//                          Log.i("test_lines", "$$$$$$$ DATA : "+one_page_data);
+//                          Log.i("test_lines", "=-=-=-=-=-=-=-=-=-= TIME TO ADD INTO ARRAY LIST, DIVISIBLE BY 50, ADD TO ARRAY LIST : "+j);
+
+                          one_page_data = one_page_data + "\n" + array_total_lines[j];
+                          page_wise_data_list.add(one_page_data);
+                          one_page_data = "";
+                      } else {
+                          one_page_data = one_page_data + "\n" + array_total_lines[j];
+                      }
+                  }
+
+                  if(total_number_of_lines > fix_lines_of_one_page && (j > (total_number_of_lines - last_remaining_lines))){
+                      if(j == total_number_of_lines - 1){
+                          one_page_data = one_page_data + "\n" + array_total_lines[j];
+//
+//                          Log.i("test_lines", "$$$$$$$ REMAINING DATA : "+one_page_data);
+//                          Log.i("test_lines", "=-=-=-=-=-=-=-=-=-= TIME TO ADD INTO ARRAY LIST, DIVISIBLE BY 50, ADD TO ARRAY LIST : "+j);
+
+                          page_wise_data_list.add(one_page_data);
+                      }
+                  }
+              }
+
+
+//              Log.i("test_lines", "============ FINISHED ===================== PAGE SIZE : "+page_wise_data_list.size());
+
+              return page_wise_data_list;
+          }
+    //----------------------------------------------------------------------------------------------
+
 }
