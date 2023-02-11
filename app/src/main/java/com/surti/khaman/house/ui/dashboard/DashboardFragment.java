@@ -851,7 +851,13 @@ public class DashboardFragment extends Fragment{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        int numberOfPages = reader.getNumberOfPages();
+        int numberOfPages = 0;
+        try{
+             numberOfPages = reader.getNumberOfPages();
+        }catch (Exception e){
+            e.getMessage();
+        }
+
         numberOfPages = numberOfPages + 1;
         for (int page = 1; page < numberOfPages; page++){
             try {

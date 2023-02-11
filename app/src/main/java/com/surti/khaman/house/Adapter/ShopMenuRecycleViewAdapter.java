@@ -45,7 +45,9 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
 
     @Override
     public void onBindViewHolder(@NonNull ShopMenuRecycleViewAdapter.ModelViewHolder holder, int position) {
-        final ShopMenuModelData model=modelArrayList.get(position);
+        int position_latest = holder.getAbsoluteAdapterPosition();
+
+        final ShopMenuModelData model=modelArrayList.get(position_latest);
         holder.tv_item_name.setText(model.getItem_name());
         holder.tv_item_weight.setText(model.getFixedWeight() + " gm");
         holder.tv_item_price.setText(model.getFixedPrice() + " Rs");
@@ -108,8 +110,8 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
                             long recedit = sqLiteDatabase.update(DatabaseMain.SHOP_MENU_TABLE_NAME, cv, "id=" + model.getId(), null);
                             if (recedit != -1) {
                                 ShopMenuModelData shopMenuModelData = new ShopMenuModelData(model.getId(), et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
-                                modelArrayList.set(position, shopMenuModelData);
-                                notifyItemChanged(position);
+                                modelArrayList.set(position_latest, shopMenuModelData);
+                                notifyItemChanged(position_latest);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
@@ -141,7 +143,7 @@ public class ShopMenuRecycleViewAdapter extends RecyclerView.Adapter<ShopMenuRec
                 long delele=sqLiteDatabase.delete(DatabaseMain.SHOP_MENU_TABLE_NAME,"id="+model.getId(),null);
                 if (delele!=-1){
                     Toast.makeText(context, "deleted data successfully", Toast.LENGTH_SHORT).show();
-                    modelArrayList.remove(position);
+                    modelArrayList.remove(position_latest);
                     notifyDataSetChanged();
                 }
             }

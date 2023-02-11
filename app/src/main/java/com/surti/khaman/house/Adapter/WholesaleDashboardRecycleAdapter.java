@@ -1,3 +1,4 @@
+
 package com.surti.khaman.house.Adapter;
 
 import android.text.Editable;
@@ -35,15 +36,17 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
     @Override
     public void onBindViewHolder(WholesaleDashboardRecycleAdapter.ViewHolder holder, int position) {
 
-        final WholesaleDashboardModelData MyData = wholesaleDashboardModelDataArrayList.get(position);
+        int position_latest = holder.getAbsoluteAdapterPosition();
+
+        final WholesaleDashboardModelData MyData = wholesaleDashboardModelDataArrayList.get(position_latest);
 
         String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
-        getItemName = wholesaleDashboardModelDataArrayList.get(position).getItem_name();
-        getWeight = wholesaleDashboardModelDataArrayList.get(position).getWeight();
-        getPrice = wholesaleDashboardModelDataArrayList.get(position).getPrice();
-        getAmount = wholesaleDashboardModelDataArrayList.get(position).getAmount();
-        getFixedPrice = wholesaleDashboardModelDataArrayList.get(position).getFixedPrice();
-        getFixedWeight = wholesaleDashboardModelDataArrayList.get(position).getFixedWeight();
+        getItemName = wholesaleDashboardModelDataArrayList.get(position_latest).getItem_name();
+        getWeight = wholesaleDashboardModelDataArrayList.get(position_latest).getWeight();
+        getPrice = wholesaleDashboardModelDataArrayList.get(position_latest).getPrice();
+        getAmount = wholesaleDashboardModelDataArrayList.get(position_latest).getAmount();
+        getFixedPrice = wholesaleDashboardModelDataArrayList.get(position_latest).getFixedPrice();
+        getFixedWeight = wholesaleDashboardModelDataArrayList.get(position_latest).getFixedWeight();
 
         holder.tv_item_name.setText(getItemName);
         holder.et_weight.setText(getWeight);
@@ -80,7 +83,7 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
                 if(is_Et_Weight_Focus) {
                     String dw_string = input.toString();
                     if(!dw_string.isEmpty() && dw_string != "0"){
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicWeight(input.toString());
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicWeight(input.toString());
                     }{
 
                     }
@@ -106,21 +109,21 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
                         find_dp_string = Long.toString(find_dp_long);
                         holder.tv_amount.setText(find_dp_string);
                         holder.et_price.setText(find_dp_string);
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice(find_dp_string);
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount(find_dp_string);
                     }else{
                         holder.et_price.setText("");
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice("");
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
 
 
 
                     if(input.toString().isEmpty()){
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicWeight("");
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice("");
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicWeight("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
 
@@ -149,13 +152,13 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
                 if(is_Et_Price_Focus) {
                     String dp_string = input.toString();
                     if(!dp_string.isEmpty() && dp_string != "0"){
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice(input.toString());
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount(input.toString());
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice(input.toString());
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount(input.toString());
                         holder.tv_amount.setText(dp_string);
                     }else{
                         holder.tv_amount.setText("");
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice("");
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
                     Long fp_long = null, dp_long = null, fw_long = null;
@@ -178,7 +181,7 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
                     if(find_dw_long != null) {
                         String find_dw_string = Long.toString(find_dw_long);
                         holder.et_weight.setText(find_dw_string);
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicWeight(find_dw_string);
                     }else{
                         holder.et_weight.setText("");
                     }
@@ -186,9 +189,9 @@ public class WholesaleDashboardRecycleAdapter  extends RecyclerView.Adapter < Wh
 
 
                     if(input.toString().isEmpty()){
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicWeight("");
-                        wholesaleDashboardModelDataArrayList.get(position).setDynamicPrice("");
-                        wholesaleDashboardModelDataArrayList.get(position).setCalculatedAmount("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicWeight("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        wholesaleDashboardModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
                 }

@@ -34,15 +34,16 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final DashboaedModelData MyData = dashboaedModelDataArrayList.get(position);
+        int position_latest = holder.getAbsoluteAdapterPosition();
+        final DashboaedModelData MyData = dashboaedModelDataArrayList.get(position_latest);
 
         String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
-        getItemName = dashboaedModelDataArrayList.get(position).getItem_name();
-        getWeight = dashboaedModelDataArrayList.get(position).getWeight();
-        getPrice = dashboaedModelDataArrayList.get(position).getPrice();
-        getAmount = dashboaedModelDataArrayList.get(position).getAmount();
-        getFixedPrice = dashboaedModelDataArrayList.get(position).getFixedPrice();
-        getFixedWeight = dashboaedModelDataArrayList.get(position).getFixedWeight();
+        getItemName = dashboaedModelDataArrayList.get(position_latest).getItem_name();
+        getWeight = dashboaedModelDataArrayList.get(position_latest).getWeight();
+        getPrice = dashboaedModelDataArrayList.get(position_latest).getPrice();
+        getAmount = dashboaedModelDataArrayList.get(position_latest).getAmount();
+        getFixedPrice = dashboaedModelDataArrayList.get(position_latest).getFixedPrice();
+        getFixedWeight = dashboaedModelDataArrayList.get(position_latest).getFixedWeight();
 
         holder.tv_item_name.setText(getItemName);
         holder.et_weight.setText(getWeight);
@@ -79,7 +80,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                 if(is_Et_Weight_Focus) {
                     String dw_string = input.toString();
                     if(!dw_string.isEmpty() && dw_string != "0"){
-                        dashboaedModelDataArrayList.get(position).setDynamicWeight(input.toString());
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicWeight(input.toString());
                     }{
 
                     }
@@ -105,21 +106,21 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                         find_dp_string = Long.toString(find_dp_long);
                         holder.tv_amount.setText(find_dp_string);
                         holder.et_price.setText(find_dp_string);
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice(find_dp_string);
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount(find_dp_string);
                     }else{
                         holder.et_price.setText("");
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
 
 
 
                     if(input.toString().isEmpty()){
-                        dashboaedModelDataArrayList.get(position).setDynamicWeight("");
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicWeight("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
 
@@ -148,13 +149,13 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                 if(is_Et_Price_Focus) {
                     String dp_string = input.toString();
                     if(!dp_string.isEmpty() && dp_string != "0"){
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice(input.toString());
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount(input.toString());
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice(input.toString());
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount(input.toString());
                         holder.tv_amount.setText(dp_string);
                     }else{
                         holder.tv_amount.setText("");
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
                     Long fp_long = null, dp_long = null, fw_long = null;
@@ -177,7 +178,7 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
                     if(find_dw_long != null) {
                         String find_dw_string = Long.toString(find_dw_long);
                         holder.et_weight.setText(find_dw_string);
-                        dashboaedModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicWeight(find_dw_string);
                     }else{
                         holder.et_weight.setText("");
                     }
@@ -185,9 +186,9 @@ public class DashboardRecyclerViewAdapter extends RecyclerView.Adapter < Dashboa
 
 
                     if(input.toString().isEmpty()){
-                        dashboaedModelDataArrayList.get(position).setDynamicWeight("");
-                        dashboaedModelDataArrayList.get(position).setDynamicPrice("");
-                        dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicWeight("");
+                        dashboaedModelDataArrayList.get(position_latest).setDynamicPrice("");
+                        dashboaedModelDataArrayList.get(position_latest).setCalculatedAmount("");
                     }
 
                 }

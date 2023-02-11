@@ -45,7 +45,9 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
 
     @Override
     public void onBindViewHolder(@NonNull ExpensesRecycleViewAdapter.ModelViewHolder holder, int position) {
-        final ExpensesModelData model=modelArrayList.get(position);
+        int position_latest = holder.getAbsoluteAdapterPosition();
+
+        final ExpensesModelData model=modelArrayList.get(position_latest);
 
         holder.et_expenses_amount.setText(model.get_Expenses_Amount() + " Rs");
         holder.et_expenses_note.setText(model.get_Expenses_Note());
@@ -96,8 +98,8 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                             long recedit = sqLiteDatabase.update(DatabaseMain.SHOP_EXPENSES_TABLE_NAME, cv, "id=" + model.getId(), null);
                             if (recedit != -1) {
                                 ExpensesModelData expensesModelData = new ExpensesModelData(model.getId(), et_expense_amount_string, et_expense_note_string, tv_date_time_value_string);
-                                modelArrayList.set(position, expensesModelData);
-                                notifyItemChanged(position);
+                                modelArrayList.set(position_latest, expensesModelData);
+                                notifyItemChanged(position_latest);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
@@ -129,7 +131,7 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                 long delele=sqLiteDatabase.delete(DatabaseMain.SHOP_EXPENSES_TABLE_NAME,"id="+model.getId(),null);
                 if (delele!=-1){
                     Toast.makeText(context, "deleted data successfully", Toast.LENGTH_SHORT).show();
-                    modelArrayList.remove(position);
+                    modelArrayList.remove(position_latest);
                     notifyDataSetChanged();
                 }
             }

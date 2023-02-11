@@ -47,15 +47,17 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
     @Override
     public void onBindViewHolder(BoxDashboardRecycleViewAdapter.ViewHolder holder, int position) {
 
-        holder.tv_item_name.setText(dashboaedModelDataArrayList.get(position).getItem_name());
+        int position_latest = holder.getAbsoluteAdapterPosition();
+
+        holder.tv_item_name.setText(dashboaedModelDataArrayList.get(position_latest).getItem_name());
 
         String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
-        getItemName = dashboaedModelDataArrayList.get(position).getItem_name();
-        getWeight = dashboaedModelDataArrayList.get(position).getWeight();
-        getPrice = dashboaedModelDataArrayList.get(position).getPrice();
-        getAmount = dashboaedModelDataArrayList.get(position).getAmount();
-        getFixedPrice = dashboaedModelDataArrayList.get(position).getFixedPrice();
-        getFixedWeight = dashboaedModelDataArrayList.get(position).getFixedWeight();
+        getItemName = dashboaedModelDataArrayList.get(position_latest).getItem_name();
+        getWeight = dashboaedModelDataArrayList.get(position_latest).getWeight();
+        getPrice = dashboaedModelDataArrayList.get(position_latest).getPrice();
+        getAmount = dashboaedModelDataArrayList.get(position_latest).getAmount();
+        getFixedPrice = dashboaedModelDataArrayList.get(position_latest).getFixedPrice();
+        getFixedWeight = dashboaedModelDataArrayList.get(position_latest).getFixedWeight();
 
 
         String fp_string = getFixedPrice;
@@ -82,7 +84,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                 et_final_result_weight = (EditText) dialog.findViewById(R.id.et_final_result_weight);
 
 
-                tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position).getItem_name());
+                tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position_latest).getItem_name());
 
                 result_total_only_weight = 0L;
                 calculation_history_weight = "";
@@ -169,7 +171,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                         is_Et_Weight_Focus = true;
                         is_Et_Price_Focus = false;
                         holder.et_final_result_weight.setText(""+result_total_only_weight);
-                        et_weight_and_find_price_logic(""+result_total_only_weight, fp_string, fw_string, holder, position);
+                        et_weight_and_find_price_logic(""+result_total_only_weight, fp_string, fw_string, holder, position_latest);
                     }
                 });
 
@@ -348,7 +350,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                 et_final_result_price = (EditText) dialog.findViewById(R.id.et_final_result_price);
 
 
-                tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position).getItem_name());
+                tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position_latest).getItem_name());
 
                 result_total_only_price = 0L;
                 calculation_history_price = "";
@@ -404,7 +406,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                         is_Et_Weight_Focus = false;
                         is_Et_Price_Focus = true;
                         holder.et_final_result_price.setText(""+result_total_only_price);
-                        et_price_and_find_weight_logic(""+result_total_only_price, fp_string, fw_string, holder, position);
+                        et_price_and_find_weight_logic(""+result_total_only_price, fp_string, fw_string, holder, position_latest);
                     }
                 });
 
@@ -569,7 +571,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
         holder.box_card_view_main_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "click on item: "+position, Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), "click on item: "+position_latest, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -592,7 +594,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
 
             @Override
             public void afterTextChanged(Editable input) {
-                et_weight_and_find_price_logic(input.toString(), fp_string, fw_string, holder, position);
+                et_weight_and_find_price_logic(input.toString(), fp_string, fw_string, holder, position_latest);
             }
         });
         //------------------------------------------------------------------------------------------
@@ -612,7 +614,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
 
             @Override
             public void afterTextChanged(Editable input) {
-                et_price_and_find_weight_logic(input.toString(), fp_string, fw_string, holder, position);
+                et_price_and_find_weight_logic(input.toString(), fp_string, fw_string, holder, position_latest);
             }
         });
         //------------------------------------------------------------------------------------------

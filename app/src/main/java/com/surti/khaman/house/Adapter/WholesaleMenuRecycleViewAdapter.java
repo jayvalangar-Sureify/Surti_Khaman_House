@@ -43,7 +43,10 @@ public class WholesaleMenuRecycleViewAdapter extends RecyclerView.Adapter<Wholes
 
     @Override
     public void onBindViewHolder(@NonNull WholesaleMenuRecycleViewAdapter.ModelViewHolder holder, int position) {
-        WholesaleMenuModelData model=modelArrayList.get(position);
+
+        int position_latest = holder.getAbsoluteAdapterPosition();
+
+        WholesaleMenuModelData model=modelArrayList.get(position_latest);
         holder.tv_item_name.setText(model.getItem_name());
         holder.tv_item_weight.setText(model.getFixedWeight() + " gm");
         holder.tv_item_price.setText(model.getFixedPrice() + " Rs");
@@ -106,8 +109,8 @@ public class WholesaleMenuRecycleViewAdapter extends RecyclerView.Adapter<Wholes
                             long recedit = sqLiteDatabase.update(DatabaseMain.WHOLESALE_MENU_TABLE_NAME, cv, "id=" + model.getId(), null);
                             if (recedit != -1) {
                                 WholesaleMenuModelData wholesaleMenuModelData = new WholesaleMenuModelData(model.getId(), et_item_name.getText().toString(), et_item_weight.getText().toString(), et_item_price.getText().toString());
-                                modelArrayList.set(position, wholesaleMenuModelData);
-                                notifyItemChanged(position);
+                                modelArrayList.set(position_latest, wholesaleMenuModelData);
+                                notifyItemChanged(position_latest);
 //                                Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show();
                             } else {
 
@@ -139,7 +142,7 @@ public class WholesaleMenuRecycleViewAdapter extends RecyclerView.Adapter<Wholes
                 long delele=sqLiteDatabase.delete(DatabaseMain.WHOLESALE_MENU_TABLE_NAME,"id="+model.getId(),null);
                 if (delele!=-1){
                     Toast.makeText(context, "deleted data successfully", Toast.LENGTH_SHORT).show();
-                    modelArrayList.remove(position);
+                    modelArrayList.remove(position_latest);
                     notifyDataSetChanged();
                 }
             }
