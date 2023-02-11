@@ -8,6 +8,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_box_dashboard"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/rl_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"

@@ -66,17 +66,17 @@ import java.util.Date;
 public class DashboardFragment extends Fragment{
 
     public static ArrayList<String> page_wise_data_arraylist = new ArrayList<>();
-    String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
-    String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
-    String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
+    public static String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
+    public static String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
+    public static String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
 
-    String internal_file_data = "";
+    public static String internal_file_data = "";
 
     public static int page_width = 420, page_height = 842;
 
 
-    SQLiteDatabase sqLiteDatabase;
-    DatabaseMain databaseMain;
+    public static SQLiteDatabase sqLiteDatabase;
+    public static DatabaseMain databaseMain;
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
 
     private FragmentDashboardBinding binding;
@@ -100,8 +100,8 @@ public class DashboardFragment extends Fragment{
 
 
 
-        if(get_SharedPreference_FixedMenu() == "0") {
-            set_SharedPreference_FixedMenu("1");
+        if(get_SharedPreference_FixedMenu(getActivity()) == "0") {
+            set_SharedPreference_FixedMenu("1", getActivity());
             //------------------------------------------------------------------------------------------
             insert_fixed_Shop_Menu_Data("Vatidal Khaman", "1000", "200");
             insert_fixed_Shop_Menu_Data("Nylon Khaman", "1000", "200");
@@ -161,7 +161,7 @@ public class DashboardFragment extends Fragment{
                    tv_bill_no = (TextView) dialog.findViewById(R.id.tv_bill_no_value);
                    tv_date_time = (TextView) dialog.findViewById(R.id.tv_date_time_value);
 
-                   tv_bill_no.setText(": "+get_SharedPreference_Billnumber());
+                   tv_bill_no.setText(": "+get_SharedPreference_Billnumber(getActivity()));
                    tv_date_time.setText(": "+currentDateAndTime);
                    //-------------------------------------------------------------------------------
 
@@ -307,11 +307,11 @@ public class DashboardFragment extends Fragment{
 
                                // Generate Bill Number
                                //------------------------------------------------------------------------
-                               int bill_no_integer = get_SharedPreference_Billnumber();
+                               int bill_no_integer = get_SharedPreference_Billnumber(getActivity());
                                if(bill_no_integer <= 100){
-                                   set_SharedPreference_Billnumber(bill_no_integer + 1);
+                                   set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
                                }else{
-                                   set_SharedPreference_Billnumber(1);
+                                   set_SharedPreference_Billnumber(1, getActivity());
                                }
                                //------------------------------------------------------------------------
 
@@ -374,13 +374,13 @@ public class DashboardFragment extends Fragment{
 
                                // Insert Into Database
                                //-------------------------------------------------------------------------------------------------------------------------------------------------
-                               insert_Shop_Revenue_Data(""+bill_no_integer, currentDateAndTime, final_file_string, ""+grand_total);
+                               insert_Shop_Revenue_Data(""+bill_no_integer, currentDateAndTime, final_file_string, ""+grand_total, getActivity());
                                //--------------------------------------------------------------------------------------------------------------------------------------------------
 
 
                                // Insert Into File
                                //-------------------------------------------------------------------------
-                               display_Shop_Revenue_Data();
+                               display_Shop_Revenue_Data(getActivity());
 
                                check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
 
@@ -468,7 +468,7 @@ public class DashboardFragment extends Fragment{
 
     // shop_revenue_tabel
     //----------------------------------------------------------------------------------------------
-    public void insert_Shop_Revenue_Data(String bill_no,String bill_date_time, String item_name_weight_price, String bill_amount){
+    public static void insert_Shop_Revenue_Data(String bill_no, String bill_date_time, String item_name_weight_price, String bill_amount, Context context){
         ContentValues cv = new ContentValues();
         cv.put(DatabaseMain.SHOP_REVENUE_BILL_NO_COLUMN, bill_no);
         cv.put(DatabaseMain.SHOP_REVENUE_BILL_DATE_TIME_COLUMN, bill_date_time);
@@ -480,12 +480,12 @@ public class DashboardFragment extends Fragment{
         if (recinsert != null) {
 //            Toast.makeText(getActivity(), "successfully inserted data", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), "REVENUE_TABLE : something wrong try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "REVENUE_TABLE : something wrong try again", Toast.LENGTH_SHORT).show();
             Log.i("test_response", "REVENUE_TABLE : something wrong try again");
         }
     }
 
-    public void display_Shop_Revenue_Data() {
+    public static void display_Shop_Revenue_Data(Context context) {
         sqLiteDatabase=databaseMain.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
         internal_file_data = "";
@@ -505,7 +505,7 @@ public class DashboardFragment extends Fragment{
         }
 
         String previous_file_data = "";
-        if(get_SharedPreference_Old_data() == 0) {
+        if(get_SharedPreference_Old_data(context) == 0) {
             previous_file_data =
                     "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n"
                             + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
@@ -538,44 +538,44 @@ public class DashboardFragment extends Fragment{
 
     // SharedPreference
     //--------------------------------------------------------------------------------------------------
-      public void set_SharedPreference_FixedMenu(String isFixedMenuAlreadyDisplay){
-          SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+      public static void set_SharedPreference_FixedMenu(String isFixedMenuAlreadyDisplay, Context context){
+          SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_FIXED_MENU_ALREADY_DISPLAY, MODE_PRIVATE);
           SharedPreferences.Editor editor = sharedPreferences.edit();
           editor.putString(KEY_FIXED_MENU_ALREADY_DISPLAY, isFixedMenuAlreadyDisplay);
           editor.commit();
     }
 
 
-    public String get_SharedPreference_FixedMenu(){
-        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+    public static String get_SharedPreference_FixedMenu(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_FIXED_MENU_ALREADY_DISPLAY, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
     }
 
-    public void set_SharedPreference_Old_data(Integer bill_no){
-        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+    public static void set_SharedPreference_Old_data(Integer bill_no, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_FILE_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_OLD_FILE_DATA, bill_no);
         editor.commit();
     }
 
 
-    public Integer get_SharedPreference_Old_data(){
-        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+    public static Integer get_SharedPreference_Old_data(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_FILE_DATA, MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_OLD_FILE_DATA, 0);
     }
 
 
 
-    public void set_SharedPreference_Billnumber(Integer bill_no){
-        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+    public static void set_SharedPreference_Billnumber(Integer bill_no, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_BILL_NUMBER, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_BILL_NUMBER, bill_no);
         editor.commit();
     }
 
 
-    public Integer get_SharedPreference_Billnumber(){
-        SharedPreferences sharedPreferences = getActivity().getPreferences(MODE_PRIVATE);
+    public static Integer get_SharedPreference_Billnumber(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_BILL_NUMBER, context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_BILL_NUMBER, 1);
     }
     //--------------------------------------------------------------------------------------------------

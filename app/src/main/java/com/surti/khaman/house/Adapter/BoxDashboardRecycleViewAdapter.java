@@ -119,6 +119,37 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                 btn_1000 = (Button) dialog.findViewById(R.id.btn_1000);
                 btn_clear = (Button) dialog.findViewById(R.id.btn_clear);
 
+
+                // per plate
+                boolean isFixedWeightPP = false;
+                if(fw_string != null || fw_string.isEmpty()){
+                    isFixedWeightPP = fw_string.equals("1");
+                }
+
+                if(isFixedWeightPP){
+                    btn_50.setText(context.getResources().getString(R.string._1));
+                    btn_100.setText(context.getString(R.string._2));
+                    btn_150.setText(context.getString(R.string._3));
+                    btn_200.setText(context.getString(R.string._4));
+                    btn_250.setText(context.getString(R.string._5));
+                    btn_300.setText(context.getString(R.string._6));
+                    btn_350.setText(context.getString(R.string._7));
+                    btn_400.setText(context.getString(R.string._8));
+                    btn_450.setText(context.getString(R.string._9));
+                    btn_500.setText(context.getString(R.string._10));
+                    btn_550.setText(context.getString(R.string._20));
+                    btn_600.setText(context.getString(R.string._25));
+                    btn_650.setText(context.getString(R.string._30));
+                    btn_700.setText(context.getString(R.string._35));
+                    btn_750.setText(context.getString(R.string._40));
+                    btn_800.setText(context.getString(R.string._45));
+                    btn_850.setText(context.getString(R.string._50));
+                    btn_900.setText(context.getString(R.string._100));
+                    btn_950.setText(context.getString(R.string._500));
+                    btn_1000.setText(context.getString(R.string._1000));
+
+                }
+
                 //======================================================================================
 
                 btn_clear.setOnClickListener(new View.OnClickListener() {
