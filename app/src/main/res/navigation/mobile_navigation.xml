@@ -34,4 +34,10 @@
         android:name="com.surti.khaman.house.ui.wholesale_menu.WholesaleMenuFragment"
         android:label="@string/left_menu_edit_wholesale_dashboard"
         tools:layout="@layout/fragment_wholesale_menu" />
+
+    <fragment
+        android:id="@+id/nav_box_dashboard"
+        android:name="com.surti.khaman.house.ui.box_dashboard.BoxDashboardFragment"
+        android:label="@string/left_menu_box_dashboard"
+        tools:layout="@layout/fragment_box_dashboard" />
 </navigation>

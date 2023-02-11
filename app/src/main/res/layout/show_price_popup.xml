@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/yellow_500">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_price"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/ll_et_show_price"
+        android:layout_below="@+id/card_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_show_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@color/red_500"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/item"
+            />
+
+
+        <EditText
+            android:id="@+id/et_history_calculation"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:gravity="right |bottom"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:enabled="false"
+            android:textSize="20sp"
+            android:textColor="@color/blue_500"
+            android:hint="HISTORY"
+            android:background="@drawable/border_red_fill_white_rectangle"
+            />
+
+        <EditText
+            android:id="@+id/et_final_result_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right |bottom"
+            android:layout_margin="4dp"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:enabled="false"
+            android:textSize="20sp"
+            android:textColor="@color/blue_500"
+            android:text="@string/equal_0"
+            android:hint="0"
+            android:background="@drawable/border_red_fill_white_rectangle"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_button_price"
+        android:layout_below="@+id/ll_et_show_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_first_row_price_buttons"
+            android:layout_below="@+id/ll_et_show_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_5"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_10"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_15"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_15"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_second_row_price_buttons"
+            android:layout_below="@+id/ll_first_row_price_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_20"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_25"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_30"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_third_row_price_buttons"
+            android:layout_below="@+id/ll_second_row_price_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_35"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_35"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_40"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_40"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_45"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_45"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_fourth_row_price_buttons"
+            android:layout_below="@+id/ll_third_row_price_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_50"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_50"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_55"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_55"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_60"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_60"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_fifth_row_price_buttons"
+            android:layout_below="@+id/ll_fourth_row_weight_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_65"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_65"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_70"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_70"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_75"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_75"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sixth_row_price_buttons"
+            android:layout_below="@+id/ll_fifth_row_price_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <Button
+                android:id="@+id/btn_100"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_100"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_200"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_200"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_300"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_300"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_seventh_row_price_buttons"
+            android:layout_below="@+id/ll_sixth_row_weight_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+
+            <Button
+                android:id="@+id/btn_500"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_500"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_1000"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/_1000"
+                android:textStyle="bold"
+                />
+
+            <Button
+                android:id="@+id/btn_clear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="1dp"
+                android:text="@string/clear"
+                android:backgroundTint="@color/red_500"
+                android:drawableRight="@drawable/ic_clear_arrow_24"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+    <Button
+        android:id="@+id/btn_done_selection_price"
+        android:layout_below="@+id/ll_button_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter"
+        android:padding="10dp"
+        android:backgroundTint="@color/green_400"
+        />
+</RelativeLayout>
