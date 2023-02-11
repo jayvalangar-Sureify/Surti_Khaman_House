@@ -71,6 +71,7 @@ public class DashboardFragment extends Fragment{
     public static String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
 
     public static String internal_file_data = "";
+    public static String previous_file_data = "";
 
     public static int page_width = 420, page_height = 842;
 
@@ -504,14 +505,12 @@ public class DashboardFragment extends Fragment{
                     +"\n ===========================================\n";
         }
 
-        String previous_file_data = "";
         if(get_SharedPreference_Old_data(context) == 0) {
             previous_file_data =
                     "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n"
                             + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
                             + "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n";
         }
-        page_wise_data_arraylist = split_line_wise(previous_file_data + "\n" + internal_file_data);
 
         cursor.close();
     }
@@ -608,6 +607,8 @@ public class DashboardFragment extends Fragment{
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static void createMyPDF(Context context, String file_data, String file_name, File file) {
+
+        page_wise_data_arraylist = split_line_wise(previous_file_data + "\n" + file_data);
 
         //Create the pdf page
         PdfDocument myPdfDocument = new PdfDocument();
