@@ -16,6 +16,7 @@
         android:id="@+id/ll_first_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="1dp"
         android:weightSum="3"
         android:orientation="horizontal">
 
@@ -23,47 +24,46 @@
                 android:id="@+id/tv_item_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:text="Item Name"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/red_500"
                 android:textStyle="bold"
                 android:textSize="18sp"/>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/spinnerLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/yellow_100"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+=
+            <EditText
+                android:id="@+id/et_final_result_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:inputType="number"
+                android:cursorVisible="false"
+                android:textColor="@color/blue_500"
+                android:textStyle="bold"
+                android:hint="0 Gm"
                 android:background="@drawable/border_red_fill_white_rectangle"
-                android:orientation="horizontal">
+                />
+
 
                 <EditText
                     android:id="@+id/et_final_result_price"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_weight="1"
                     android:gravity="center"
+                    android:layout_gravity="center"
                     android:inputType="number"
+                    android:cursorVisible="false"
                     android:textColor="@color/blue_500"
                     android:textStyle="bold"
                     android:hint="0 Rs"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/border_red_fill_white_rectangle"
                     />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-
     </LinearLayout>
 
 
@@ -78,38 +78,11 @@
             android:background="@color/yellow_100"
             android:orientation="horizontal">
 
-            <androidx.cardview.widget.CardView
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:elevation="2dp"
-                app:cardCornerRadius="6dp"
-                android:layout_margin="5dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_red_fill_white_rectangle"
-                    android:orientation="horizontal">
-                    <EditText
-                        android:id="@+id/et_final_result_weight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:inputType="number"
-                        android:textColor="@color/blue_500"
-                        android:textStyle="bold"
-                        android:hint="0 Gm"
-                        android:background="@android:color/transparent"
-                        />
-                </LinearLayout>
-
-
-
-            </androidx.cardview.widget.CardView>
+                android:layout_weight="1"
+                />
 
             <Button
                 android:id="@+id/btn_show_popup_weight"

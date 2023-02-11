@@ -2,6 +2,8 @@ package com.surti.khaman.house.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 
 public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDashboardRecycleViewAdapter.ViewHolder > {
 
-
+    boolean is_Et_Weight_Focus, is_Et_Price_Focus;
     Long result_total_only_weight = 0L;
     String calculation_history_weight = "";
     String calculation_history_price = "";
@@ -45,11 +47,23 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
     @Override
     public void onBindViewHolder(BoxDashboardRecycleViewAdapter.ViewHolder holder, int position) {
 
-
-
         holder.tv_item_name.setText(dashboaedModelDataArrayList.get(position).getItem_name());
 
+        String getItemName = "", getWeight = "", getPrice = "", getAmount = "", getFixedPrice = "", getFixedWeight = "";;
+        getItemName = dashboaedModelDataArrayList.get(position).getItem_name();
+        getWeight = dashboaedModelDataArrayList.get(position).getWeight();
+        getPrice = dashboaedModelDataArrayList.get(position).getPrice();
+        getAmount = dashboaedModelDataArrayList.get(position).getAmount();
+        getFixedPrice = dashboaedModelDataArrayList.get(position).getFixedPrice();
+        getFixedWeight = dashboaedModelDataArrayList.get(position).getFixedWeight();
 
+
+        String fp_string = getFixedPrice;
+        String fw_string = getFixedWeight;
+
+        holder.tv_item_name.setText(getItemName);
+        holder.et_final_result_weight.setText(getWeight);
+        holder.et_final_result_price.setText(getPrice);
 //$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#
         holder.btn_show_popup_weight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +124,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                 btn_clear.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        et_final_result_weight.setText("= 0");
+                        et_final_result_weight.setText("= 0 gm");
                         et_history_calculation.setText("");
                         calculation_history_weight = "";
                         result_total_only_weight = 0L;
@@ -121,7 +135,10 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+                        is_Et_Weight_Focus = true;
+                        is_Et_Price_Focus = false;
                         holder.et_final_result_weight.setText(""+result_total_only_weight);
+                        et_weight_and_find_price_logic(""+result_total_only_weight, fp_string, fw_string, holder, position);
                     }
                 });
 
@@ -342,7 +359,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                 btn_clear.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        et_final_result_price.setText("= 0");
+                        et_final_result_price.setText("= 0 Rs");
                         et_history_calculation.setText("");
                         calculation_history_price = "";
                         result_total_only_price = 0L;
@@ -353,7 +370,10 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
+                        is_Et_Weight_Focus = false;
+                        is_Et_Price_Focus = true;
                         holder.et_final_result_price.setText(""+result_total_only_price);
+                        et_price_and_find_weight_logic(""+result_total_only_price, fp_string, fw_string, holder, position);
                     }
                 });
 
@@ -522,6 +542,65 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
             }
         });
 
+
+        // Find Price
+        //------------------------------------------------------------------------------------------
+        holder.et_final_result_weight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(is_Et_Weight_Focus && i2 == 0) {
+                    holder.et_final_result_price.setText("");
+//                    holder.tv_amount.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable input) {
+                et_weight_and_find_price_logic(input.toString(), fp_string, fw_string, holder, position);
+            }
+        });
+        //------------------------------------------------------------------------------------------
+
+
+
+        // Find Weight
+        //------------------------------------------------------------------------------------------
+        holder.et_final_result_price.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable input) {
+                et_price_and_find_weight_logic(input.toString(), fp_string, fw_string, holder, position);
+            }
+        });
+        //------------------------------------------------------------------------------------------
+
+
+        holder.et_final_result_weight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean isFocus) {
+                is_Et_Weight_Focus = isFocus;
+            }
+        });
+
+        holder.et_final_result_price.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean isFocus) {
+                is_Et_Price_Focus = isFocus;
+            }
+        });
+
     }
 
 
@@ -537,7 +616,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
         result_total_only_weight = result_total_only_weight + Integer.parseInt(input_button);
 
         et_history_calculation.setText(calculation_history_weight);
-        et_final_result_weight.setText("= "+result_total_only_weight);
+        et_final_result_weight.setText("= "+result_total_only_weight+ " gm");
 
     }
 
@@ -553,7 +632,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
         result_total_only_price = result_total_only_price + Integer.parseInt(input_button);
 
         et_history_calculation.setText(calculation_history_price);
-        et_final_result_price.setText("= "+result_total_only_price);
+        et_final_result_price.setText("= "+result_total_only_price + " Rs");
 
     }
 
@@ -588,6 +667,144 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
 
         }
     }
+
+
+ // Enter dynamic price and finding weight
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--==--=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-
+    public void et_price_and_find_weight_logic(String input_dp_string, String fp_string, String fw_string, ViewHolder holder, int position){
+
+        if(is_Et_Price_Focus) {
+            String dp_string = input_dp_string;
+            if(!dp_string.isEmpty() && dp_string != "0"){
+                dashboaedModelDataArrayList.get(position).setDynamicPrice(dp_string);
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount(dp_string);
+//                        holder.tv_amount.setText(dp_string);
+            }else{
+//                        holder.tv_amount.setText("");
+                dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+            }
+
+            Long fp_long = null, dp_long = null, fw_long = null;
+
+            if(!fp_string.isEmpty()){
+                fp_long = Long.parseLong(fp_string);
+            }
+
+            if(!dp_string.isEmpty()){
+                dp_long = Long.parseLong(dp_string);;
+            }
+
+            if(!fw_string.isEmpty()){
+                fw_long = Long.parseLong(fw_string);
+            }
+
+            Long find_dw_long = findDynamicWeight(fw_long, fp_long, dp_long);
+            if(find_dw_long != null) {
+                String find_dw_string = Long.toString(find_dw_long);
+                holder.et_final_result_weight.setText(find_dw_string);
+                dashboaedModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
+            }else{
+                holder.et_final_result_weight.setText("");
+            }
+
+            if(input_dp_string.isEmpty()){
+                dashboaedModelDataArrayList.get(position).setDynamicWeight("");
+                dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+            }
+
+        }
+    }
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--==--=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-
+
+
+    // Enter dynamic price and finding weight
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--==--=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-
+    public void et_weight_and_find_price_logic(String input_dw_string, String fp_string, String fw_string, ViewHolder holder, int position) {
+        if(is_Et_Weight_Focus) {
+            String dw_string = input_dw_string;
+            if(!dw_string.isEmpty() && dw_string != "0"){
+                dashboaedModelDataArrayList.get(position).setDynamicWeight(input_dw_string);
+            }{
+
+            }
+
+            Long fp_long = null, dw_long = null, fw_long = null;
+
+            if(!fp_string.isEmpty()){
+                fp_long = Long.parseLong(fp_string);
+            }
+
+            if(!dw_string.isEmpty()){
+                dw_long = Long.parseLong(dw_string);;
+            }
+
+            if(!fw_string.isEmpty()){
+                fw_long = Long.parseLong(fw_string);
+            }
+
+
+            Long find_dp_long = findDynamicPrice(fp_long, dw_long, fw_long);
+            String find_dp_string = "";
+            if(find_dp_long != null && find_dp_long != 0l) {
+                find_dp_string = Long.toString(find_dp_long);
+//                        holder.tv_amount.setText(find_dp_string);
+                holder.et_final_result_price.setText(find_dp_string);
+                dashboaedModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
+            }else{
+                holder.et_final_result_price.setText("");
+                dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+            }
+
+
+
+
+            if(input_dw_string.isEmpty()){
+                dashboaedModelDataArrayList.get(position).setDynamicWeight("");
+                dashboaedModelDataArrayList.get(position).setDynamicPrice("");
+                dashboaedModelDataArrayList.get(position).setCalculatedAmount("");
+            }
+
+
+        }
+
+    }
+
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=--==--=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-
+
+
+
+    // f.w / f.p = d.w / d.p
+    // dw = (f.w * d.p / f.p )
+    // dp = (f.p * d.w / f.w)
+
+    public Long findDynamicWeight(Long fw, Long fp, Long dp){
+        if((fp != null) && (dp != null) && (fw != null)) {
+            Long dynamic_weight;
+
+            dynamic_weight = (fw * dp) / fp;
+
+            return dynamic_weight;
+        }else {
+            return null;
+        }
+    }
+
+    public Long findDynamicPrice(Long fp, Long dw, Long fw){
+        if((fp != null) && (dw != null) && (fw != null)) {
+            Long dynamic_price;
+
+            dynamic_price = (fp * dw) / fw;
+
+            return dynamic_price;
+        }else {
+            return null;
+        }
+    }
+
 
 
 }

@@ -54,7 +54,7 @@
             android:textStyle="bold"
             android:enabled="false"
             android:textSize="20sp"
-            android:textColor="@color/blue_500"
+            android:textColor="@color/red_500"
             android:hint="HISTORY"
             android:background="@drawable/border_red_fill_white_rectangle"
             />
@@ -68,9 +68,9 @@
             android:padding="8dp"
             android:textStyle="bold"
             android:enabled="false"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textColor="@color/blue_500"
-            android:text="@string/equal_0"
+            android:text="= 0 Rs"
             android:hint="0"
             android:background="@drawable/border_red_fill_white_rectangle"
             />
