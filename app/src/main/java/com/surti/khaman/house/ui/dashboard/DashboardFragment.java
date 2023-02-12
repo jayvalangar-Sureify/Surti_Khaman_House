@@ -12,9 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -46,7 +44,11 @@ import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
 import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
 import com.dantsu.escposprinter.exceptions.EscPosParserException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.surti.khaman.house.Adapter.DashboardRecyclerViewAdapter;
 import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
@@ -58,9 +60,11 @@ import com.surti.khaman.house.WorkerDirectory.UploadPDF;
 import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -494,6 +498,17 @@ public class DashboardFragment extends Fragment{
         sqLiteDatabase=databaseMain.getReadableDatabase();
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
         internal_file_data = "";
+
+        if(get_SharedPreference_Old_data(context) == 0) {
+            previous_file_data =
+                    "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                            + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
+                            + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+
+            internal_file_data = previous_file_data;
+
+        }
+
         while (cursor.moveToNext()){
             int id=cursor.getInt(0);
             String SHOP_REVENUE_BILL_NO_COLUMN = cursor.getString(1);
@@ -501,20 +516,14 @@ public class DashboardFragment extends Fragment{
             String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
             String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
             internal_file_data =  internal_file_data
-                    +"\n====Bill====Bill====Bill====Bill====Bill====Bill==\n"
+                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n"
                     +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
                     +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
                     +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
                     +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
-                    +"\n ===========================================\n";
+                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n";
         }
 
-        if(get_SharedPreference_Old_data(context) == 0) {
-            previous_file_data =
-                    "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n"
-                            + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
-                            + "\n====OLD====OLD====OLD====OLD====OLD====OLD==\n";
-        }
 
         cursor.close();
     }
@@ -609,7 +618,13 @@ public class DashboardFragment extends Fragment{
     //==============================================================================================
     public static void check_and_create_file(Context context, String file_data, String file_name){
         File download_directory_file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        createMyPDF(context, file_data, file_name, download_directory_file);
+        try {
+            createMyPDF(context, file_data, file_name, download_directory_file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
     //==============================================================================================
 
@@ -617,102 +632,93 @@ public class DashboardFragment extends Fragment{
     //==============================================================================================
     public static void check_and_create_file_insdie_package(Context context, String file_data, String file_name){
         File inside_package_file = get_inside_Package_File_object(context, file_name);
-        createMyPDF_Inside_Package(context, file_data, file_name, inside_package_file);
+        try {
+            createMyPDF_Inside_Package(context, file_data, file_name, inside_package_file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
     //==============================================================================================
 
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static void createMyPDF(Context context, String file_data, String file_name, File file) {
+    public static void createMyPDF(Context context, String file_data, String file_name, File file) throws FileNotFoundException, DocumentException {
 
-        page_wise_data_arraylist = split_line_wise(previous_file_data + "\n" + file_data);
-
-        //Create the pdf page
-        PdfDocument myPdfDocument = new PdfDocument();
-        Paint myPaint = new Paint();
-
-        //=============================================================================================================================
-
-        for (int i = 0; i < page_wise_data_arraylist.size(); i++){
-
-            //Initialize top and left margin for text
-            int page1_x = 10, page1_y = 25;
-
-            PdfDocument.PageInfo myPageInfo1 = new PdfDocument.PageInfo.Builder(page_width, page_height, 1).create();
-            PdfDocument.Page myPage1 = myPdfDocument.startPage(myPageInfo1);
-
-            Log.i("test_page", i+") "+page_wise_data_arraylist.get(i));
-
-            for (String line : page_wise_data_arraylist.get(i).split("\n")) {
-                myPage1.getCanvas().drawText(line, page1_x, page1_y, myPaint);
-                page1_y += myPaint.descent() - myPaint.ascent();
-            }
-
-            myPdfDocument.finishPage(myPage1);
-
-        }
-
-//=============================================================================================================================
-
-
-
-        //Initialize the file with the name and path
-        File myExternalFile = new File(file, file_name);
         try {
-            myPdfDocument.writeTo(new FileOutputStream(myExternalFile));
-///            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : FILE SAVED");
-        } catch (Exception e) {
-            //If file is not saved, print stack trace, clear edittext, and display toast message
-            e.printStackTrace();
-            Toast.makeText(context, file_name+" : Exception , "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : Exception , "+e.getMessage());
+            //Create time stamp
+            Date date = new Date();
+            String timeStamp = new SimpleDateFormat("yyyy_MMM_dd_(HH:mm)").format(date);
+
+            File download_directory_file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File myFile = new File(download_directory_file, file_name);
+
+            OutputStream output = new FileOutputStream(myFile);
+
+            //Step 1
+            Document document = new Document();
+
+            //Step 2
+            PdfWriter.getInstance(document, output);
+
+            //Step 3
+            document.open();
+
+            //Step 4 Add content
+            document.add(new Paragraph(
+                    "\n +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+ \n"
+                    +"FILE UPDATE TIME :"+timeStamp+
+                    "\n +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+ \n"
+                    +file_data));
+
+            //Step 5: Close the document
+            document.close();
+        }catch (Exception e){
+            e.getMessage();
         }
-        myPdfDocument.close();
+
     }
     //==============================================================================================
 
     // Create PDF
     //==============================================================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static void createMyPDF_Inside_Package(Context context, String file_data, String file_name, File file) {
-        //Create the pdf page
-        PdfDocument myPdfDocument = new PdfDocument();
-        Paint myPaint = new Paint();
+    public static void createMyPDF_Inside_Package(Context context, String file_data, String file_name, File file) throws FileNotFoundException, DocumentException{
 
-        //=============================================================================================================================
-
-        for (int i = 0; i < page_wise_data_arraylist.size(); i++){
-
-            //Initialize top and left margin for text
-            int page1_x = 10, page1_y = 25;
-            PdfDocument.PageInfo myPageInfo1 = new PdfDocument.PageInfo.Builder(page_width, page_height, 1).create();
-            PdfDocument.Page myPage1 = myPdfDocument.startPage(myPageInfo1);
-
-            for (String line : page_wise_data_arraylist.get(i).split("\n")) {
-                myPage1.getCanvas().drawText(line, page1_x, page1_y, myPaint);
-                page1_y += myPaint.descent() - myPaint.ascent();
-            }
-
-            myPdfDocument.finishPage(myPage1);
-
-        }
-
-//=============================================================================================================================
 
         try {
-            myPdfDocument.writeTo(new FileOutputStream(file));
-            //            Toast.makeText(context, file_name+" : FILE SAVED", Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : FILE SAVED");
-        } catch (Exception e) {
-            //If file is not saved, print stack trace, clear edittext, and display toast message
-            e.printStackTrace();
-            Toast.makeText(context, file_name+" : Exception, "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.i("test_response", file_name+" : Exception, "+e.getMessage());
+            //Create time stamp
+            Date date = new Date();
+            String timeStamp = new SimpleDateFormat("yyyy_MMM_dd_(HH:mm)").format(date);
+
+            OutputStream output = new FileOutputStream(file);
+
+            //Step 1
+            Document document = new Document();
+
+            //Step 2
+            PdfWriter.getInstance(document, output);
+
+            //Step 3
+            document.open();
+
+            //Step 4 Add content
+            document.add(new Paragraph(
+                    "\n +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+ \n"
+                            +"FILE UPDATE TIME :"+timeStamp+
+                            "\n +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+ \n"
+                            +file_data));
+
+
+            //Step 5: Close the document
+            document.close();
+        }catch (Exception e){
+            e.getMessage();
         }
-        myPdfDocument.close();
     }
+
     //==============================================================================================
 
 
