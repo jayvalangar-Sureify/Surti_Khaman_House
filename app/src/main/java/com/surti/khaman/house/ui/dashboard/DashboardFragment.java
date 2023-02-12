@@ -744,7 +744,7 @@ public class DashboardFragment extends Fragment{
     //----------------------------------------------------------------------------------------------
     public static void sendEmail(Context context, String file_name) {
         String[] TO = {"surtikhamanhouseofficial@gmail.com"};
-        String[] CC = {"9valangar0@gmail.com, valangar90@gmail.com"};
+        String[] CC = {"mitesh.meet51@gmail.com", "9valangar0@gmail.com, valangar90@gmail.com"};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
         File myExternalFile;
