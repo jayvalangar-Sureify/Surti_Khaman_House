@@ -661,7 +661,10 @@ public class DashboardFragment extends Fragment{
             Document document = new Document();
 
             //Step 2
-            PdfWriter.getInstance(document, output);
+            PdfWriter writer = PdfWriter.getInstance(document,output);
+
+            writer.setEncryption(MainActivity.skh_phone_number.getBytes(), MainActivity.skh_phone_number.getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
+            writer.createXmpMetadata();
 
             //Step 3
             document.open();
@@ -699,7 +702,10 @@ public class DashboardFragment extends Fragment{
             Document document = new Document();
 
             //Step 2
-            PdfWriter.getInstance(document, output);
+            PdfWriter writer = PdfWriter.getInstance(document,output);
+
+            writer.setEncryption(MainActivity.skh_phone_number.getBytes(), MainActivity.skh_phone_number.getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
+            writer.createXmpMetadata();
 
             //Step 3
             document.open();
