@@ -72,15 +72,23 @@ public class ExpenseFragment extends Fragment {
                 //-------------------------------------------------------------------------------
                 EditText et_expense_amount, et_expense_note;
                 TextView tv_expenses_date_time;
-                Button btn_save;
+                Button btn_save, btn_close;
                 et_expense_amount = (EditText) dialog.findViewById(R.id.et_expense_amount);
                 et_expense_note = (EditText) dialog.findViewById(R.id.et_expense_note);
                 tv_expenses_date_time = (TextView) dialog.findViewById(R.id.tv_expenses_date_time);
                 btn_save = (Button) dialog.findViewById(R.id.btn_save);
+                btn_close = (Button) dialog.findViewById(R.id.btn_close);
 
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy  HH:mm");
                 currentDateAndTime = sdf.format(new Date());
                 tv_expenses_date_time.setText(currentDateAndTime);
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
                 btn_save.setOnClickListener(new View.OnClickListener() {
                     @Override

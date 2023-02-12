@@ -20,11 +20,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +72,7 @@ public class DashboardFragment extends Fragment{
     public static String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     public static String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
     public static String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
+    public static String KEY_PASSWORD = "KEY_PASSWORD";
 
     public static String internal_file_data = "";
     public static String previous_file_data = "";
@@ -577,6 +581,20 @@ public class DashboardFragment extends Fragment{
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_BILL_NUMBER, context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_BILL_NUMBER, 1);
     }
+
+
+    public static void set_password_sharedpreference(String password, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PASSWORD, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_PASSWORD, password);
+        editor.commit();
+    }
+
+
+    public static String get_password_sharedpreference(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_FIXED_MENU_ALREADY_DISPLAY, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_PASSWORD, "0");
+    }
     //--------------------------------------------------------------------------------------------------
 
 
@@ -840,6 +858,8 @@ public class DashboardFragment extends Fragment{
     //----------------------------------------------------------------------------------------------
 
 
+    // Read File
+    //---------------------------------------------------------------------------------------------------------------------
     public static InputStream inputStream;
     public static String extract_pdf_text(String fileName){
         String content = "";
@@ -872,4 +892,224 @@ public class DashboardFragment extends Fragment{
         Log.i("Test_lines",""+content);
         return content;
     }
+    //---------------------------------------------------------------------------------------------------------------------
+
+
+    // Delete File
+    //-----------------------------------------------------------------------------------------------------------------------
+    public static void delete_file_from_download(Context context, String filename){
+        try {
+            File downloadDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File file = new File(downloadDirectory,filename);
+            if(file.exists()) {
+                file.delete();
+            }
+            Toast.makeText(context, ""+context.getResources().getString(R.string.delete_file_success), Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.getMessage();
+            Toast.makeText(context, ""+context.getResources().getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show();
+        }
+    }
+    //------------------------------------------------------------------------------------------------------------------------
+
+
+    // Delete File
+    //-----------------------------------------------------------------------------------------------------------------------
+    public static void show_delete_passord_popup(Context context, String file_name){
+//--------------------------------------------------------------------------------------------------
+
+        Dialog dialog = new Dialog(context);
+                //==================================================================================
+                dialog.setContentView(R.layout.password_popup);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.setCancelable(true);
+//                dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+                //-------------------------------------------------------------------------------
+                EditText et_password;
+                TextView tv_dynamic_result;
+                Button btn_0, btn_1, btn_2,
+                        btn_3, btn_4, btn_5,
+                        btn_6, btn_7, btn_8,
+                        btn_9, btn_clear, btn_info, btn_close_popup;
+
+        tv_dynamic_result = (TextView) dialog.findViewById(R.id.tv_dynamic_result);
+        et_password = (EditText) dialog.findViewById(R.id.et_password);;
+        btn_0 = (Button) dialog.findViewById(R.id.btn_0);
+        btn_1 = (Button) dialog.findViewById(R.id.btn_1);
+        btn_2 = (Button) dialog.findViewById(R.id.btn_2);
+        btn_3 = (Button) dialog.findViewById(R.id.btn_3);
+        btn_4 = (Button) dialog.findViewById(R.id.btn_4);
+        btn_5 = (Button) dialog.findViewById(R.id.btn_5);
+        btn_6 = (Button) dialog.findViewById(R.id.btn_6);
+        btn_7 = (Button) dialog.findViewById(R.id.btn_7);
+        btn_8 = (Button) dialog.findViewById(R.id.btn_8);
+        btn_9 = (Button) dialog.findViewById(R.id.btn_9);
+        btn_close_popup = (Button) dialog.findViewById(R.id.btn_close_popup);
+        btn_clear = (Button) dialog.findViewById(R.id.btn_clear);
+        btn_info = (Button) dialog.findViewById(R.id.btn_info);
+
+
+        //------------------------------------------------------------------------------------------
+        btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, ""+context.getResources().getString(R.string.info_password), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        btn_0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_0, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+        btn_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_1, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_2, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_3, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_4, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_5, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_6, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_7, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_8, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_9, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password_for_calculation(btn_0, et_password, context, dialog, tv_dynamic_result);
+            }
+        });
+
+
+        btn_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entering_password = "";
+                et_password.setText("");
+            }
+        });
+
+        btn_close_popup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              dialog.dismiss();
+            }
+        });
+        //------------------------------------------------------------------------------------------
+
+                dialog.show();
+    }
+
+
+     public static String entering_password = "";
+    public static void entering_password_for_calculation(Button btn, EditText et_password, Context context, Dialog dialog, TextView tv_dynamic_result) {
+        entering_password = entering_password + btn.getText().toString();
+
+        et_password.setText(entering_password);
+
+
+        et_password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String input_password = charSequence.toString();
+                if(i2 == 10) {
+                    if (checkPasswordValidation(input_password)) {
+                        delete_file_from_download(context, MainActivity.file_name_surtikhamanhouse);
+                        dialog.dismiss();
+                    } else {
+                        entering_password = "";
+                        tv_dynamic_result.setText(context.getResources().getString(R.string.wrong_password));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable input) {
+
+            }
+        });
+    }
+
+    private static boolean checkPasswordValidation(String entering_password) {
+        boolean result =false;
+        if (!entering_password.isEmpty() && entering_password != null) {
+            if (entering_password.equals(MainActivity.skh_phone_number)) {
+                result = true;
+            } else {
+                result = false;
+            }
+        }
+        return result;
+    }
+    //------------------------------------------------------------------------------------------------------------------------
+
 }

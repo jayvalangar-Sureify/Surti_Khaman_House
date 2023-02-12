@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
     public static String file_name_surtikhamanhouse = "SKH_Bills.pdf";
     public static String file_name_skh_expenses = "SKH_Expenses.pdf";
 
+    public static String skh_phone_number = "9137272150";
+
     // Wholesale
     //----------------------------------------------------------------------------------------------
     public static String file_name_wholesale_bill = "SKH_wholesale_Bills.pdf";
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        DashboardFragment.set_password_sharedpreference(skh_phone_number, MainActivity.this);
 
         requestPermissions();
 
@@ -147,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
             case R.id.action_send_mail:
                 DashboardFragment.sendEmail(MainActivity.this, MainActivity.file_name_surtikhamanhouse);
                 return true;
+            case R.id.delete_file:
+                 DashboardFragment.show_delete_passord_popup(MainActivity.this, file_name_surtikhamanhouse);
+                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);

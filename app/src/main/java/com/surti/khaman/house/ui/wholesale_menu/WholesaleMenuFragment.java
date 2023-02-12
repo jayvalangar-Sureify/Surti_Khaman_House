@@ -62,11 +62,19 @@ public class WholesaleMenuFragment extends Fragment {
 
                 //-------------------------------------------------------------------------------
                 EditText et_item_name, et_item_weight, et_item_price;
-                Button btn_save;
+                Button btn_save, btn_close;
                 et_item_name = (EditText) dialog.findViewById(R.id.et_item_name);
                 et_item_weight = (EditText) dialog.findViewById(R.id.et_item_weight);
                 et_item_price = (EditText) dialog.findViewById(R.id.et_item_price);
                 btn_save = (Button) dialog.findViewById(R.id.btn_save);
+                btn_close = (Button) dialog.findViewById(R.id.btn_close);
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
                 btn_save.setOnClickListener(new View.OnClickListener() {
                     @Override

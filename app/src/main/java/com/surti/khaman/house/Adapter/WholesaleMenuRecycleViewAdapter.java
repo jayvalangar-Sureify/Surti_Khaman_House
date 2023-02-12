@@ -80,15 +80,23 @@ public class WholesaleMenuRecycleViewAdapter extends RecyclerView.Adapter<Wholes
 
                 //-------------------------------------------------------------------------------
                 EditText et_item_name, et_item_weight, et_item_price;
-                Button btn_update;
+                Button btn_update, btn_close;
                 et_item_name = (EditText) dialog.findViewById(R.id.et_item_name);
                 et_item_weight = (EditText) dialog.findViewById(R.id.et_item_weight);
                 et_item_price = (EditText) dialog.findViewById(R.id.et_item_price);
                 btn_update = (Button) dialog.findViewById(R.id.btn_update);
+                btn_close = (Button) dialog.findViewById(R.id.btn_close);
 
                 et_item_name.setText(model.getItem_name());
                 et_item_weight.setText(model.getFixedWeight());
                 et_item_price.setText(model.getFixedPrice());
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override

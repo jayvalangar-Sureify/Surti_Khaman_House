@@ -79,10 +79,21 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
 
                 EditText et_history_calculation, et_final_result_weight;
                 TextView tv_show_item_name;
+                Button btn_close_popup;
+
+                btn_close_popup = (Button) dialog.findViewById(R.id.btn_close_popup);
                 tv_show_item_name = (TextView) dialog.findViewById(R.id.tv_show_item_name);
                 et_history_calculation = (EditText) dialog.findViewById(R.id.et_history_calculation);
                 et_final_result_weight = (EditText) dialog.findViewById(R.id.et_final_result_weight);
 
+
+
+                btn_close_popup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
                 tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position_latest).getItem_name());
 
@@ -345,10 +356,20 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
 
                 EditText et_history_calculation, et_final_result_price;
                 TextView tv_show_item_name;
+                Button btn_close_popup;
+
+                btn_close_popup = (Button) dialog.findViewById(R.id.btn_close_popup);
                 tv_show_item_name = (TextView) dialog.findViewById(R.id.tv_show_item_name);
                 et_history_calculation = (EditText) dialog.findViewById(R.id.et_history_calculation);
                 et_final_result_price = (EditText) dialog.findViewById(R.id.et_final_result_price);
 
+
+                btn_close_popup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
 
                 tv_show_item_name.setText(""+dashboaedModelDataArrayList.get(position_latest).getItem_name());
 

@@ -108,5 +108,13 @@
             android:text="Update"
             android:padding="6dp"
             android:id="@+id/btn_update"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close"
+            android:padding="6dp"
+            android:layout_margin="6dp"
+            android:id="@+id/btn_close"/>
     </LinearLayout>
 </LinearLayout>

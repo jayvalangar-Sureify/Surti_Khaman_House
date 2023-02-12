@@ -65,6 +65,7 @@
 
     <!-- Send Mail -->
     <string name="send_mail">Send Mail</string>
+    <string name="delete_file">Delete File</string>
 
     <!-- Wholesale -->
     <string name="wholesale">Wholesale</string>
@@ -76,7 +77,9 @@
     <string name="clear">Clear</string>
     <string name="enter">Enter</string>
     <string name="Done">Done</string>
+    <string name="info">Info</string>
     <string name="equal_0">= 0</string>
+    <string name="_0">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
     <string name="_3">3</string>
@@ -125,6 +128,14 @@
     <string name="_1000">1000</string>
 
 
+    <!-- Password -->
+    <string name="password">Password</string>
+    <string name="info_password">Enter 10 digit password</string>
+    <string name="wrong_password">Wrong Password !</string>
+
+    <!-- Delete File -->
+    <string name="delete_file_success">File deleted successfully</string>
+    <string name="something_went_wrong">Something Went Wrong</string>
 
 
 </resources>

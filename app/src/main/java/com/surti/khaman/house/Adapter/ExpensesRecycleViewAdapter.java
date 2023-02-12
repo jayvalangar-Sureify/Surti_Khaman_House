@@ -69,15 +69,25 @@ public class ExpensesRecycleViewAdapter extends RecyclerView.Adapter<ExpensesRec
                 //-------------------------------------------------------------------------------
                 EditText et_expense_amount, et_expense_note;
                 TextView tv_date_time_value;
-                Button btn_update;
+                Button btn_update, btn_close;
+
+
                 et_expense_amount = (EditText) dialog.findViewById(R.id.et_expense_amount);
                 et_expense_note = (EditText) dialog.findViewById(R.id.et_expense_note);
                 tv_date_time_value = (TextView) dialog.findViewById(R.id.tv_expenses_date_time);
                 btn_update = (Button) dialog.findViewById(R.id.btn_update);
+                btn_close = (Button) dialog.findViewById(R.id.btn_close);
 
                 et_expense_amount.setText(model.get_Expenses_Amount());
                 et_expense_note.setText(model.get_Expenses_Note());
                 tv_date_time_value.setText(model.get_Expenses_Date_Time());
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                      dialog.dismiss();
+                    }
+                });
 
                 btn_update.setOnClickListener(new View.OnClickListener() {
                     @Override
