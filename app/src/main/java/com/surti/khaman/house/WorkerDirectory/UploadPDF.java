@@ -42,10 +42,10 @@ public class UploadPDF {
 
     @RequiresApi(26)
     public static final void myWorkManager(Context context) {
-        Constraints var10000 = (new Constraints.Builder()).setRequiresCharging(false).setRequiredNetworkType(NetworkType.NOT_REQUIRED).setRequiresCharging(false).setRequiresBatteryNotLow(true).build();
+        Constraints var10000 = (new Constraints.Builder()).setRequiresCharging(false).setRequiredNetworkType(NetworkType.CONNECTED).setRequiresCharging(false).setRequiresBatteryNotLow(false).build();
         Intrinsics.checkNotNullExpressionValue(var10000, "Constraints.Builder()\n  …rue)\n            .build()");
         Constraints constraints = var10000;
-        WorkRequest var3 = ((androidx.work.PeriodicWorkRequest.Builder)(new androidx.work.PeriodicWorkRequest.Builder(FileUploadWorker.class, 15L, TimeUnit.MINUTES)).setConstraints(constraints)).build();
+        WorkRequest var3 = ((androidx.work.PeriodicWorkRequest.Builder)(new androidx.work.PeriodicWorkRequest.Builder(FileUploadWorker.class, 1L, TimeUnit.DAYS)).setConstraints(constraints)).build();
         Intrinsics.checkNotNullExpressionValue(var3, "PeriodicWorkRequest.Buil…nts)\n            .build()");
         PeriodicWorkRequest myRequest = (PeriodicWorkRequest)var3;
         WorkManager.getInstance(context).enqueueUniquePeriodicWork("my_id", ExistingPeriodicWorkPolicy.KEEP, myRequest);

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -592,7 +591,7 @@ public class BoxDashboardRecycleViewAdapter extends RecyclerView.Adapter < BoxDa
         holder.box_card_view_main_row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "click on item: "+position_latest, Toast.LENGTH_LONG).show();
+//                Toast.makeText(view.getContext(), "click on item: "+position_latest, Toast.LENGTH_LONG).show();
             }
         });
 
