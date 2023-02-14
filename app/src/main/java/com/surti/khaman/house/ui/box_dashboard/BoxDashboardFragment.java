@@ -39,7 +39,6 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
-import com.surti.khaman.house.WorkerDirectory.UploadPDF;
 import com.surti.khaman.house.databinding.FragmentBoxDashboardBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
@@ -97,11 +96,6 @@ public class BoxDashboardFragment extends Fragment{
                 rv_box_dashboard.setHasFixedSize(true);
                 rv_box_dashboard.setLayoutManager(new LinearLayoutManager(getContext()));
                 rv_box_dashboard.setAdapter(adapter);
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    UploadPDF.myWorkManager(getActivity());
-                }
             }
         });
         //==========================================================================================

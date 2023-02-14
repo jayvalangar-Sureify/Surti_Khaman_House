@@ -2,6 +2,7 @@ package com.surti.khaman.house.ui.admin_panel;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.surti.khaman.house.R;
+import com.surti.khaman.house.WorkerDirectory.UploadPDF;
 import com.surti.khaman.house.databinding.FragmentAdminPanelBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
@@ -53,6 +55,10 @@ public class AdminPanelFragment  extends Fragment {
             binding.tvIsAdminLoginValue.setText(getActivity().getResources().getString(R.string.admin_login_success));
             binding.tvIsAdminLoginValue.setTextColor(getActivity().getResources().getColor(R.color.green_500));
             binding.btnLogin.setVisibility(View.GONE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                UploadPDF.myWorkManager(getActivity());
+            }
         } else {
             binding.tvIsAdminLoginValue.setText(getActivity().getResources().getString(R.string.admin_login_unsuccess));
             binding.tvIsAdminLoginValue.setTextColor(getActivity().getResources().getColor(R.color.red_500));

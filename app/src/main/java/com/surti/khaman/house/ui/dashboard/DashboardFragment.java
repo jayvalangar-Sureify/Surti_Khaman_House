@@ -56,7 +56,6 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
-import com.surti.khaman.house.WorkerDirectory.UploadPDF;
 import com.surti.khaman.house.databinding.FragmentDashboardBinding;
 
 import java.io.File;
@@ -421,11 +420,6 @@ public class DashboardFragment extends Fragment{
                 dashboard_recycleView.setHasFixedSize(true);
                 dashboard_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
                 dashboard_recycleView.setAdapter(adapter);
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    UploadPDF.myWorkManager(getActivity());
-                }
             }
         });
         //==========================================================================================

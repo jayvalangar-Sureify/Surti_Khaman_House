@@ -49,7 +49,6 @@ import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.MainActivity;
 import com.surti.khaman.house.Model.WholesaleDashboardModelData;
 import com.surti.khaman.house.R;
-import com.surti.khaman.house.WorkerDirectory.UploadPDF;
 import com.surti.khaman.house.databinding.FragmentWholesaleBinding;
 
 import java.io.File;
@@ -402,11 +401,6 @@ public class WholesaleFragment extends Fragment {
                 wholesale_recycleView.setHasFixedSize(true);
                 wholesale_recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
                 wholesale_recycleView.setAdapter(adapter);
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    UploadPDF.myWorkManager(getActivity());
-                }
             }
         });
         //==========================================================================================

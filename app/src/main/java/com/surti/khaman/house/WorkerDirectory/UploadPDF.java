@@ -37,18 +37,27 @@ import kotlin.jvm.internal.Intrinsics;
 
 public class UploadPDF {
 
+    public static String file_upload_work_id = "file_upload_work";
     public static StorageReference storageReference;
     public static DatabaseReference databaseReference;
 
     @RequiresApi(26)
     public static final void myWorkManager(Context context) {
-        Constraints var10000 = (new Constraints.Builder()).setRequiresCharging(false).setRequiredNetworkType(NetworkType.CONNECTED).setRequiresCharging(false).setRequiresBatteryNotLow(false).build();
-        Intrinsics.checkNotNullExpressionValue(var10000, "Constraints.Builder()\n  …rue)\n            .build()");
-        Constraints constraints = var10000;
-        WorkRequest var3 = ((androidx.work.PeriodicWorkRequest.Builder)(new androidx.work.PeriodicWorkRequest.Builder(FileUploadWorker.class, 1L, TimeUnit.DAYS)).setConstraints(constraints)).build();
-        Intrinsics.checkNotNullExpressionValue(var3, "PeriodicWorkRequest.Buil…nts)\n            .build()");
-        PeriodicWorkRequest myRequest = (PeriodicWorkRequest)var3;
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork("my_id", ExistingPeriodicWorkPolicy.KEEP, myRequest);
+        Constraints constraints =
+                (new Constraints.Builder())
+                        .setRequiresCharging(false)
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .setRequiresCharging(false)
+                        .setRequiresBatteryNotLow(false)
+                        .build();
+        Intrinsics.checkNotNullExpressionValue(constraints, "Constraints.Builder()\n  …rue)\n            .build()");
+        WorkRequest workRequest =
+                ((androidx.work.PeriodicWorkRequest.Builder)(new androidx.work.PeriodicWorkRequest
+                .Builder(FileUploadWorker.class, 1L, TimeUnit.DAYS))
+                .setConstraints(constraints)).build();
+        Intrinsics.checkNotNullExpressionValue(workRequest, "PeriodicWorkRequest.Buil…nts)\n            .build()");
+        PeriodicWorkRequest myRequest = (PeriodicWorkRequest)workRequest;
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(file_upload_work_id, ExistingPeriodicWorkPolicy.KEEP, myRequest);
     }
 
 
