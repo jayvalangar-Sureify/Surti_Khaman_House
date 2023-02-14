@@ -12,6 +12,7 @@
     <string name="left_menu_expenses">Expenses</string>
     <string name="left_menu_wholesale">Wholesale</string>
     <string name="left_menu_box_dashboard">Box Dashboard</string>
+    <string name="left_menu_admin_pannel">Admin Panel</string>
     <string name="left_menu_edit_wholesale_dashboard">Edit Wholesale Data</string>
     <string name="left_menu_find_rupees">Find Rupees</string>
     <string name="left_menu_find_weight">Find Weight</string>
@@ -136,6 +137,13 @@
     <!-- Delete File -->
     <string name="delete_file_success">File deleted successfully</string>
     <string name="something_went_wrong">Something Went Wrong</string>
+
+    <!-- Admin Panel -->
+    <string name="admin_panel_status">Admin Login Status</string>
+    <string name="admin_login_success">Logged In : TRUE </string>
+    <string name="admin_login_unsuccess">Logged In : FALSE </string>
+    <string name="login">LogIn</string>
+    <string name="change_status">Change Status</string>
 
 
 </resources>

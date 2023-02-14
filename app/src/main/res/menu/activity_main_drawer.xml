@@ -9,6 +9,14 @@
             android:icon="@drawable/ic_left_menu_dashboard_24"
             android:title="@string/left_menu_dashboard" />
         <item
+            android:id="@+id/nav_box_dashboard"
+            android:icon="@drawable/ic_box_dashboard_24"
+            android:title="@string/left_menu_box_dashboard" />
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_admin_24"
+            android:title="@string/left_menu_admin_pannel" />
+        <item
             android:id="@+id/nav_shop_menu"
             android:icon="@drawable/ic_edit_24"
             android:title="@string/left_menu_edit_dashboard" />
@@ -24,9 +32,6 @@
             android:id="@+id/nav_wholesale_menu"
             android:icon="@drawable/ic_edit_wholesale_24"
             android:title="@string/left_menu_edit_wholesale_dashboard" />
-        <item
-            android:id="@+id/nav_box_dashboard"
-            android:icon="@drawable/ic_box_dashboard_24"
-            android:title="@string/left_menu_box_dashboard" />
+
     </group>
 </menu>

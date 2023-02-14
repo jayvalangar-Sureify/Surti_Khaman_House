@@ -77,6 +77,7 @@ public class DashboardFragment extends Fragment{
     public static String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
     public static String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
     public static String KEY_PASSWORD = "KEY_PASSWORD";
+    public static String KEY_LOGGED_IN_VALE = "KEY_LOGGED_IN_VALE";
 
     public static String internal_file_data = "";
     public static String previous_file_data = "";
@@ -591,6 +592,19 @@ public class DashboardFragment extends Fragment{
         return sharedPreferences.getInt(KEY_BILL_NUMBER, 1);
     }
 
+    public static void set_SharedPreference_Is_Successfully_Logged_In(Integer bill_no, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_LOGGED_IN_VALE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_LOGGED_IN_VALE, bill_no);
+        editor.commit();
+    }
+
+
+    public static Integer get_SharedPreference_Is_Successfully_Logged_In(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_LOGGED_IN_VALE, context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_LOGGED_IN_VALE, 0);
+    }
+
 
     public static void set_password_sharedpreference(String password, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PASSWORD, MODE_PRIVATE);
@@ -601,7 +615,7 @@ public class DashboardFragment extends Fragment{
 
 
     public static String get_password_sharedpreference(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_FIXED_MENU_ALREADY_DISPLAY, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PASSWORD, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_PASSWORD, "0");
     }
     //--------------------------------------------------------------------------------------------------
@@ -1094,7 +1108,7 @@ public class DashboardFragment extends Fragment{
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String input_password = charSequence.toString();
                 if(i2 == 10) {
-                    if (checkPasswordValidation(input_password)) {
+                    if (checkPasswordValidation(input_password, context)) {
                         delete_file_from_download(context, MainActivity.file_name_surtikhamanhouse);
                         dialog.dismiss();
                     } else {
@@ -1111,10 +1125,10 @@ public class DashboardFragment extends Fragment{
         });
     }
 
-    private static boolean checkPasswordValidation(String entering_password) {
+    private static boolean checkPasswordValidation(String entering_password, Context context) {
         boolean result =false;
         if (!entering_password.isEmpty() && entering_password != null) {
-            if (entering_password.equals(MainActivity.skh_phone_number)) {
+            if (entering_password.equals(get_password_sharedpreference(context))) {
                 result = true;
             } else {
                 result = false;
