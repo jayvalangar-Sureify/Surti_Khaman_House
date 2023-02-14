@@ -238,6 +238,9 @@ public class AdminPanelFragment  extends Fragment {
                         binding.tvIsAdminLoginValue.setText(context.getResources().getString(R.string.admin_login_success));
                         binding.tvIsAdminLoginValue.setTextColor(context.getResources().getColor(R.color.green_500));
                         binding.btnLogin.setVisibility(View.GONE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            UploadPDF.myWorkManager(context);
+                        }
                     } else {
                         entering_password = "";
                         binding.tvIsAdminLoginValue.setText(context.getResources().getString(R.string.admin_login_unsuccess));
