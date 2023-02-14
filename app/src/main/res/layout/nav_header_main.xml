@@ -18,7 +18,7 @@
         android:layout_height="100dp"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="20dp"
-        app:srcCompat="@drawable/surti_khaman_house_logo" />
+        app:srcCompat="@drawable/skh_logo" />
 
     <TextView
         android:layout_width="match_parent"
