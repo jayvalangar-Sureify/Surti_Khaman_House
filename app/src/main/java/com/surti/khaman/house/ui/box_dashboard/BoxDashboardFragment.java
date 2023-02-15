@@ -6,6 +6,7 @@ import static com.surti.khaman.house.ui.dashboard.DashboardFragment.set_SharedPr
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentBoxDashboardBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +58,10 @@ public class BoxDashboardFragment extends Fragment{
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
 
     private FragmentBoxDashboardBinding binding;
+
+    public static String previous_file_data = "";
+    public static String bill_no_and__earning_history = "";
+    public static Long todays_earning_data = 0l;
 
     ArrayList<String> item_name_list ;
     ArrayList<String> item_weight_list ;
@@ -339,11 +346,45 @@ public class BoxDashboardFragment extends Fragment{
 
                             // Insert Into File
                             //-------------------------------------------------------------------------
-                            DashboardFragment.display_Shop_Revenue_Data(getActivity());
+                            display_Shop_Revenue_Data(getActivity());
 
-                            DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
+                            previous_file_data = "";
+                            if(DashboardFragment.get_SharedPreference_Old_data_bill_file(getActivity()) == 0) {
+                                DashboardFragment.set_SharedPreference_Old_data_bill_file(1, getActivity());
+                                String latest_old_bill_file_data = DashboardFragment.extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath(), getActivity());
+                                if(!latest_old_bill_file_data.isEmpty()) {
+                                    previous_file_data =
+                                            "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                                                    + latest_old_bill_file_data
+                                                    + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+                                }
+                                DashboardFragment.set_SharedPreference_Old_data_bill_file_String(previous_file_data, getActivity());
+                            }
 
-                            DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_surtikhamanhouse);
+                            previous_file_data = DashboardFragment.get_SharedPreference_Old_data_bill_file_String(getActivity());
+
+                            if(!previous_file_data.isEmpty()){
+                                previous_file_data =  "\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                                        +"\n"+previous_file_data+"\n"
+                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+                            }
+
+                            String final_file_data =
+                                    previous_file_data
+                                            +"\n\n\n\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n"
+                                            +"\n EARNING HISTORY \n"
+                                            +"\n "+bill_no_and__earning_history
+                                            +"\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                                            +"\n TODAY's EARNING : "+todays_earning_data
+                                            +"\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                                            +"\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n\n\n\n"
+                                            +internal_file_data;
+
+                            DashboardFragment.check_and_create_file(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
+
+                            DashboardFragment.check_and_create_file_insdie_package(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
                             //-------------------------------------------------------------------------
 
                             binding.btnReset.performClick();
@@ -378,6 +419,45 @@ public class BoxDashboardFragment extends Fragment{
             String item_price = cursor.getString(3);
             dashboaedModelDataArrayList.add(new DashboaedModelData(item_name, "", "", "",  item_price, item_weight));
         }
+        cursor.close();
+    }
+    //----------------------------------------------------------------------------------------------
+
+
+    //----------------------------------------------------------------------------------------------
+    public void display_Shop_Revenue_Data(Context context) {
+        sqLiteDatabase=databaseMain.getReadableDatabase();
+        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
+        internal_file_data = "";
+
+        Long todays_total_earning = 0l;
+        bill_no_and__earning_history = "";
+        while (cursor.moveToNext()){
+            int id=cursor.getInt(0);
+            String SHOP_REVENUE_BILL_NO_COLUMN = cursor.getString(1);
+            String SHOP_REVENUE_BILL_DATE_TIME_COLUMN = cursor.getString(2);
+            String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
+            String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
+            internal_file_data =  internal_file_data
+                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n"
+                    +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
+                    +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
+                    +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
+                    +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
+                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n";
+
+            Long grand_total_long = Long.parseLong(SHOP_REVENUE_BILL_AMOUNT_COLUMN);
+            bill_no_and__earning_history = bill_no_and__earning_history
+                    +"\n"
+                    +SHOP_REVENUE_BILL_NO_COLUMN
+                    +") "
+                    + SHOP_REVENUE_BILL_DATE_TIME_COLUMN
+                    +" ----> "
+                    +SHOP_REVENUE_BILL_AMOUNT_COLUMN;
+            todays_total_earning = todays_total_earning + grand_total_long;
+        }
+
+        todays_earning_data = todays_total_earning;
         cursor.close();
     }
     //----------------------------------------------------------------------------------------------
