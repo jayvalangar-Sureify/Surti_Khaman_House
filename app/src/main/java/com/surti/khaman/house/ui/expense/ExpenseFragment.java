@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,15 @@ import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentExpenseBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ExpenseFragment extends Fragment {
 
-    String internal_file_data = "";
+    public static String internal_file_data = "";
+    public static String previous_file_data = "";
 
     String currentDateAndTime;
     DatabaseMain databaseMain;
@@ -50,9 +53,9 @@ public class ExpenseFragment extends Fragment {
         binding = FragmentExpenseBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        databaseMain=new DatabaseMain(getActivity());
+        databaseMain = new DatabaseMain(getActivity());
         //create method
-        recyclerView= (RecyclerView) root.findViewById(R.id.rv_expenses);
+        recyclerView = (RecyclerView) root.findViewById(R.id.rv_expenses);
 
         Dialog dialog = new Dialog(getActivity());
 
@@ -99,13 +102,13 @@ public class ExpenseFragment extends Fragment {
                         et_expense_note_string = et_expense_note.getText().toString();
 
 
-                        if(!et_expense_amount_string.isEmpty() && !et_expense_note_string.isEmpty() ) {
+                        if (!et_expense_amount_string.isEmpty() && !et_expense_note_string.isEmpty()) {
 
                             insert_shop_expenses(et_expense_amount_string, et_expense_note_string, currentDateAndTime);
                             dialog.dismiss();
                             display_Shop_Expenses_Data();
                             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        }else{
+                        } else {
                             Toast.makeText(getActivity(), "Enter ALL Field", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -118,7 +121,6 @@ public class ExpenseFragment extends Fragment {
             }
         });
         //==================================================================================
-
 
 
         btnDashboard.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +150,7 @@ public class ExpenseFragment extends Fragment {
 
 
     //----------------------------------------------------------------------------------------------
-    private void insert_shop_expenses(String expenses_amount, String expenses_note, String expenses_date_time){
+    private void insert_shop_expenses(String expenses_amount, String expenses_note, String expenses_date_time) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseMain.SHOP_EXPENSES_AMOUNT, expenses_amount);
         cv.put(DatabaseMain.SHOP_EXPENSES_NOTE, expenses_note);
@@ -171,33 +173,48 @@ public class ExpenseFragment extends Fragment {
 
     //----------------------------------------------------------------------------------------------
     private void display_Shop_Expenses_Data() {
-        sqLiteDatabase=databaseMain.getReadableDatabase();
-        Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_EXPENSES_TABLE_NAME+"",null);
-        ArrayList<ExpensesModelData> modelArrayList=new ArrayList<>();
+        sqLiteDatabase = databaseMain.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select *from " + DatabaseMain.SHOP_EXPENSES_TABLE_NAME + "", null);
+        ArrayList<ExpensesModelData> modelArrayList = new ArrayList<>();
         internal_file_data = "";
-        while (cursor.moveToNext()){
-            int id=cursor.getInt(0);
-            String expense_amount = cursor.getString(1);
-            String expense_note = cursor.getString(2);
-            String expense_date_time = cursor.getString(3);
-            modelArrayList.add(new ExpensesModelData(id, expense_amount, expense_note, expense_date_time));
-            internal_file_data = internal_file_data
-                    +"\n"+"====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
-                    +"\n"+"Id : "+id
-                    +"\n"+"Date and Time : "+expense_date_time
-                    +"\n"+"Expenses Amount : "+expense_amount
-                    +"\n"+"Expenses Note : "+expense_note
-                    +"\n ===========================================\n";
+
+
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(0);
+                String expense_amount = cursor.getString(1);
+                String expense_note = cursor.getString(2);
+                String expense_date_time = cursor.getString(3);
+                modelArrayList.add(new ExpensesModelData(id, expense_amount, expense_note, expense_date_time));
+
+                internal_file_data = internal_file_data
+                        + "\n" + "====EXPENSES====EXPENSES====EXPENSES====EXPENSES====\n"
+                        + "\n" + "Id : " + id
+                        + "\n" + "Date and Time : " + expense_date_time
+                        + "\n" + "Expenses Amount : " + expense_amount
+                        + "\n" + "Expenses Note : " + expense_note
+                        + "\n ===========================================\n";
+            }
+            cursor.close();
+            sqLiteDatabase.close();
+
+        if (DashboardFragment.get_SharedPreference_Old_data_expenses_file(getActivity()) == 0) {
+            DashboardFragment.set_SharedPreference_Old_data_expenses_file(1, getActivity());
+            String latest_old_expenses_file_data = DashboardFragment.extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_skh_expenses).getAbsolutePath(), getActivity());
+            if (!latest_old_expenses_file_data.isEmpty())
+            {
+                previous_file_data =
+                        "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                                + latest_old_expenses_file_data
+                                + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+
+            }
         }
-        cursor.close();
-        sqLiteDatabase.close();
-        DashboardFragment.check_and_create_file(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
-        DashboardFragment.check_and_create_file_insdie_package(getActivity(), internal_file_data, MainActivity.file_name_skh_expenses);
-        myAdapter=new ExpensesRecycleViewAdapter(getActivity(),R.layout.row_expenses_crud,modelArrayList,sqLiteDatabase);
-        recyclerView.setAdapter(myAdapter);
-    }
+            DashboardFragment.check_and_create_file(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
+            DashboardFragment.check_and_create_file_insdie_package(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
+            myAdapter = new ExpensesRecycleViewAdapter(getActivity(), R.layout.row_expenses_crud, modelArrayList, sqLiteDatabase);
+            recyclerView.setAdapter(myAdapter);
+        }
 
-    //----------------------------------------------------------------------------------------------
-
+        //----------------------------------------------------------------------------------------------
 
 }

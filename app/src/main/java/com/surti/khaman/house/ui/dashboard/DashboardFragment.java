@@ -74,7 +74,8 @@ public class DashboardFragment extends Fragment{
     public static ArrayList<String> page_wise_data_arraylist = new ArrayList<>();
     public static String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     public static String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
-    public static String KEY_OLD_FILE_DATA = "KEY_OLD_FILE_DATA";
+    public static String KEY_OLD_BILL_FILE_DATA = "KEY_OLD_BILL_FILE_DATA";
+    public static String KEY_OLD_EXPENSES_FILE_DATA = "KEY_OLD_EXPENSES_FILE_DATA";
     public static String KEY_PASSWORD = "KEY_PASSWORD";
     public static String KEY_LOGGED_IN_VALE = "KEY_LOGGED_IN_VALE";
 
@@ -494,13 +495,17 @@ public class DashboardFragment extends Fragment{
         Cursor cursor=sqLiteDatabase.rawQuery("select *from "+ DatabaseMain.SHOP_REVENUE_TABLE_NAME+"",null);
         internal_file_data = "";
 
-        if(get_SharedPreference_Old_data(context) == 0) {
-            previous_file_data =
-                    "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
-                            + extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath())
-                            + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+        if(get_SharedPreference_Old_data_bill_file(context) == 0) {
+            set_SharedPreference_Old_data_bill_file(0, context);
+            String latest_old_bill_file_data = extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath(), context);
+          if(!latest_old_bill_file_data.isEmpty()) {
+              previous_file_data =
+                      "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                              + latest_old_bill_file_data
+                              + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
 
-            internal_file_data = previous_file_data;
+              internal_file_data = previous_file_data;
+          }
 
         }
 
@@ -558,17 +563,30 @@ public class DashboardFragment extends Fragment{
         return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
     }
 
-    public static void set_SharedPreference_Old_data(Integer bill_no, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_FILE_DATA, MODE_PRIVATE);
+    public static void set_SharedPreference_Old_data_bill_file(Integer value, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_OLD_FILE_DATA, bill_no);
+        editor.putInt(KEY_OLD_BILL_FILE_DATA, value);
         editor.commit();
     }
 
 
-    public static Integer get_SharedPreference_Old_data(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_FILE_DATA, MODE_PRIVATE);
-        return sharedPreferences.getInt(KEY_OLD_FILE_DATA, 0);
+    public static Integer get_SharedPreference_Old_data_bill_file(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_OLD_BILL_FILE_DATA, 0);
+    }
+
+    public static void set_SharedPreference_Old_data_expenses_file(Integer value, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_DATA, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_OLD_EXPENSES_FILE_DATA, value);
+        editor.commit();
+    }
+
+
+    public static Integer get_SharedPreference_Old_data_expenses_file(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_DATA, MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_OLD_EXPENSES_FILE_DATA, 0);
     }
 
 
@@ -671,7 +689,7 @@ public class DashboardFragment extends Fragment{
             //Step 2
             PdfWriter writer = PdfWriter.getInstance(document,output);
 
-            writer.setEncryption(MainActivity.skh_phone_number.getBytes(), MainActivity.skh_phone_number.getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
+            writer.setEncryption(get_password_sharedpreference(context).getBytes(), get_password_sharedpreference(context).getBytes(), PdfWriter.ALLOW_COPY | PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_40);
             writer.createXmpMetadata();
 
             //Step 3
@@ -881,36 +899,28 @@ public class DashboardFragment extends Fragment{
     // Read File
     //---------------------------------------------------------------------------------------------------------------------
     public static InputStream inputStream;
-    public static String extract_pdf_text(String fileName){
-        String content = "";
+    public static String extract_pdf_text(String fileName, Context context) {
+
+        String old_file_content = "";
         PdfReader reader = null;
         try {
-            //String fileName is the string with the path to your .pdf file, for example resources/pdfs/preface.pdf
-            reader = new PdfReader(fileName);
+            reader = new PdfReader(fileName, get_password_sharedpreference(context).getBytes());
+
+            for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                // pageNumber = 1
+                String textFromPage = PdfTextExtractor.getTextFromPage(reader, i);
+                old_file_content = old_file_content + "\n" + textFromPage;
+            }
+
+            reader.close();
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        int numberOfPages = 0;
-        try{
-             numberOfPages = reader.getNumberOfPages();
-        }catch (Exception e){
-            e.getMessage();
-        }
 
-        numberOfPages = numberOfPages + 1;
-        for (int page = 1; page < numberOfPages; page++){
-            try {
-                String content1Page = PdfTextExtractor.getTextFromPage(reader, page);
-                content = content + content1Page;
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
 
-        Log.i("Test_lines",""+content);
-        return content;
+        Log.i("Test_lines", "" + old_file_content);
+        return old_file_content;
     }
     //---------------------------------------------------------------------------------------------------------------------
 

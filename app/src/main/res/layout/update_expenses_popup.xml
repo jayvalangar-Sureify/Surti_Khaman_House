@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_expense_amount"
-            android:inputType="text"
+            android:inputType="number"
             android:textStyle="bold"
             android:textColor="@color/blue_500"
             android:hint="100"/>
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_expense_note"
-            android:inputType="number"
+            android:inputType="text"
             android:textStyle="bold"
             android:textColor="@color/blue_500"
             android:hint="Tea "/>
