@@ -209,8 +209,11 @@ public class ExpenseFragment extends Fragment {
 
             }
         }
-            DashboardFragment.check_and_create_file(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
-            DashboardFragment.check_and_create_file_insdie_package(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
+
+            if(!previous_file_data.isEmpty() || !internal_file_data.isEmpty()) {
+                DashboardFragment.check_and_create_file(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
+                DashboardFragment.check_and_create_file_insdie_package(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
+            }
             myAdapter = new ExpensesRecycleViewAdapter(getActivity(), R.layout.row_expenses_crud, modelArrayList, sqLiteDatabase);
             recyclerView.setAdapter(myAdapter);
         }
