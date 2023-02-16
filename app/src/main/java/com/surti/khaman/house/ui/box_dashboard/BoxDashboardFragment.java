@@ -274,13 +274,8 @@ public class BoxDashboardFragment extends Fragment{
                             // Generate Bill Number
                             //------------------------------------------------------------------------
                             int bill_no_integer = get_SharedPreference_Billnumber(getActivity());
-                            if(bill_no_integer <= 100){
-                                set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
-                            }else{
-                                set_SharedPreference_Billnumber(1, getActivity());
-                            }
+                            set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
                             //------------------------------------------------------------------------
-
 
                             AsyncTask.execute(new Runnable() {
                                 @Override
@@ -423,6 +418,28 @@ public class BoxDashboardFragment extends Fragment{
     }
     //----------------------------------------------------------------------------------------------
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+            String currentDateandTime = sdf.format(new Date());
+            String last_dat = DashboardFragment.get_last_day_for_bill_no_sharedpreference(getActivity());
+
+            // Today's date is not same with last day, Reset Bill Number
+            if(!currentDateandTime.equals(last_dat)){
+                set_SharedPreference_Billnumber(1, getActivity());
+            }
+            DashboardFragment.set_last_day_for_bill_no_sharedpreference(currentDateandTime, getActivity());
+
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
 
     //----------------------------------------------------------------------------------------------
     public void display_Shop_Revenue_Data(Context context) {

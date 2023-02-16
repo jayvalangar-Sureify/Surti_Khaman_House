@@ -74,6 +74,7 @@ public class DashboardFragment extends Fragment{
     public static ArrayList<String> page_wise_data_arraylist = new ArrayList<>();
     public static String KEY_FIXED_MENU_ALREADY_DISPLAY = "KEY_FIXED_MENU_ALREADY_DISPLAY";
     public static String KEY_BILL_NUMBER = "KEY_BILL_NUMBER";
+    public static String KEY_LAST_DATE = "KEY_LAST_DATE";
     public static String KEY_OLD_BILL_FILE_DATA = "KEY_OLD_BILL_FILE_DATA";
     public static String KEY_OLD_BILL_FILE_STRING_DATA = "KEY_OLD_BILL_FILE_STRING_DATA";
     public static String KEY_OLD_EXPENSES_FILE_DATA = "KEY_OLD_EXPENSES_FILE_DATA";
@@ -321,11 +322,7 @@ public class DashboardFragment extends Fragment{
                                // Generate Bill Number
                                //------------------------------------------------------------------------
                                int bill_no_integer = get_SharedPreference_Billnumber(getActivity());
-                               if(bill_no_integer <= 100){
-                                   set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
-                               }else{
-                                   set_SharedPreference_Billnumber(1, getActivity());
-                               }
+                               set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
                                //------------------------------------------------------------------------
 
 
@@ -487,7 +484,27 @@ public class DashboardFragment extends Fragment{
     }
     //----------------------------------------------------------------------------------------------
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
+            String currentDateandTime = sdf.format(new Date());
+            String last_dat = get_last_day_for_bill_no_sharedpreference(getActivity());
+
+            // Today's date is not same with last day, Reset Bill Number
+            if(!currentDateandTime.equals(last_dat)){
+                set_SharedPreference_Billnumber(1, getActivity());
+            }
+            set_last_day_for_bill_no_sharedpreference(currentDateandTime, getActivity());
+
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
 
 
     // Shop_Menu_Tabel
@@ -651,6 +668,19 @@ public class DashboardFragment extends Fragment{
     public static Integer get_SharedPreference_Billnumber(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_BILL_NUMBER, context.MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_BILL_NUMBER, 1);
+    }
+
+    public static void set_last_day_for_bill_no_sharedpreference(String password, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_LAST_DATE, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_LAST_DATE, password);
+        editor.commit();
+    }
+
+
+    public static String get_last_day_for_bill_no_sharedpreference(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_LAST_DATE, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_LAST_DATE, "0");
     }
 
     public static void set_SharedPreference_Is_Successfully_Logged_In(Integer bill_no, Context context){
