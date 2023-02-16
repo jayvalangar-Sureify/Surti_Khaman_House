@@ -456,12 +456,12 @@ public class BoxDashboardFragment extends Fragment{
             String SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN = cursor.getString(3);
             String SHOP_REVENUE_BILL_AMOUNT_COLUMN = cursor.getString(4);
             internal_file_data =  internal_file_data
-                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n"
+                    +"\n (ID : "+id+") >>>>====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"\n"
                     +"\n Bill No : "+SHOP_REVENUE_BILL_NO_COLUMN
                     +"\n Date Time : "+SHOP_REVENUE_BILL_DATE_TIME_COLUMN
                     +"\n"+SHOP_REVENUE_ITEM_NAME_WEIGHT_PRICE_COLUMN
                     +"\n Grand Total : "+SHOP_REVENUE_BILL_AMOUNT_COLUMN
-                    +"\n====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"====Bill_"+id+"\n";
+                    +"\n (ID : "+id+") >>>>====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"====Bill_"+SHOP_REVENUE_BILL_NO_COLUMN+"\n";
 
             Long grand_total_long = Long.parseLong(SHOP_REVENUE_BILL_AMOUNT_COLUMN);
             bill_no_and__earning_history = bill_no_and__earning_history
