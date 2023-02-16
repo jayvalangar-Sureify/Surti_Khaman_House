@@ -359,11 +359,11 @@ public class BoxDashboardFragment extends Fragment{
                             previous_file_data = DashboardFragment.get_SharedPreference_Old_data_bill_file_String(getActivity());
 
                             if(!previous_file_data.isEmpty()){
-                                previous_file_data =  "\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                                previous_file_data =  "\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
                                         +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
                                         +"\n"+previous_file_data+"\n"
-                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+                                        +"\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
+                                        +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
                             }
 
                             String final_file_data =
