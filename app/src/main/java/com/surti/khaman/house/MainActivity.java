@@ -1,9 +1,8 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +12,10 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -162,31 +165,47 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
 
     //==============================================================================================
     public static void show_file_access_permission_dialog_box(Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Please Grant File Access Permission");
-        builder.setTitle("Grant Permission");
-        builder.setCancelable(false);
+        Dialog dialog = new Dialog(context);
+        //==================================================================================
+        dialog.setContentView(R.layout.permission_popup_information);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+//                dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
 
-        builder.setPositiveButton("Grant", (DialogInterface.OnClickListener) (dialog, which) -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                try {
-                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
-                    context.startActivity(intent);
-                } catch (Exception ex){
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                    context.startActivity(intent);
-                }
+        //-------------------------------------------------------------------------------
+        TextView tv_permission_details;
+        Button btn_cancel, btn_grant;
+        tv_permission_details = (TextView) dialog.findViewById(R.id.tv_permission_details);
+        btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        btn_grant = (Button) dialog.findViewById(R.id.btn_grant);
+
+        tv_permission_details.setText(context.getResources().getString(R.string.file_access_permission_details));
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
 
-        builder.setNegativeButton("Cancel", (DialogInterface.OnClickListener) (dialog, which) -> {
-            dialog.cancel();
+        btn_grant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    try {
+                        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+                        context.startActivity(intent);
+                    } catch (Exception ex){
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                        context.startActivity(intent);
+                    }
+                    dialog.dismiss();
+                }
+            }
         });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+        //-------------------------------------------------------------------------------
+        dialog.show();
     }
     //==============================================================================================
 }

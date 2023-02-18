@@ -18,6 +18,7 @@
     <string name="left_menu_find_weight">Find Weight</string>
 
     <string name="app_tag_line">"Chakhi to juvo chahak bani jaso !"</string>
+    <string name="app_version_name">0.0 (1)</string>
 
     <!-- Dashboard -->
     <string name="item">Item</string>
@@ -145,5 +146,10 @@
     <string name="login">LogIn</string>
     <string name="change_status">Change Status</string>
 
+    <!-- Permission, Access all file permission -->
+    <string name="file_access_permission_details">Allow this app to read, modify and delete all files on this device or any connected storage volumes. If granted, app may access files without your explicit knowledge.</string>
+    <string name="permission">Permission</string>
+    <string name="grant">Grant</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
