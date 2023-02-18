@@ -13,6 +13,7 @@
     <string name="left_menu_wholesale">Wholesale</string>
     <string name="left_menu_box_dashboard">Box Dashboard</string>
     <string name="left_menu_admin_pannel">Admin Panel</string>
+    <string name="left_menu_info">Info</string>
     <string name="left_menu_edit_wholesale_dashboard">Edit Wholesale Data</string>
     <string name="left_menu_find_rupees">Find Rupees</string>
     <string name="left_menu_find_weight">Find Weight</string>
@@ -151,5 +152,25 @@
     <string name="permission">Permission</string>
     <string name="grant">Grant</string>
     <string name="cancel">Cancel</string>
+
+
+    <!-- Info Page -->
+    <string name="info_page">Info</string>
+    <string name="privacy_policy_link">http://bit.ly/3S9BpZb</string>
+    <string name="app_version_code">APP VERSION CODE</string>
+    <string name="app_name_label">APP NAME</string>
+    <string name="privacy_policy">PRIVACY POLICY</string>
+    <string name="permission_used">PERMISSION USED</string>
+    <string name="permission_used_info">Allow this app to read, modify and delete all files on this device or any connected storage volumes. If granted, app may access files without your explicit knowledge.
+        \n\nRead, Write, Bluetooth and Access all file permission used
+        \n\n &#8226; BLUETOOTH
+         \n &#8226; READ_EXTERNAL_STORAGE
+         \n &#8226; WRITE_EXTERNAL_STORAGE
+         \n &#8226; MANAGE_EXTERNAL_STORAGE
+    </string>
+
+
+
+
 
 </resources>

@@ -33,5 +33,10 @@
             android:icon="@drawable/ic_edit_wholesale_24"
             android:title="@string/left_menu_edit_wholesale_dashboard" />
 
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_info_24"
+            android:title="@string/left_menu_info" />
+
     </group>
 </menu>

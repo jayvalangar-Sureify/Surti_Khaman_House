@@ -46,4 +46,10 @@
         android:name="com.surti.khaman.house.ui.admin_panel.AdminPanelFragment"
         android:label="@string/left_menu_admin_pannel"
         tools:layout="@layout/fragment_admin_panel" />
+
+    <fragment
+        android:id="@+id/nav_info"
+        android:name="com.surti.khaman.house.ui.info.InfoPageFragment"
+        android:label="@string/left_menu_info"
+        tools:layout="@layout/fragment_info_page" />
 </navigation>
