@@ -148,8 +148,9 @@
     <string name="change_status">Change Status</string>
 
     <!-- Permission, Access all file permission -->
-    <string name="file_access_permission_details">Allow this app to read, modify and delete all files on this device or any connected storage volumes. If granted, app may access files without your explicit knowledge.</string>
-    <string name="permission">Permission</string>
+    <string name="folder_access_permission_details"> Go to "DOWNLOAD / SKH / ... "  \n\n Allow Surti Khaman House (SKH) application to access SKH Folder
+        \n\n This will let app to access current and future content stored in SKH Folder  </string>
+    <string name="permission">Permission (Download / SKH)</string>
     <string name="grant">Grant</string>
     <string name="cancel">Cancel</string>
 
@@ -161,8 +162,9 @@
     <string name="app_name_label">APP NAME</string>
     <string name="privacy_policy">PRIVACY POLICY</string>
     <string name="permission_used">PERMISSION USED</string>
-    <string name="permission_used_info">Allow this app to read, modify and delete all files on this device or any connected storage volumes. If granted, app may access files without your explicit knowledge.
-        \n\nRead, Write, Bluetooth and Access all file permission used
+<!--    Allow this app to read, modify and delete all files on this device or any connected storage volumes. If granted, app may access files without your explicit knowledge.-->
+    <string name="permission_used_info">
+        \n\nRead, Write and Bluetooth
         \n\n &#8226; BLUETOOTH
          \n &#8226; READ_EXTERNAL_STORAGE
          \n &#8226; WRITE_EXTERNAL_STORAGE

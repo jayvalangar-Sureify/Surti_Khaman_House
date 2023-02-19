@@ -79,6 +79,7 @@ public class DashboardFragment extends Fragment{
     public static String KEY_OLD_BILL_FILE_STRING_DATA = "KEY_OLD_BILL_FILE_STRING_DATA";
     public static String KEY_OLD_EXPENSES_FILE_DATA = "KEY_OLD_EXPENSES_FILE_DATA";
     public static String KEY_PASSWORD = "KEY_PASSWORD";
+    public static String KEY_URI_SKH_BILL = "KEY_URI_SKH_BILL";
     public static String KEY_LOGGED_IN_VALE = "KEY_LOGGED_IN_VALE";
 
     public static String internal_file_data = "";
@@ -315,9 +316,9 @@ public class DashboardFragment extends Fragment{
                            } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.BLUETOOTH_SCAN}, MainActivity.PERMISSION_BLUETOOTH_SCAN);
                            } else {
-                               Log.i("test_print", "Run bussiness logic : "+ final_payment_method[0]);
-                               Log.i("test_print", "final_bill_string :- "+final_bill_string);
-                               Log.i("test_print", "grand_total :- "+grand_total);
+                               Log.i("test_print", "Run bussiness logic : " + final_payment_method[0]);
+                               Log.i("test_print", "final_bill_string :- " + final_bill_string);
+                               Log.i("test_print", "grand_total :- " + grand_total);
 
                                // Generate Bill Number
                                //------------------------------------------------------------------------
@@ -325,114 +326,116 @@ public class DashboardFragment extends Fragment{
                                set_SharedPreference_Billnumber(bill_no_integer + 1, getActivity());
                                //------------------------------------------------------------------------
 
+                               // Only admin can print bills
+                               if (get_SharedPreference_Is_Successfully_Logged_In(getActivity()) == 1) {
 
+                                   AsyncTask.execute(new Runnable() {
+                                       @Override
+                                       public void run() {
+
+                                           // Print Bill
+                                           //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                                           // Your code HERE
+                                           try {
+
+                                               if (item_name_list.size() != 0) {
+                                                   EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
+                                                   printer
+                                                           .printFormattedText(
+                                                                   "[C]<font size='normal'><b>SURTI KHAMAN HOUSE</b></font>\n" +
+                                                                           "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
+                                                                           "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
+                                                                           "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> " + final_payment_method[0] + "\n" +
+                                                                           "[L]<font size='normal'> Date-Time : " + currentDateAndTime + "</font>\n" +
+                                                                           "[L]<font size='normal'> Fssai : " + "21522012000953" + "</font>\n" +
+                                                                           "[C]================================\n" +
+                                                                           "[L] Items" +
+                                                                           "[R] Weight" + "    Price\n" +
+                                                                           "[L]<font size='small'>" + final_bill_string + "</font>\n" +
+                                                                           "[C]================================\n" +
+                                                                           "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
+                                                                           "[C]================================"
+                                                           );
+                                               } else {
+
+                                               }
+                                               try {
+                                                   dialog.dismiss();
+                                               } catch (Exception e) {
+                                                   e.getMessage();
+                                                   Log.i("test_print", "Exception dialog dismiss:" + e.getMessage());
+                                               }
+                                           } catch (EscPosConnectionException e) {
+                                               e.printStackTrace();
+                                               Log.i("test_print", "Exception 1 :- " + e.getMessage());
+                                           } catch (EscPosParserException e) {
+                                               e.printStackTrace();
+                                               Log.i("test_print", "Exception 2 :- " + e.getMessage());
+                                           } catch (EscPosEncodingException e) {
+                                               e.printStackTrace();
+                                               Log.i("test_print", "Exception 3 :- " + e.getMessage());
+                                           } catch (EscPosBarcodeException e) {
+                                               e.printStackTrace();
+                                               Log.i("test_print", "Exception 4 :- " + e.getMessage());
+                                           }
+
+
+                                       }
+                                       //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+                                   });
+
+                               }
+
+                               //---------------------------------------------------------------------------------------------------------
                                AsyncTask.execute(new Runnable() {
-                                                     @Override
-                                                     public void run() {
-
-                                                         // Print Bill
-                                                         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-                                                         // Your code HERE
-                                                         try {
-
-                                                             if(item_name_list.size() != 0){
-                                                                 EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
-                                                                 printer
-                                                                         .printFormattedText(
-                                                                                 "[C]<font size='normal'><b>SURTI KHAMAN HOUSE</b></font>\n" +
-                                                                                         "[C]<font size='normal'>BORIVALI (EAST)</font>\n" +
-                                                                                         "[C]<font size='normal'>Mobile. 9137272150</font>\n" +
-                                                                                         "[L] Bill No : <font size='big'><b>" + bill_no_integer + "</b></font> "+final_payment_method[0]+"\n" +
-                                                                                         "[L]<font size='normal'> Date-Time : " + currentDateAndTime + "</font>\n" +
-                                                                                         "[L]<font size='normal'> Fssai : " + "21522012000953" + "</font>\n" +
-                                                                                         "[C]================================\n" +
-                                                                                         "[L] Items" +
-                                                                                         "[R] Weight" + "    Price\n" +
-                                                                                         "[L]<font size='small'>" + final_bill_string + "</font>\n" +
-                                                                                         "[C]================================\n" +
-                                                                                         "[C]GRAND TOTAL : <font size='big'><b>" + grand_total + "</b></font>\n" +
-                                                                                         "[C]================================"
-                                                                         );
-                                                             }else{
-
-                                                             }
-                                                             try{
-                                                                 dialog.dismiss();
-                                                             }catch (Exception e){
-                                                                 e.getMessage();
-                                                                 Log.i("test_print", "Exception dialog dismiss:"+e.getMessage());
-                                                             }
-                                                         } catch (EscPosConnectionException e) {
-                                                             e.printStackTrace();
-                                                             Log.i("test_print", "Exception 1 :- "+e.getMessage());
-                                                         } catch (EscPosParserException e) {
-                                                             e.printStackTrace();
-                                                             Log.i("test_print", "Exception 2 :- "+e.getMessage());
-                                                         } catch (EscPosEncodingException e) {
-                                                             e.printStackTrace();
-                                                             Log.i("test_print", "Exception 3 :- "+e.getMessage());
-                                                         } catch (EscPosBarcodeException e) {
-                                                             e.printStackTrace();
-                                                             Log.i("test_print", "Exception 4 :- "+e.getMessage());
-                                                         }
+                                   @Override
+                                   public void run() {
+                                       // Insert Into Database
+                                       //-------------------------------------------------------------------------------------------------------------------------------------------------
+                                       insert_Shop_Revenue_Data("" + bill_no_integer, currentDateAndTime, final_file_string, "" + grand_total, getActivity());
+                                       //--------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-                                                     }
-                                   //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+                                       // Insert Into File
+                                       //-------------------------------------------------------------------------
+                                       display_Shop_Revenue_Data(getActivity());
+
+
+                                       previous_file_data = get_SharedPreference_Old_data_bill_file_String(getActivity());
+
+                                       if (!previous_file_data.isEmpty()) {
+                                           previous_file_data = "\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
+                                                   + "\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+                                                   + "\n" + previous_file_data + "\n"
+                                                   + "\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
+                                                   + "\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
+                                       }
+
+                                       String final_file_data =
+                                               previous_file_data
+                                                       + "\n\n\n\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n"
+                                                       + "\n EARNING HISTORY \n"
+                                                       + "\n " + bill_no_and__earning_history
+                                                       + "\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                                                       + "\n TODAY's EARNING : " + todays_earning_data
+                                                       + "\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+                                                       + "\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n\n\n\n"
+                                                       + internal_file_data;
+
+
+                                       check_and_create_file(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
+
+                                       check_and_create_file_insdie_package(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
+                                       //-------------------------------------------------------------------------
+                                   }
 
                                });
+                               //---------------------------------------------------------------------------------------------------------
 
-                               // Insert Into Database
-                               //-------------------------------------------------------------------------------------------------------------------------------------------------
-                               insert_Shop_Revenue_Data(""+bill_no_integer, currentDateAndTime, final_file_string, ""+grand_total, getActivity());
-                               //--------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-                               // Insert Into File
-                               //-------------------------------------------------------------------------
-                               display_Shop_Revenue_Data(getActivity());
-
-                               previous_file_data = "";
-                               if(get_SharedPreference_Old_data_bill_file(getActivity()) == 0) {
-                                   set_SharedPreference_Old_data_bill_file(1, getActivity());
-                                   String latest_old_bill_file_data = extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath(), getActivity());
-                                   if(!latest_old_bill_file_data.isEmpty()) {
-                                       previous_file_data =
-                                               "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
-                                                       + latest_old_bill_file_data
-                                                       + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
-                                   }
-                                   set_SharedPreference_Old_data_bill_file_String(previous_file_data, getActivity());
-                               }
-
-                               previous_file_data = get_SharedPreference_Old_data_bill_file_String(getActivity());
-
-                               if(!previous_file_data.isEmpty()){
-                                   previous_file_data =  "\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
-                                           +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-                                           +"\n"+previous_file_data+"\n"
-                                           +"\n@@ ---->DELETED FILE DATA / Old App data)<---- @@"
-                                           +"\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n";
-                               }
-
-                               String final_file_data =
-                                       previous_file_data
-                                       +"\n\n\n\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n"
-                                       +"\n EARNING HISTORY \n"
-                                       +"\n "+bill_no_and__earning_history
-                                       +"\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-                                       +"\n TODAY's EARNING : "+todays_earning_data
-                                       +"\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-                                       +"\n =$+$+$+$+$+$+$+$+$= TODAY'S EARNING =$+$+$+$+$+$+$+$+$=\n\n\n\n"
-                                       +internal_file_data;
-
-
-                               check_and_create_file(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
-
-                               check_and_create_file_insdie_package(getActivity(), final_file_data, MainActivity.file_name_surtikhamanhouse);
-                               //-------------------------------------------------------------------------
-
+                               dialog.dismiss();
                                binding.btnReset.performClick();
+
                            }
 
 
@@ -616,14 +619,6 @@ public class DashboardFragment extends Fragment{
         return sharedPreferences.getString(KEY_FIXED_MENU_ALREADY_DISPLAY, "0");
     }
 
-    public static void set_SharedPreference_Old_data_bill_file(Integer value, Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_OLD_BILL_FILE_DATA, value);
-        editor.commit();
-    }
-
-
     public static String get_SharedPreference_Old_data_bill_file_String(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_STRING_DATA, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_OLD_BILL_FILE_STRING_DATA, "");
@@ -637,7 +632,14 @@ public class DashboardFragment extends Fragment{
     }
 
 
-    public static Integer get_SharedPreference_Old_data_bill_file(Context context){
+    public static void set_SharedPreference_Old_data_bill_file_already_written_or_not(Integer value, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(KEY_OLD_BILL_FILE_DATA, value);
+        editor.commit();
+    }
+
+    public static Integer get_SharedPreference_Old_data_bill_file_already_written_or_not(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_OLD_BILL_FILE_DATA, 0);
     }
@@ -709,6 +711,21 @@ public class DashboardFragment extends Fragment{
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PASSWORD, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_PASSWORD, "0");
     }
+
+
+    public static void set_uri_skh_bill_file_sharedpreference(String file_uri_with_permission, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_URI_SKH_BILL, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_URI_SKH_BILL, file_uri_with_permission);
+        editor.commit();
+    }
+
+
+    public static String get_uri_skh_bill_file_sharedpreference(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_URI_SKH_BILL, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_URI_SKH_BILL, "no");
+    }
+
     //--------------------------------------------------------------------------------------------------
 
 
@@ -757,7 +774,11 @@ public class DashboardFragment extends Fragment{
             Date date = new Date();
             String timeStamp = new SimpleDateFormat("yyyy_MMM_dd_(HH:mm)").format(date);
 
-            File download_directory_file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File download_directory_file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+File.separator+MainActivity.download_skh_directory);
+            if(!download_directory_file.exists()){
+                download_directory_file.mkdirs();
+            }
+
             File myFile = new File(download_directory_file, file_name);
 
             OutputStream output = new FileOutputStream(myFile);

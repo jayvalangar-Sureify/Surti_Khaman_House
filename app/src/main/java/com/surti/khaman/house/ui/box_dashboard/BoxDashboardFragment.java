@@ -14,7 +14,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +43,6 @@ import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentBoxDashboardBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -344,17 +342,6 @@ public class BoxDashboardFragment extends Fragment{
                             display_Shop_Revenue_Data(getActivity());
 
                             previous_file_data = "";
-                            if(DashboardFragment.get_SharedPreference_Old_data_bill_file(getActivity()) == 0) {
-                                DashboardFragment.set_SharedPreference_Old_data_bill_file(1, getActivity());
-                                String latest_old_bill_file_data = DashboardFragment.extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_surtikhamanhouse).getAbsolutePath(), getActivity());
-                                if(!latest_old_bill_file_data.isEmpty()) {
-                                    previous_file_data =
-                                            "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
-                                                    + latest_old_bill_file_data
-                                                    + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
-                                }
-                                DashboardFragment.set_SharedPreference_Old_data_bill_file_String(previous_file_data, getActivity());
-                            }
 
                             previous_file_data = DashboardFragment.get_SharedPreference_Old_data_bill_file_String(getActivity());
 

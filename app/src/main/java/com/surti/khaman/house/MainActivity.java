@@ -1,6 +1,7 @@
 package com.surti.khaman.house;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +18,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,14 +32,20 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.surti.khaman.house.databinding.ActivityMainBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements PermissionUtil.PermissionsCallBack {
 
     public static String firebase_storage_bill_file_name = "Firebase_Bills_File";
     public static String firebase_storage_expenses_file_name = "Expenses_File";
     public static String provider_name = "com.surti.khaman.house.provider";
+    public static String download_skh_directory = "skh";
     public static String file_name_surtikhamanhouse = "SKH_Bills.pdf";
     public static String file_name_skh_expenses = "SKH_Expenses.pdf";
 
@@ -77,30 +88,150 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
 
         requestPermissions();
 
-        // Show File Access Permission
-        if (Build.VERSION.SDK_INT >= 30){
-            if(!Environment.isExternalStorageManager()) {
-                show_file_access_permission_dialog_box(MainActivity.this);
+
+
+        // Checking old data freshly want to write or not
+        if(DashboardFragment.get_SharedPreference_Old_data_bill_file_already_written_or_not(MainActivity.this) == 0) {
+            // If directory available,than read data , save that than delete file
+            if (check_skh_directory_previously_available_or_not()) {
+                // Checking Uri already set or not
+                String uri_skh_bill_file_string = DashboardFragment.get_uri_skh_bill_file_sharedpreference(MainActivity.this);
+
+                // If Uri not set than , ask for permission
+                if(uri_skh_bill_file_string.matches("no")){
+                    show_download_directory_ask_user_to_give_permission(MainActivity.this);
+                }else{
+                    // If already permission is given than save that Uri
+                    set_Old_skh_bill_file_Data(uri_skh_bill_file_string, MainActivity.this);
+                }
             }
         }
+
+
+
     }
 
-    private static boolean isExternalStorageReadOnly() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+    // Read Old Data
+    // Check skh directory available or not, if available than grant the permission, read the data and delete old file, and create new file
+//=============================================================================================================
+
+    // Check Directory is present or not
+    //—-------------------------------------------------------------------------------------------------------------------------------------
+    public static boolean check_skh_directory_previously_available_or_not(){
+        File download_directory_file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File dir_skh = new File(download_directory_file, MainActivity.download_skh_directory);
+        if(!dir_skh.exists()) {
+            return false;
+        }else {
             return true;
         }
-        return false;
     }
+    //—-------------------------------------------------------------------------------------------------------------------------------------
 
-    private static boolean isExternalStorageAvailable() {
-        String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
+
+    // Open Folder for Allow Permission
+    //—-------------------------------------------------------------------------------------------------------------------------------------
+    public void openSomeActivityForResult() {
+        Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        openFolderToAllowPermissionActivityResultLauncher.launch(i);
+    }
+   //—---------------------------------------------------------------------------------------------------------------------------------------
+
+    // OnActivity Result to get file data and file Uri
+    //—------------------------------------------------------------------------------------------------------------------------------------
+    ActivityResultLauncher<Intent> openFolderToAllowPermissionActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        Uri uri = data.getData();
+
+                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                        DocumentFile documentFile = DocumentFile.fromTreeUri(MainActivity.this, uri);
+
+                        for(DocumentFile file : documentFile.listFiles()){
+                            if(file.getName().matches(MainActivity.file_name_surtikhamanhouse)){
+
+                                DashboardFragment.set_uri_skh_bill_file_sharedpreference(String.valueOf(file.getUri()), MainActivity.this);
+
+                                set_Old_skh_bill_file_Data(String.valueOf(file.getUri()), MainActivity.this);
+                                 try{
+                                     file.delete();
+                                 }catch (Exception e){
+                                     e.getMessage();
+                                 }
+
+                                Log.i("test_response", "FILE FOUND");
+                            }
+                            Log.i("test_response", "File Name : "+file.getName());
+                        }
+                    }
+                }
+            });
+     //—------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // Read old File text and return file content
+    //—------------------------------------------------------------------------------------------------------------------------------------
+    private static String readTextFromUri(Uri uri, Context context) throws IOException {
+        String old_file_content = "";
+        PdfReader reader = null;
+
+        try {
+            reader = new PdfReader(context.getContentResolver().openInputStream(uri), DashboardFragment.get_password_sharedpreference(context).getBytes());
+
+            for (int i = 1; i <= reader.getNumberOfPages(); i++) {
+                // pageNumber = 1
+                String textFromPage = PdfTextExtractor.getTextFromPage(reader, i);
+                old_file_content = old_file_content + "\n" + textFromPage;
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return false;
-    }
 
+        Log.i("test_response", "FILE CONTENT : "+old_file_content);
+
+        return old_file_content;
+    }
+//—------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // set old data on sharedpreference
+    //—------------------------------------------------------------------------------------------------------------------------------------
+    public static void set_Old_skh_bill_file_Data(String uri_skh_bill_file_string,Context context){
+        try{
+            if(DashboardFragment.get_SharedPreference_Old_data_bill_file_already_written_or_not(context) == 0) {
+                DashboardFragment.set_SharedPreference_Old_data_bill_file_already_written_or_not(1, context);
+                String latest_old_bill_file_data = readTextFromUri(Uri.parse(uri_skh_bill_file_string), context);
+                String previous_file_data = "";
+                if(!latest_old_bill_file_data.isEmpty()) {
+                    previous_file_data =
+                            "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                                    + latest_old_bill_file_data
+                                    + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+                }
+                DashboardFragment.set_SharedPreference_Old_data_bill_file_String(previous_file_data, context);
+            }
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
+    //—------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+//=============================================================================================================
+
+
+//=============================================================================================================
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -163,8 +294,10 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         }
     }
 
+    //=============================================================================================================
+
     //==============================================================================================
-    public static void show_file_access_permission_dialog_box(Context context){
+    public void show_download_directory_ask_user_to_give_permission(Context context){
         Dialog dialog = new Dialog(context);
         //==================================================================================
         dialog.setContentView(R.layout.permission_popup_information);
@@ -179,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
         btn_grant = (Button) dialog.findViewById(R.id.btn_grant);
 
-        tv_permission_details.setText(context.getResources().getString(R.string.file_access_permission_details));
+        tv_permission_details.setText(context.getResources().getString(R.string.folder_access_permission_details));
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,18 +323,8 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
         btn_grant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    try {
-                        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
-                        context.startActivity(intent);
-                    } catch (Exception ex){
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                        context.startActivity(intent);
-                    }
-                    dialog.dismiss();
-                }
+                openSomeActivityForResult();
+                dialog.dismiss();
             }
         });
         //-------------------------------------------------------------------------------
