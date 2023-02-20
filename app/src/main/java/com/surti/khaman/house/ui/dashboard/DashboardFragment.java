@@ -77,9 +77,11 @@ public class DashboardFragment extends Fragment{
     public static String KEY_LAST_DATE = "KEY_LAST_DATE";
     public static String KEY_OLD_BILL_FILE_DATA = "KEY_OLD_BILL_FILE_DATA";
     public static String KEY_OLD_BILL_FILE_STRING_DATA = "KEY_OLD_BILL_FILE_STRING_DATA";
+    public static String KEY_OLD_EXPENSES_FILE_STRING_DATA = "KEY_OLD_EXPENSES_FILE_STRING_DATA";
     public static String KEY_OLD_EXPENSES_FILE_DATA = "KEY_OLD_EXPENSES_FILE_DATA";
     public static String KEY_PASSWORD = "KEY_PASSWORD";
     public static String KEY_URI_SKH_BILL = "KEY_URI_SKH_BILL";
+    public static String KEY_URI_SKH_EXPENSES = "KEY_URI_SKH_EXPENSES";
     public static String KEY_LOGGED_IN_VALE = "KEY_LOGGED_IN_VALE";
 
     public static String internal_file_data = "";
@@ -631,6 +633,18 @@ public class DashboardFragment extends Fragment{
         editor.commit();
     }
 
+    public static String get_SharedPreference_Old_data_expenses_file_String(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_STRING_DATA, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_OLD_EXPENSES_FILE_STRING_DATA, "");
+    }
+
+    public static void set_SharedPreference_Old_data_expenses_file_String(String value, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_STRING_DATA, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_OLD_EXPENSES_FILE_STRING_DATA, value);
+        editor.commit();
+    }
+
 
     public static void set_SharedPreference_Old_data_bill_file_already_written_or_not(Integer value, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_BILL_FILE_DATA, MODE_PRIVATE);
@@ -644,7 +658,7 @@ public class DashboardFragment extends Fragment{
         return sharedPreferences.getInt(KEY_OLD_BILL_FILE_DATA, 0);
     }
 
-    public static void set_SharedPreference_Old_data_expenses_file(Integer value, Context context){
+    public static void set_SharedPreference_Old_data_expenses_file_already_written_or_not(Integer value, Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_DATA, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_OLD_EXPENSES_FILE_DATA, value);
@@ -652,7 +666,7 @@ public class DashboardFragment extends Fragment{
     }
 
 
-    public static Integer get_SharedPreference_Old_data_expenses_file(Context context){
+    public static Integer get_SharedPreference_Old_data_expenses_file_already_written_or_not(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_OLD_EXPENSES_FILE_DATA, MODE_PRIVATE);
         return sharedPreferences.getInt(KEY_OLD_EXPENSES_FILE_DATA, 0);
     }
@@ -724,6 +738,19 @@ public class DashboardFragment extends Fragment{
     public static String get_uri_skh_bill_file_sharedpreference(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_URI_SKH_BILL, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_URI_SKH_BILL, "no");
+    }
+
+    public static void set_uri_skh_expenses_file_sharedpreference(String file_uri_with_permission, Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_URI_SKH_EXPENSES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_URI_SKH_EXPENSES, file_uri_with_permission);
+        editor.commit();
+    }
+
+
+    public static String get_uri_skh_expenses_file_sharedpreference(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_URI_SKH_EXPENSES, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_URI_SKH_EXPENSES, "no");
     }
 
     //--------------------------------------------------------------------------------------------------

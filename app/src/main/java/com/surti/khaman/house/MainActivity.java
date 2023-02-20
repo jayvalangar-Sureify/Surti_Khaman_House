@@ -153,21 +153,48 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
 
                         DocumentFile documentFile = DocumentFile.fromTreeUri(MainActivity.this, uri);
 
+                        DocumentFile bill_file_uri = null, expenses_file_uri = null;
                         for(DocumentFile file : documentFile.listFiles()){
+                            // Checking skh bill file is available or not
+                            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=
                             if(file.getName().matches(MainActivity.file_name_surtikhamanhouse)){
-
                                 DashboardFragment.set_uri_skh_bill_file_sharedpreference(String.valueOf(file.getUri()), MainActivity.this);
-
                                 set_Old_skh_bill_file_Data(String.valueOf(file.getUri()), MainActivity.this);
-                                 try{
-                                     file.delete();
-                                 }catch (Exception e){
-                                     e.getMessage();
-                                 }
+                                bill_file_uri = file;
 
-                                Log.i("test_response", "FILE FOUND");
+                                Log.i("test_response", "BILL FILE FOUND");
                             }
+                            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=
+
+
+                            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=
+                            if(file.getName().matches(MainActivity.file_name_skh_expenses)){
+                                DashboardFragment.set_uri_skh_expenses_file_sharedpreference(String.valueOf(file.getUri()), MainActivity.this);
+                                set_Old_skh_expenses_file_Data(String.valueOf(file.getUri()), MainActivity.this);
+                                expenses_file_uri = file;
+
+                                Log.i("test_response", "EXPENSES FILE FOUND");
+                            }
+                            //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=
+
                             Log.i("test_response", "File Name : "+file.getName());
+
+                            if(bill_file_uri != null) {
+                                try {
+                                    bill_file_uri.delete();
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                            }
+
+                            if(expenses_file_uri != null) {
+                                try {
+                                    expenses_file_uri.delete();
+                                } catch (Exception e) {
+                                    e.getMessage();
+                                }
+                            }
+
                         }
                     }
                 }
@@ -203,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
 //—------------------------------------------------------------------------------------------------------------------------------------
 
 
-    // set old data on sharedpreference
+    // set old bill file data on sharedpreference
     //—------------------------------------------------------------------------------------------------------------------------------------
     public static void set_Old_skh_bill_file_Data(String uri_skh_bill_file_string,Context context){
         try{
@@ -218,6 +245,30 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
                                     + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
                 }
                 DashboardFragment.set_SharedPreference_Old_data_bill_file_String(previous_file_data, context);
+            }
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
+    //—------------------------------------------------------------------------------------------------------------------------------------
+
+
+    // set old expenses file data on sharedpreference
+    //—------------------------------------------------------------------------------------------------------------------------------------
+    public static void set_Old_skh_expenses_file_Data(String uri_skh_expenses_file_string,Context context){
+        try{
+            if(DashboardFragment.get_SharedPreference_Old_data_expenses_file_already_written_or_not(context) == 0) {
+                DashboardFragment.set_SharedPreference_Old_data_expenses_file_already_written_or_not(1, context);
+                String latest_old_expenses_file_data = readTextFromUri(Uri.parse(uri_skh_expenses_file_string), context);
+                String previous_file_data = "";
+                if(!latest_old_expenses_file_data.isEmpty()) {
+                    previous_file_data =
+                            "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
+                                    + latest_old_expenses_file_data
+                                    + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
+                }
+                DashboardFragment.set_SharedPreference_Old_data_expenses_file_String(previous_file_data, context);
             }
 
         }catch (Exception e){

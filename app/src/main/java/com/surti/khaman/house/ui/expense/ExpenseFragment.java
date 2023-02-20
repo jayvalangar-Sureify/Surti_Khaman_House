@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentExpenseBinding;
 import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -197,19 +195,8 @@ public class ExpenseFragment extends Fragment {
             cursor.close();
             sqLiteDatabase.close();
 
-        if (DashboardFragment.get_SharedPreference_Old_data_expenses_file(getActivity()) == 0) {
-            DashboardFragment.set_SharedPreference_Old_data_expenses_file(1, getActivity());
-            String latest_old_expenses_file_data = DashboardFragment.extract_pdf_text(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + File.separator + MainActivity.file_name_skh_expenses).getAbsolutePath(), getActivity());
-            if (!latest_old_expenses_file_data.isEmpty())
-            {
-                previous_file_data =
-                        "\n======OLD_DATA_START====OLD_DATA_START====OLD_DATA_START======\n"
-                                + latest_old_expenses_file_data
-                                + "\n=======OLD_DATA_END====OLD_DATA_END====OLD_DATA_END======\n";
 
-            }
-        }
-
+        previous_file_data = DashboardFragment.get_SharedPreference_Old_data_expenses_file_String(getActivity());
             if(!previous_file_data.isEmpty() || !internal_file_data.isEmpty()) {
                 DashboardFragment.check_and_create_file(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
                 DashboardFragment.check_and_create_file_insdie_package(getActivity(), previous_file_data + internal_file_data, MainActivity.file_name_skh_expenses);
