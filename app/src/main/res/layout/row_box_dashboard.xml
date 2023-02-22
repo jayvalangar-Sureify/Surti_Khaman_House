@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     app:cardCornerRadius="6dp"
@@ -9,22 +9,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="6dp">
 
     <LinearLayout
         android:id="@+id/ll_first_row"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:weightSum="3"
         android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_item_name"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Item Name"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -32,85 +31,8 @@
                 android:textStyle="bold"
                 android:textSize="18sp"/>
 
-            <EditText
-                android:id="@+id/et_final_result_weight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:inputType="number"
-                android:cursorVisible="false"
-                android:textColor="@color/blue_500"
-                android:textStyle="bold"
-                android:hint="0 Gm"
-                android:background="@drawable/border_red_fill_white_rectangle"
-                />
-
-
-                <EditText
-                    android:id="@+id/et_final_result_price"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:inputType="number"
-                    android:cursorVisible="false"
-                    android:textColor="@color/blue_500"
-                    android:textStyle="bold"
-                    android:hint="0 Rs"
-                    android:background="@drawable/border_red_fill_white_rectangle"
-                    />
     </LinearLayout>
 
-
-
-        <LinearLayout
-            android:id="@+id/ll_second_row"
-            android:layout_below="@+id/ll_first_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:weightSum="3"
-            android:background="@color/yellow_100"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                />
-
-            <Button
-                android:id="@+id/btn_show_popup_weight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/weight"
-                android:layout_margin="1dp"
-                android:textSize="12sp"
-                android:drawableRight="@drawable/ic_drop_down_24"
-                android:layout_weight="1"
-                />
-
-            <Button
-                android:id="@+id/btn_show_popup_price"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/price"
-                android:layout_margin="1dp"
-                android:textSize="12sp"
-                android:drawableRight="@drawable/ic_drop_down_24"
-                android:layout_weight="1"
-                />
-
-        </LinearLayout>
-
-
-
     </RelativeLayout>
-
 
 </androidx.cardview.widget.CardView>

@@ -3,18 +3,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.box_dashboard.BoxDashboardFragment">
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_box_dashboard"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/rl_bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/rl_view_print"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
         android:scrollbars="vertical"
         />
 
+
+    <RelativeLayout
+        android:id="@+id/rl_view_print"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/rv_box_dashboard_item_selected"
+        android:background="@drawable/border_red_fill_white_rectangle"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_show_popup_weight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_yellow_drawable"
+                android:drawableRight="@drawable/ic_drop_down_24"
+                android:text="@string/weight"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_show_popup_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_yellow_drawable"
+                android:drawableRight="@drawable/ic_drop_down_24"
+                android:text="@string/price"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_box_dashboard_item_selected"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_above="@+id/rl_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scrollbars="horizontal"
+        android:visibility="gone"
+        />
 
     <RelativeLayout
         android:id="@+id/rl_bottom_layout"
