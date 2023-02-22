@@ -39,10 +39,12 @@ import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
 import com.dantsu.escposprinter.exceptions.EscPosParserException;
 import com.surti.khaman.house.Adapter.BoxDashboardRecycleViewAdapter;
+import com.surti.khaman.house.Adapter.BoxDashboardSelectedItemRecycleViewAdapter;
 import com.surti.khaman.house.Adapter.ReceiptPopupRecycleViewAdapter;
 import com.surti.khaman.house.Database.DatabaseMain;
 import com.surti.khaman.house.FragmentCommunication;
 import com.surti.khaman.house.MainActivity;
+import com.surti.khaman.house.Model.BoxDashboardSelectedItemModelData;
 import com.surti.khaman.house.Model.DashboaedModelData;
 import com.surti.khaman.house.R;
 import com.surti.khaman.house.databinding.FragmentBoxDashboardBinding;
@@ -60,10 +62,11 @@ public class BoxDashboardFragment extends Fragment{
     String calculation_history_price = "";
     Long result_total_only_price = 0L;
 
-    RecyclerView rv_box_dashboard;
+    RecyclerView rv_box_dashboard, rv_box_dashboard_item_selected;
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
+    ArrayList<BoxDashboardSelectedItemModelData> boxDashboardSelectedItemModelDataArrayList;
 
     private FragmentBoxDashboardBinding binding;
 
@@ -103,6 +106,9 @@ public class BoxDashboardFragment extends Fragment{
         View root = binding.getRoot();
         databaseMain=new DatabaseMain(getActivity());
         rv_box_dashboard = (RecyclerView) root.findViewById(R.id.rv_box_dashboard);
+        rv_box_dashboard_item_selected = (RecyclerView) root.findViewById(R.id.rv_box_dashboard_item_selected);
+
+        boxDashboardSelectedItemModelDataArrayList = new ArrayList<>();
 
         //--------------
         displayData();
@@ -125,6 +131,8 @@ public class BoxDashboardFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 displayData();
+                boxDashboardSelectedItemModelDataArrayList = new ArrayList<>();
+
                 rv_box_dashboard = (RecyclerView) root.findViewById(R.id.rv_box_dashboard);
                 BoxDashboardRecycleViewAdapter adapter = new BoxDashboardRecycleViewAdapter(dashboaedModelDataArrayList, getActivity(), communication);
                 rv_box_dashboard.setHasFixedSize(true);
@@ -1158,6 +1166,18 @@ public class BoxDashboardFragment extends Fragment{
                 String find_dw_string = Long.toString(find_dw_long);
 //                holder.et_final_result_weight.setText(find_dw_string);
                 dashboaedModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
+
+                boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+
+                //==========================================================================================
+                BoxDashboardSelectedItemRecycleViewAdapter adapter = new BoxDashboardSelectedItemRecycleViewAdapter(boxDashboardSelectedItemModelDataArrayList, getActivity());
+                rv_box_dashboard_item_selected.setHasFixedSize(true);
+//        rv_box_dashboard.setLayoutManager(new LinearLayoutManager(getContext()));
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),1);
+                gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+                rv_box_dashboard_item_selected.setLayoutManager(gridLayoutManager);
+                rv_box_dashboard_item_selected.setAdapter(adapter);
+                //==========================================================================================
             }else{
 //                holder.et_final_result_weight.setText("");
             }
@@ -1213,6 +1233,19 @@ public class BoxDashboardFragment extends Fragment{
 //                holder.et_final_result_price.setText(find_dp_string);
                 dashboaedModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
                 dashboaedModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
+
+                boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));;
+
+                //==========================================================================================
+                BoxDashboardSelectedItemRecycleViewAdapter adapter = new BoxDashboardSelectedItemRecycleViewAdapter(boxDashboardSelectedItemModelDataArrayList, getActivity());
+                rv_box_dashboard_item_selected.setHasFixedSize(true);
+//        rv_box_dashboard.setLayoutManager(new LinearLayoutManager(getContext()));
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),1);
+                gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+                rv_box_dashboard_item_selected.setLayoutManager(gridLayoutManager);
+                rv_box_dashboard_item_selected.setAdapter(adapter);
+                //==========================================================================================
+
             }else{
 //                holder.et_final_result_price.setText("");
                 dashboaedModelDataArrayList.get(position).setDynamicPrice("");
