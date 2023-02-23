@@ -53,6 +53,8 @@ import com.surti.khaman.house.ui.dashboard.DashboardFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class BoxDashboardFragment extends Fragment{
@@ -66,7 +68,8 @@ public class BoxDashboardFragment extends Fragment{
     SQLiteDatabase sqLiteDatabase;
     DatabaseMain databaseMain;
     ArrayList<DashboaedModelData> dashboaedModelDataArrayList;
-    ArrayList<BoxDashboardSelectedItemModelData> boxDashboardSelectedItemModelDataArrayList;
+    HashMap<String, Integer> boxDashboardSelectedItemModelDataHashMap;
+    ArrayList<BoxDashboardSelectedItemModelData> boxDashboardSelectedItemModelDataArrayList ;
 
     private FragmentBoxDashboardBinding binding;
 
@@ -108,6 +111,7 @@ public class BoxDashboardFragment extends Fragment{
         rv_box_dashboard = (RecyclerView) root.findViewById(R.id.rv_box_dashboard);
         rv_box_dashboard_item_selected = (RecyclerView) root.findViewById(R.id.rv_box_dashboard_item_selected);
 
+        boxDashboardSelectedItemModelDataHashMap = new HashMap<>();
         boxDashboardSelectedItemModelDataArrayList = new ArrayList<>();
 
         //--------------
@@ -131,6 +135,7 @@ public class BoxDashboardFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 displayData();
+                boxDashboardSelectedItemModelDataHashMap = new HashMap<>();
                 boxDashboardSelectedItemModelDataArrayList = new ArrayList<>();
 
                 rv_box_dashboard = (RecyclerView) root.findViewById(R.id.rv_box_dashboard);
@@ -138,6 +143,18 @@ public class BoxDashboardFragment extends Fragment{
                 rv_box_dashboard.setHasFixedSize(true);
 //                rv_box_dashboard.setLayoutManager(new LinearLayoutManager(getContext()));
                 rv_box_dashboard.setAdapter(adapter);
+
+                //==========================================================================================
+                BoxDashboardSelectedItemRecycleViewAdapter boxDashboardSelectedItemRecycleViewAdapter = new BoxDashboardSelectedItemRecycleViewAdapter(boxDashboardSelectedItemModelDataArrayList, getActivity());
+                rv_box_dashboard_item_selected = (RecyclerView) root.findViewById(R.id.rv_box_dashboard_item_selected);
+                rv_box_dashboard_item_selected.setHasFixedSize(true);
+//        rv_box_dashboard.setLayoutManager(new LinearLayoutManager(getContext()));
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),1);
+                gridLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+                rv_box_dashboard_item_selected.setLayoutManager(gridLayoutManager);
+                rv_box_dashboard_item_selected.setAdapter(boxDashboardSelectedItemRecycleViewAdapter);
+                //==========================================================================================
+
             }
         });
         //==========================================================================================
@@ -1167,8 +1184,22 @@ public class BoxDashboardFragment extends Fragment{
 //                holder.et_final_result_weight.setText(find_dw_string);
                 dashboaedModelDataArrayList.get(position).setDynamicWeight(find_dw_string);
 
-                boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+                if(!boxDashboardSelectedItemModelDataHashMap.containsKey(dashboaedModelDataArrayList.get(position).getItem_name())) {
+                    boxDashboardSelectedItemModelDataHashMap.put(dashboaedModelDataArrayList.get(position).getItem_name(), position);
+                    boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+                }else{
 
+                        Iterator<BoxDashboardSelectedItemModelData> iter = boxDashboardSelectedItemModelDataArrayList.iterator();
+                        while (iter.hasNext()) {
+                            BoxDashboardSelectedItemModelData boxDashboardSelectedItemModelData = iter.next();
+                            if (boxDashboardSelectedItemModelData.get_selected_item_name().contains(dashboaedModelDataArrayList.get(position).getItem_name())){
+                                boxDashboardSelectedItemModelDataArrayList.remove(iter);
+                                iter.remove();
+                            }
+                        }
+
+                    boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+                }
                 //==========================================================================================
                 BoxDashboardSelectedItemRecycleViewAdapter adapter = new BoxDashboardSelectedItemRecycleViewAdapter(boxDashboardSelectedItemModelDataArrayList, getActivity());
                 rv_box_dashboard_item_selected.setHasFixedSize(true);
@@ -1234,8 +1265,22 @@ public class BoxDashboardFragment extends Fragment{
                 dashboaedModelDataArrayList.get(position).setDynamicPrice(find_dp_string);
                 dashboaedModelDataArrayList.get(position).setCalculatedAmount(find_dp_string);
 
-                boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));;
+                if(!boxDashboardSelectedItemModelDataHashMap.containsKey(dashboaedModelDataArrayList.get(position).getItem_name())) {
+                    boxDashboardSelectedItemModelDataHashMap.put(dashboaedModelDataArrayList.get(position).getItem_name(), position);
+                    boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+                }else{
+                    Iterator<BoxDashboardSelectedItemModelData> iter = boxDashboardSelectedItemModelDataArrayList.iterator();
+                    while (iter.hasNext()) {
+                        BoxDashboardSelectedItemModelData boxDashboardSelectedItemModelData = iter.next();
+                        if (boxDashboardSelectedItemModelData.get_selected_item_name().contains(dashboaedModelDataArrayList.get(position).getItem_name())){
+                            boxDashboardSelectedItemModelDataArrayList.remove(iter);
+                            iter.remove();
+                        }
+                    }
 
+                    boxDashboardSelectedItemModelDataArrayList.add(new BoxDashboardSelectedItemModelData(dashboaedModelDataArrayList.get(position).getItem_name(), dashboaedModelDataArrayList.get(position).getWeight(), dashboaedModelDataArrayList.get(position).getPrice()));
+                }
+                
                 //==========================================================================================
                 BoxDashboardSelectedItemRecycleViewAdapter adapter = new BoxDashboardSelectedItemRecycleViewAdapter(boxDashboardSelectedItemModelDataArrayList, getActivity());
                 rv_box_dashboard_item_selected.setHasFixedSize(true);
