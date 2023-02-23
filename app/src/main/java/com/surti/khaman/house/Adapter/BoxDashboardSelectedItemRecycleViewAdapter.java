@@ -39,8 +39,8 @@ public class BoxDashboardSelectedItemRecycleViewAdapter extends RecyclerView.Ada
             int position_latest = holder.getAbsoluteAdapterPosition();
 
             holder.tv_item_selected_name.setText(boxDashboardSelectedItemModelData.get(position_latest).get_selected_item_name());
-            holder.tv_item_selected_weight.setText(boxDashboardSelectedItemModelData.get(position_latest).get_selected_weight());
-            holder.tv_item_selected_price.setText(boxDashboardSelectedItemModelData.get(position_latest).get_selected_price());
+            holder.tv_item_selected_weight.setText(take_only_numbers_from_string(boxDashboardSelectedItemModelData.get(position_latest).get_selected_weight()));
+            holder.tv_item_selected_price.setText("= "+take_only_numbers_from_string(boxDashboardSelectedItemModelData.get(position_latest).get_selected_price())+ " Rs");
 
         }
 
@@ -72,6 +72,13 @@ public class BoxDashboardSelectedItemRecycleViewAdapter extends RecyclerView.Ada
         public int getItemViewType(int position) {
             return position;
         }
+
+    public String take_only_numbers_from_string(String value){
+        if(!value.isEmpty()){
+            value = value.replaceAll("[^0-9]", "");
+        }
+        return value;
+    }
 
     }
 

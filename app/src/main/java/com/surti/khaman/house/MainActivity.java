@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements PermissionUtil.Pe
                     // If already permission is given than save that Uri
                     set_Old_skh_bill_file_Data(uri_skh_bill_file_string, MainActivity.this);
                 }
+            }else {
+                DashboardFragment.set_uri_skh_bill_file_sharedpreference("no_need", MainActivity.this);
             }
         }
 

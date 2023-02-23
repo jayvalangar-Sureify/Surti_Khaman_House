@@ -10,14 +10,15 @@
         android:id="@+id/rv_box_dashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_above="@+id/rl_view_print"
-        android:layout_margin="2dp"
-        android:background="@drawable/border_red_fill_white_rectangle"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:scrollbars="vertical"
-        />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3" />
 
 
     <RelativeLayout
@@ -71,8 +72,10 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_above="@+id/rl_bottom_layout"
-        android:layout_margin="2dp"
-        android:background="@drawable/border_red_fill_white_rectangle"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:scrollbars="horizontal"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
