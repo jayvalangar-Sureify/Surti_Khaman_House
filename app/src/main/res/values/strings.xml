@@ -76,7 +76,9 @@
     <!-- Box Dashboard -->
     <string name="box_dashboard">Box Dashboard</string>
     <string name="select_weights">Select Weights</string>
+    <string name="weights_calculator">Weights Calculator</string>
     <string name="select_price">Select Price</string>
+    <string name="price_calculator">Price Calculator</string>
     <string name="clear">Clear</string>
     <string name="enter">Enter</string>
     <string name="Done">Done</string>

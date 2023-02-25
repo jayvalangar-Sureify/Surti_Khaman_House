@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -98,9 +99,611 @@ public class BoxDashboardFragment extends Fragment{
             getAmount = dashboaedModelDataArrayList.get(position_latest).getAmount();
             getFixedPrice = dashboaedModelDataArrayList.get(position_latest).getFixedPrice();
             getFixedWeight = dashboaedModelDataArrayList.get(position_latest).getFixedWeight();
+
+            open_weight_selection_popup();
+
         }
 
     };
+
+
+    public void open_price_selection_popup(){
+
+        // If item is selected than open popup
+        if (position_from_rv_adapter > -1) {
+
+
+            Dialog dialog = new Dialog(getActivity());
+            //==================================================================================
+            dialog.setContentView(R.layout.show_price_popup);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(true);
+//                dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+            EditText et_history_calculation, et_final_result_price;
+            TextView tv_show_item_name;
+            Button btn_close_popup, btn_change_price_to_weight_calculator, btn_price;
+
+            btn_change_price_to_weight_calculator = (Button) dialog.findViewById(R.id.btn_change_price_to_weight_calculator);
+            btn_close_popup = (Button) dialog.findViewById(R.id.btn_close_popup);
+            btn_price = (Button) dialog.findViewById(R.id.btn_price);
+            tv_show_item_name = (TextView) dialog.findViewById(R.id.tv_show_item_name);
+            et_history_calculation = (EditText) dialog.findViewById(R.id.et_history_calculation);
+            et_final_result_price = (EditText) dialog.findViewById(R.id.et_final_result_price);
+
+
+            btn_change_price_to_weight_calculator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    open_weight_selection_popup();
+                    dialog.dismiss();
+                }
+            });
+
+
+
+            btn_price.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Info : Enter Price To Calculate Weights", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            btn_close_popup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+
+            tv_show_item_name.setText("" + dashboaedModelDataArrayList.get(position_from_rv_adapter).getItem_name());
+
+            result_total_only_price = 0L;
+            calculation_history_price = "";
+            //======================================================================================
+            Button btn_5, btn_10, btn_15,
+                    btn_20, btn_25, btn_30,
+                    btn_2000, btn_40, btn_45,
+                    btn_50, btn_55, btn_60,
+                    btn_65, btn_70, btn_75,
+                    btn_100, btn_200, btn_300,
+                    btn_500, btn_1000, btn_clear,
+                    btn_done_selection_price;
+
+            btn_done_selection_price = (Button) dialog.findViewById(R.id.btn_done_selection_price);
+            btn_5 = (Button) dialog.findViewById(R.id.btn_5);
+            btn_10 = (Button) dialog.findViewById(R.id.btn_10);
+//            btn_15 = (Button) dialog.findViewById(R.id.btn_15);
+            btn_20 = (Button) dialog.findViewById(R.id.btn_20);
+//            btn_25 = (Button) dialog.findViewById(R.id.btn_25);
+            btn_30 = (Button) dialog.findViewById(R.id.btn_30);
+            btn_2000 = (Button) dialog.findViewById(R.id.btn_2000);
+            btn_40 = (Button) dialog.findViewById(R.id.btn_40);
+            btn_45 = (Button) dialog.findViewById(R.id.btn_45);
+            btn_50 = (Button) dialog.findViewById(R.id.btn_50);
+            btn_55 = (Button) dialog.findViewById(R.id.btn_55);
+            btn_60 = (Button) dialog.findViewById(R.id.btn_60);
+            btn_65 = (Button) dialog.findViewById(R.id.btn_65);
+            btn_70 = (Button) dialog.findViewById(R.id.btn_70);
+            btn_75 = (Button) dialog.findViewById(R.id.btn_75);
+            btn_100 = (Button) dialog.findViewById(R.id.btn_100);
+            btn_200 = (Button) dialog.findViewById(R.id.btn_200);
+            btn_300 = (Button) dialog.findViewById(R.id.btn_300);
+            btn_500 = (Button) dialog.findViewById(R.id.btn_500);
+            btn_1000 = (Button) dialog.findViewById(R.id.btn_1000);
+            btn_clear = (Button) dialog.findViewById(R.id.btn_clear);
+
+            //======================================================================================
+
+            btn_clear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    et_final_result_price.setText("= 0 Rs");
+                    et_history_calculation.setText("");
+                    calculation_history_price = "";
+                    result_total_only_price = 0L;
+                }
+            });
+
+            btn_done_selection_price.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    et_price_and_find_weight_logic(et_final_result_price.getText().toString(), getFixedPrice, getFixedWeight, position_from_rv_adapter);
+                    dialog.dismiss();
+                }
+            });
+
+
+            // Find Weight
+            //------------------------------------------------------------------------------------------
+            et_final_result_price.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable input) {
+
+                }
+            });
+            //------------------------------------------------------------------------------------------
+
+
+            //----------------------------------------------------------------------------------
+            btn_5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_5, et_history_calculation, et_final_result_price);
+                }
+            });
+
+            btn_10.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_10, et_history_calculation, et_final_result_price);
+                }
+            });
+
+//            btn_15.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    button_click_add_price(btn_15, et_history_calculation, et_final_result_price);
+//                }
+//            });
+
+
+            btn_20.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_20, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+//            btn_25.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    button_click_add_price(btn_25, et_history_calculation, et_final_result_price);
+//                }
+//            });
+
+
+            btn_30.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_30, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_2000.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_2000, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_40.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_40, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_45.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_45, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_50.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_50, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_55.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_55, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_60.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_60, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_65.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_65, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            btn_70.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_70, et_history_calculation, et_final_result_price);
+                }
+            });
+
+            btn_75.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_75, et_history_calculation, et_final_result_price);
+                }
+            });
+            btn_100.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_100, et_history_calculation, et_final_result_price);
+                }
+            });
+            btn_200.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_200, et_history_calculation, et_final_result_price);
+                }
+            });
+            btn_300.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_300, et_history_calculation, et_final_result_price);
+                }
+            });
+            btn_500.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_500, et_history_calculation, et_final_result_price);
+                }
+            });
+            btn_1000.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_price(btn_1000, et_history_calculation, et_final_result_price);
+                }
+            });
+
+
+            //----------------------------------------------------------------------------------
+
+
+            dialog.show();
+        }
+    }
+
+
+    public void open_weight_selection_popup(){
+
+        // If item is selected than open popup
+        if(position_from_rv_adapter > -1){
+            Dialog dialog = new Dialog(getContext());
+            //==================================================================================
+            dialog.setContentView(R.layout.show_weight_popup);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.setCancelable(true);
+
+            EditText et_history_calculation, et_final_result_weight;
+            TextView tv_show_item_name;
+            Button btn_close_popup, btn_change_weight_to_price_calculator, btn_weight;
+
+            btn_weight = (Button) dialog.findViewById(R.id.btn_weight);
+            btn_close_popup = (Button) dialog.findViewById(R.id.btn_close_popup);
+            btn_change_weight_to_price_calculator = (Button) dialog.findViewById(R.id.btn_change_weight_to_price_calculator);
+            tv_show_item_name = (TextView) dialog.findViewById(R.id.tv_show_item_name);
+            et_history_calculation = (EditText) dialog.findViewById(R.id.et_history_calculation);
+            et_final_result_weight = (EditText) dialog.findViewById(R.id.et_final_result_weight);
+
+
+            btn_weight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Info : Enter Weights To Calculate Price", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            btn_change_weight_to_price_calculator.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    open_price_selection_popup();
+                    dialog.dismiss();
+                }
+            });
+
+
+            btn_close_popup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            tv_show_item_name.setText("" + dashboaedModelDataArrayList.get(position_from_rv_adapter).getItem_name());
+
+            result_total_only_weight = 0L;
+            calculation_history_weight = "";
+            //======================================================================================
+            Button btn_50, btn_100, btn_150,
+                    btn_200, btn_250, btn_300,
+                    btn_350, btn_400, btn_5000,
+                    btn_500, btn_550, btn_600,
+                    btn_650, btn_700, btn_750,
+                    btn_800, btn_850, btn_900,
+                    btn_950, btn_1000, btn_clear,
+                    btn_done_selection_weight;
+
+            btn_done_selection_weight = (Button) dialog.findViewById(R.id.btn_done_selection_weight);
+            btn_50 = (Button) dialog.findViewById(R.id.btn_50);
+            btn_100 = (Button) dialog.findViewById(R.id.btn_100);
+            btn_150 = (Button) dialog.findViewById(R.id.btn_150);
+            btn_200 = (Button) dialog.findViewById(R.id.btn_200);
+            btn_250 = (Button) dialog.findViewById(R.id.btn_250);
+            btn_300 = (Button) dialog.findViewById(R.id.btn_300);
+//            btn_350 = (Button) dialog.findViewById(R.id.btn_350);
+            btn_400 = (Button) dialog.findViewById(R.id.btn_400);
+            btn_5000 = (Button) dialog.findViewById(R.id.btn_5000);
+            btn_500 = (Button) dialog.findViewById(R.id.btn_500);
+            btn_550 = (Button) dialog.findViewById(R.id.btn_550);
+            btn_600 = (Button) dialog.findViewById(R.id.btn_600);
+            btn_650 = (Button) dialog.findViewById(R.id.btn_650);
+            btn_700 = (Button) dialog.findViewById(R.id.btn_700);
+            btn_750 = (Button) dialog.findViewById(R.id.btn_750);
+            btn_800 = (Button) dialog.findViewById(R.id.btn_800);
+            btn_850 = (Button) dialog.findViewById(R.id.btn_850);
+            btn_900 = (Button) dialog.findViewById(R.id.btn_900);
+//            btn_950 = (Button) dialog.findViewById(R.id.btn_950);
+            btn_1000 = (Button) dialog.findViewById(R.id.btn_1000);
+            btn_clear = (Button) dialog.findViewById(R.id.btn_clear);
+
+
+            // condition checking calculation will be accordingly "per plate" or "Weight" wise
+            boolean isFixedWeightPP = false;
+            if (getFixedWeight != null || getFixedWeight.isEmpty()) {
+                isFixedWeightPP = getFixedWeight.equals("1");
+            }
+
+            if (isFixedWeightPP) {
+                btn_50.setText(getActivity().getResources().getString(R.string._1));
+                btn_100.setText(getActivity().getResources().getString(R.string._2));
+                btn_150.setText(getActivity().getResources().getString(R.string._5));
+                btn_200.setText(getActivity().getResources().getString(R.string._10));
+                btn_250.setText(getActivity().getResources().getString(R.string._20));
+                btn_300.setText(getActivity().getResources().getString(R.string._50));
+                btn_500.setText(getActivity().getResources().getString(R.string._100));
+                btn_1000.setText(getActivity().getResources().getString(R.string._150));
+                btn_5000.setText(getActivity().getResources().getString(R.string._200));
+//                btn_350.setText(getActivity().getResources().getString(R.string._250));
+                btn_400.setText(getActivity().getResources().getString(R.string._150));
+
+
+                btn_550.setText(getActivity().getResources().getString(R.string._20));
+                btn_600.setText(getActivity().getResources().getString(R.string._25));
+                btn_650.setText(getActivity().getResources().getString(R.string._30));
+                btn_700.setText(getActivity().getResources().getString(R.string._35));
+                btn_750.setText(getActivity().getResources().getString(R.string._40));
+                btn_800.setText(getActivity().getResources().getString(R.string._45));
+                btn_850.setText(getActivity().getResources().getString(R.string._50));
+                btn_900.setText(getActivity().getResources().getString(R.string._100));
+//                btn_950.setText(getActivity().getResources().getString(R.string._500));
+
+
+            }
+
+            //======================================================================================
+
+
+            // Find Price
+            //------------------------------------------------------------------------------------------
+            et_final_result_weight.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable input) {
+
+                }
+            });
+            //------------------------------------------------------------------------------------------
+
+
+            btn_clear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    et_final_result_weight.setText("= 0 gm");
+                    et_history_calculation.setText("");
+                    calculation_history_weight = "";
+                    result_total_only_weight = 0L;
+                }
+            });
+
+            btn_done_selection_weight.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    et_weight_and_find_price_logic(et_final_result_weight.getText().toString(), getFixedPrice, getFixedWeight, position_from_rv_adapter);
+                    dialog.dismiss();
+                }
+            });
+
+            //----------------------------------------------------------------------------------
+            btn_50.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_50, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+            btn_100.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_100, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+            btn_150.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_150, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_200.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_200, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_250.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_250, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_300.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_300, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+//            btn_350.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    button_click_add_weight(btn_350, et_history_calculation, et_final_result_weight);
+//                }
+//            });
+
+
+            btn_400.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_400, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_5000.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_5000, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_500.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_500, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_550.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_550, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_600.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_600, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_650.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_650, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            btn_700.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_700, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+            btn_750.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_750, et_history_calculation, et_final_result_weight);
+                }
+            });
+            btn_800.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_800, et_history_calculation, et_final_result_weight);
+                }
+            });
+            btn_850.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_850, et_history_calculation, et_final_result_weight);
+                }
+            });
+            btn_900.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_900, et_history_calculation, et_final_result_weight);
+                }
+            });
+//            btn_950.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    button_click_add_weight(btn_950, et_history_calculation, et_final_result_weight);
+//                }
+//            });
+            btn_1000.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    button_click_add_weight(btn_1000, et_history_calculation, et_final_result_weight);
+                }
+            });
+
+
+            //----------------------------------------------------------------------------------
+
+
+            dialog.show();
+        }
+    }
+
+
 
 //=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -210,7 +813,7 @@ public class BoxDashboardFragment extends Fragment{
                 btn_200 = (Button) dialog.findViewById(R.id.btn_200);
                 btn_250 = (Button) dialog.findViewById(R.id.btn_250);
                 btn_300 = (Button) dialog.findViewById(R.id.btn_300);
-                btn_350 = (Button) dialog.findViewById(R.id.btn_350);
+//                btn_350 = (Button) dialog.findViewById(R.id.btn_350);
                 btn_400 = (Button) dialog.findViewById(R.id.btn_400);
                 btn_5000 = (Button) dialog.findViewById(R.id.btn_5000);
                 btn_500 = (Button) dialog.findViewById(R.id.btn_500);
@@ -222,7 +825,7 @@ public class BoxDashboardFragment extends Fragment{
                 btn_800 = (Button) dialog.findViewById(R.id.btn_800);
                 btn_850 = (Button) dialog.findViewById(R.id.btn_850);
                 btn_900 = (Button) dialog.findViewById(R.id.btn_900);
-                btn_950 = (Button) dialog.findViewById(R.id.btn_950);
+//                btn_950 = (Button) dialog.findViewById(R.id.btn_950);
                 btn_1000 = (Button) dialog.findViewById(R.id.btn_1000);
                 btn_clear = (Button) dialog.findViewById(R.id.btn_clear);
 
@@ -243,7 +846,7 @@ public class BoxDashboardFragment extends Fragment{
                     btn_500.setText(getActivity().getResources().getString(R.string._100));
                     btn_1000.setText(getActivity().getResources().getString(R.string._150));
                     btn_5000.setText(getActivity().getResources().getString(R.string._200));
-                    btn_350.setText(getActivity().getResources().getString(R.string._250));
+//                    btn_350.setText(getActivity().getResources().getString(R.string._250));
                     btn_400.setText(getActivity().getResources().getString(R.string._150));
 
 
@@ -255,7 +858,7 @@ public class BoxDashboardFragment extends Fragment{
                     btn_800.setText(getActivity().getResources().getString(R.string._45));
                     btn_850.setText(getActivity().getResources().getString(R.string._50));
                     btn_900.setText(getActivity().getResources().getString(R.string._100));
-                    btn_950.setText(getActivity().getResources().getString(R.string._500));
+//                    btn_950.setText(getActivity().getResources().getString(R.string._500));
 
 
                 }
@@ -348,12 +951,12 @@ public class BoxDashboardFragment extends Fragment{
                 });
 
 
-                btn_350.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        button_click_add_weight(btn_350, et_history_calculation, et_final_result_weight);
-                    }
-                });
+//                btn_350.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        button_click_add_weight(btn_350, et_history_calculation, et_final_result_weight);
+//                    }
+//                });
 
 
                 btn_400.setOnClickListener(new View.OnClickListener() {
@@ -435,12 +1038,12 @@ public class BoxDashboardFragment extends Fragment{
                         button_click_add_weight(btn_900, et_history_calculation, et_final_result_weight);
                     }
                 });
-                btn_950.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        button_click_add_weight(btn_950, et_history_calculation, et_final_result_weight);
-                    }
-                });
+//                btn_950.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        button_click_add_weight(btn_950, et_history_calculation, et_final_result_weight);
+//                    }
+//                });
                 btn_1000.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -510,9 +1113,9 @@ public class BoxDashboardFragment extends Fragment{
                     btn_done_selection_price = (Button) dialog.findViewById(R.id.btn_done_selection_price);
                     btn_5 = (Button) dialog.findViewById(R.id.btn_5);
                     btn_10 = (Button) dialog.findViewById(R.id.btn_10);
-                    btn_15 = (Button) dialog.findViewById(R.id.btn_15);
+//                    btn_15 = (Button) dialog.findViewById(R.id.btn_15);
                     btn_20 = (Button) dialog.findViewById(R.id.btn_20);
-                    btn_25 = (Button) dialog.findViewById(R.id.btn_25);
+//                    btn_25 = (Button) dialog.findViewById(R.id.btn_25);
                     btn_30 = (Button) dialog.findViewById(R.id.btn_30);
                     btn_2000 = (Button) dialog.findViewById(R.id.btn_2000);
                     btn_40 = (Button) dialog.findViewById(R.id.btn_40);
@@ -586,12 +1189,12 @@ public class BoxDashboardFragment extends Fragment{
                         }
                     });
 
-                    btn_15.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            button_click_add_price(btn_15, et_history_calculation, et_final_result_price);
-                        }
-                    });
+//                    btn_15.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            button_click_add_price(btn_15, et_history_calculation, et_final_result_price);
+//                        }
+//                    });
 
 
                     btn_20.setOnClickListener(new View.OnClickListener() {
@@ -602,12 +1205,12 @@ public class BoxDashboardFragment extends Fragment{
                     });
 
 
-                    btn_25.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            button_click_add_price(btn_25, et_history_calculation, et_final_result_price);
-                        }
-                    });
+//                    btn_25.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            button_click_add_price(btn_25, et_history_calculation, et_final_result_price);
+//                        }
+//                    });
 
 
                     btn_30.setOnClickListener(new View.OnClickListener() {

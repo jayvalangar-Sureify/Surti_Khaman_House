@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rl_view_print"
         android:layout_alignParentTop="true"
+        android:background="@drawable/border_red_fill_white_rectangle"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="2dp"
@@ -30,6 +31,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:visibility="gone"
         android:background="@drawable/border_blue_fill_yellow_rectangle"
         android:padding="6dp">
 
@@ -73,10 +75,11 @@
         android:layout_height="120dp"
         android:layout_above="@+id/rl_bottom_layout"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="2dp"
         android:layout_marginBottom="2dp"
         android:scrollbars="horizontal"
+        android:background="@drawable/border_blue_fill_yellow_rectangle"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
     <RelativeLayout

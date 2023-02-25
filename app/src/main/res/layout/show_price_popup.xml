@@ -21,7 +21,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/select_price"
+                android:text="@string/price_calculator"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -37,6 +37,18 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:drawableBottom="@drawable/ic_cross_white_24" />
+
+            <Button
+                android:id="@+id/btn_price"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:text=""
+                android:drawableTint="@color/white"
+                android:drawableBottom="@drawable/ic_left_menu_price_24" />
 
         </RelativeLayout>
 
@@ -103,28 +115,17 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
-
         <Button
-            android:id="@+id/btn_15"
+            android:id="@+id/btn_change_price_to_weight_calculator"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_margin="1dp"
-            android:visibility="invisible"
-            android:text="@string/_15"
+            android:textAllCaps="false"
+            android:text="@string/weights_calculator"
             android:textStyle="bold"
             />
 
-        <Button
-            android:id="@+id/btn_25"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="1dp"
-            android:visibility="invisible"
-            android:text="@string/_25"
-            android:textStyle="bold"
-            />
 
         <Button
             android:id="@+id/btn_clear"
