@@ -129,6 +129,8 @@
     <string name="_900">900</string>
     <string name="_950">950</string>
     <string name="_1000">1000</string>
+    <string name="_2000">2000</string>
+    <string name="_5000">5000</string>
 
 
     <!-- Password -->

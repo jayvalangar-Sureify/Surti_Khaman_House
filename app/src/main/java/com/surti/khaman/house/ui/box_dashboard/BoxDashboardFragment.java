@@ -196,7 +196,7 @@ public class BoxDashboardFragment extends Fragment{
                 //======================================================================================
                 Button btn_50, btn_100, btn_150,
                         btn_200, btn_250, btn_300,
-                        btn_350, btn_400, btn_450,
+                        btn_350, btn_400, btn_5000,
                         btn_500, btn_550, btn_600,
                         btn_650, btn_700, btn_750,
                         btn_800, btn_850, btn_900,
@@ -212,7 +212,7 @@ public class BoxDashboardFragment extends Fragment{
                 btn_300 = (Button) dialog.findViewById(R.id.btn_300);
                 btn_350 = (Button) dialog.findViewById(R.id.btn_350);
                 btn_400 = (Button) dialog.findViewById(R.id.btn_400);
-                btn_450 = (Button) dialog.findViewById(R.id.btn_450);
+                btn_5000 = (Button) dialog.findViewById(R.id.btn_5000);
                 btn_500 = (Button) dialog.findViewById(R.id.btn_500);
                 btn_550 = (Button) dialog.findViewById(R.id.btn_550);
                 btn_600 = (Button) dialog.findViewById(R.id.btn_600);
@@ -236,14 +236,17 @@ public class BoxDashboardFragment extends Fragment{
                 if (isFixedWeightPP) {
                     btn_50.setText(getActivity().getResources().getString(R.string._1));
                     btn_100.setText(getActivity().getResources().getString(R.string._2));
-                    btn_150.setText(getActivity().getResources().getString(R.string._3));
-                    btn_200.setText(getActivity().getResources().getString(R.string._4));
-                    btn_250.setText(getActivity().getResources().getString(R.string._5));
-                    btn_300.setText(getActivity().getResources().getString(R.string._6));
-                    btn_350.setText(getActivity().getResources().getString(R.string._7));
-                    btn_400.setText(getActivity().getResources().getString(R.string._8));
-                    btn_450.setText(getActivity().getResources().getString(R.string._9));
-                    btn_500.setText(getActivity().getResources().getString(R.string._10));
+                    btn_150.setText(getActivity().getResources().getString(R.string._5));
+                    btn_200.setText(getActivity().getResources().getString(R.string._10));
+                    btn_250.setText(getActivity().getResources().getString(R.string._20));
+                    btn_300.setText(getActivity().getResources().getString(R.string._50));
+                    btn_500.setText(getActivity().getResources().getString(R.string._100));
+                    btn_1000.setText(getActivity().getResources().getString(R.string._150));
+                    btn_5000.setText(getActivity().getResources().getString(R.string._200));
+                    btn_350.setText(getActivity().getResources().getString(R.string._250));
+                    btn_400.setText(getActivity().getResources().getString(R.string._150));
+
+
                     btn_550.setText(getActivity().getResources().getString(R.string._20));
                     btn_600.setText(getActivity().getResources().getString(R.string._25));
                     btn_650.setText(getActivity().getResources().getString(R.string._30));
@@ -253,7 +256,7 @@ public class BoxDashboardFragment extends Fragment{
                     btn_850.setText(getActivity().getResources().getString(R.string._50));
                     btn_900.setText(getActivity().getResources().getString(R.string._100));
                     btn_950.setText(getActivity().getResources().getString(R.string._500));
-                    btn_1000.setText(getActivity().getResources().getString(R.string._1000));
+
 
                 }
 
@@ -361,10 +364,10 @@ public class BoxDashboardFragment extends Fragment{
                 });
 
 
-                btn_450.setOnClickListener(new View.OnClickListener() {
+                btn_5000.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        button_click_add_weight(btn_450, et_history_calculation, et_final_result_weight);
+                        button_click_add_weight(btn_5000, et_history_calculation, et_final_result_weight);
                     }
                 });
 
@@ -497,7 +500,7 @@ public class BoxDashboardFragment extends Fragment{
                     //======================================================================================
                     Button btn_5, btn_10, btn_15,
                             btn_20, btn_25, btn_30,
-                            btn_35, btn_40, btn_45,
+                            btn_2000, btn_40, btn_45,
                             btn_50, btn_55, btn_60,
                             btn_65, btn_70, btn_75,
                             btn_100, btn_200, btn_300,
@@ -511,7 +514,7 @@ public class BoxDashboardFragment extends Fragment{
                     btn_20 = (Button) dialog.findViewById(R.id.btn_20);
                     btn_25 = (Button) dialog.findViewById(R.id.btn_25);
                     btn_30 = (Button) dialog.findViewById(R.id.btn_30);
-                    btn_35 = (Button) dialog.findViewById(R.id.btn_35);
+                    btn_2000 = (Button) dialog.findViewById(R.id.btn_2000);
                     btn_40 = (Button) dialog.findViewById(R.id.btn_40);
                     btn_45 = (Button) dialog.findViewById(R.id.btn_45);
                     btn_50 = (Button) dialog.findViewById(R.id.btn_50);
@@ -615,10 +618,10 @@ public class BoxDashboardFragment extends Fragment{
                     });
 
 
-                    btn_35.setOnClickListener(new View.OnClickListener() {
+                    btn_2000.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            button_click_add_price(btn_35, et_history_calculation, et_final_result_price);
+                            button_click_add_price(btn_2000, et_history_calculation, et_final_result_price);
                         }
                     });
 
